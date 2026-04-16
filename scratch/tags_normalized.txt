@@ -1,0 +1,1305 @@
+'use client';
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import DashboardLayout from '@/components/Dashboard/DashboardLayout';
+import { 
+  Users, UserPlus, ShieldCheck, Activity, 
+  Search, Filter, MoreHorizontal, Mail, 
+  Phone, Calendar, ArrowUpRight, TrendingUp,
+  Plus, X, Check, Clock, UserCheck, AlertCircle, Loader2, Stethoscope, UserCircle,
+  LayoutGrid, Brain, Baby, Bone, Droplets, Eye, Heart, Microscope, Pill, Syringe, Thermometer, Tooth, Settings2, Trash2, Edit3, Save, ChevronRight
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { collection, query, where, getDocs, doc, updateDoc, onSnapshot, setDoc } from 'firebase/firestore';
+import { db, secondaryAuth } from '@/lib/firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+
+function AdminDashboardContent() {
+  const searchParams = useSearchParams();
+  const activeTab = searchParams.get('view') || 'overview';
+  const [showAddStaff, setShowAddStaff] = useState(false);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [pendingProviders, setPendingProviders] = useState([]);
+  const [isLoadingApprovals, setIsLoadingApprovals] = useState(false);
+  const [staff, setStaff] = useState([]);
+  const [isCreatingStaff, setIsCreatingStaff] = useState(false);
+  const [staffForm, setStaffForm] = useState({ name: '', email: '', phone: '', password: '' });
+  
+  // Medical Setup State
+  const [specialties, setSpecialties] = useState([]);
+  const [isSpecialtiesLoaded, setIsSpecialtiesLoaded] = useState(false);
+  const [selectedSpecialty, setSelectedSpecialty] = useState(null);
+  const [showAddSpecialty, setShowAddSpecialty] = useState(false);
+  const [showAddService, setShowAddService] = useState(false);
+  const [editingService, setEditingService] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
+  
+  const [specForm, setSpecForm] = useState({ name: '', icon: 'Heart', color: 'text-emerald-500', bg: 'bg-emerald-50' });
+  const [serviceForm, setServiceForm] = useState({ name: '', price: '', telemed: false, telemedPrice: '' });
+  
+  const [stats, setStats] = useState([
+    { name: 'Total Doctors', value: '0', growth: '+12%', icon: Stethoscope, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+    { name: 'Active Patients', value: '0', growth: '+18%', icon: UserCircle, color: 'text-blue-600', bg: 'bg-blue-50' },
+    { name: 'Staff Members', value: '0', growth: '+2%', icon: ShieldCheck, color: 'text-stone-600', bg: 'bg-stone-50' },
+    { name: 'Revenue', value: '৳0k', growth: '+24%', icon: TrendingUp, color: 'text-rose-600', bg: 'bg-rose-50' },
+  ]);
+
+  useEffect(() => {
+    const qPending = query(collection(db, 'users'), where('status', '==', 'pending'));
+    const unPending = onSnapshot(qPending, (snapshot) => {
+      setPendingProviders(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    });
+
+    const qStaff = query(collection(db, 'users'), where('role', '==', 'receptionist'));
+    const unStaff = onSnapshot(qStaff, (snapshot) => {
+      setStaff(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+    });
+
+    const unAllUsers = onSnapshot(collection(db, 'users'), (snapshot) => {
+      let doctors = 0;
+      let patients = 0;
+      let receptionists = 0;
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        if (data.role === 'doctor' && data.status === 'approved') doctors++;
+        if (data.role === 'patient') patients++;
+        if (data.role === 'receptionist') receptionists++;
+      });
+      setStats(prev => [
+        { ...prev[0], value: doctors.toString() },
+        { ...prev[1], value: patients.toString() },
+        { ...prev[2], value: receptionists.toString() },
+        prev[3]
+      ]);
+      // Remove loading state once initial data stream is established
+      setIsDataLoaded(true);
+    });
+
+    const unSpecialties = onSnapshot(collection(db, 'specialties'), (snapshot) => {
+      setSpecialties(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      setIsSpecialtiesLoaded(true);
+    });
+
+    return () => {
+      unPending();
+      unStaff();
+      unAllUsers();
+      unSpecialties();
+    };
+  }, []);
+
+  // --- SEEDING LOGIC ---
+  useEffect(() => {
+    if (isSpecialtiesLoaded && specialties.length === 0) {
+      seedSpecialties();
+    }
+  }, [isSpecialtiesLoaded, specialties.length]);
+
+  const seedSpecialties = async () => {
+    const initialData = {
+      'Cardiology': { icon: 'Heart', color: 'text-emerald-500', bg: 'bg-emerald-50', services: [
+        { name: 'ECG Interpretation', price: 1500, telemed: true, telemedPrice: 1000 },
+        { name: 'Stress Test (ETT)', price: 3500, telemed: false },
+        { name: 'Echocardiogram', price: 4000, telemed: false }
+      ]},
+      'Neurology': { icon: 'Brain', color: 'text-blue-500', bg: 'bg-blue-50', services: [
+        { name: 'Stroke Assessment', price: 2500, telemed: true, telemedPrice: 2000 },
+        { name: 'Memory Screening', price: 2000, telemed: true, telemedPrice: 1500 }
+      ]},
+      'Pediatrics': { icon: 'Baby', color: 'text-rose-500', bg: 'bg-rose-50', services: [
+        { name: 'Vaccination', price: 500, telemed: false },
+        { name: 'Growth Monitoring', price: 1200, telemed: true, telemedPrice: 1000 }
+      ]}
+    };
+
+    for (const [name, data] of Object.entries(initialData)) {
+      await setDoc(doc(db, 'specialties', name), {
+        name,
+        ...data,
+        createdAt: new Date().toISOString()
+      });
+    }
+  };
+
+  const handleSaveSpecialty = async (e) => {
+    e.preventDefault();
+    setIsSaving(true);
+    try {
+      await setDoc(doc(db, 'specialties', specForm.name), {
+        ...specForm,
+        services: [],
+        createdAt: new Date().toISOString()
+      });
+      setShowAddSpecialty(false);
+      setSpecForm({ name: '', icon: 'Heart', color: 'text-emerald-500', bg: 'bg-emerald-50' });
+    } catch (error) {
+      console.error("Save specialty error:", error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDeleteSpecialty = async (id) => {
+    if (!window.confirm("Delete this entire specialty and all its services?")) return;
+    try {
+      await updateDoc(doc(db, 'specialties', id), { deleted: true }); // Or actual delete
+      // For now, actual delete for clean records
+      const { deleteDoc } = await import('firebase/firestore');
+      await deleteDoc(doc(db, 'specialties', id));
+      if (selectedSpecialty?.id === id) setSelectedSpecialty(null);
+    } catch (error) {
+      console.error("Delete specialty error:", error);
+    }
+  };
+
+  const handleSaveService = async (e) => {
+    e.preventDefault();
+    setIsSaving(true);
+    try {
+      const updatedServices = [...(selectedSpecialty.services || [])];
+      const newService = {
+        name: serviceForm.name,
+        price: Number(serviceForm.price),
+        telemed: serviceForm.telemed,
+        telemedPrice: serviceForm.telemed ? Number(serviceForm.telemedPrice) : 0
+      };
+
+      if (editingService !== null) {
+        updatedServices[editingService] = newService;
+      } else {
+        updatedServices.push(newService);
+      }
+
+      await updateDoc(doc(db, 'specialties', selectedSpecialty.id), {
+        services: updatedServices
+      });
+      
+      setShowAddService(false);
+      setEditingService(null);
+      setServiceForm({ name: '', price: '', telemed: false, telemedPrice: '' });
+      // Update local selection for UI
+      setSelectedSpecialty({ ...selectedSpecialty, services: updatedServices });
+    } catch (error) {
+      console.error("Save service error:", error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDeleteService = async (idx) => {
+    if (!window.confirm("Delete this service?")) return;
+    try {
+      const updatedServices = selectedSpecialty.services.filter((_, i) => i !== idx);
+      await updateDoc(doc(db, 'specialties', selectedSpecialty.id), {
+        services: updatedServices
+      });
+      setSelectedSpecialty({ ...selectedSpecialty, services: updatedServices });
+    } catch (error) {
+      console.error("Delete service error:", error);
+    }
+  };
+
+  const ICON_MAP = {
+    Heart, Brain, Baby, Bone, Droplets, Eye, Microscope, Pill, Syringe, Thermometer, Tooth, Stethoscope, Activity, HeartPulse
+  };
+
+  const IconComponent = ({ name, ...props }) => {
+    const Icon = ICON_MAP[name] || Heart;
+    return <Icon {...props}  SELF_CLOSE
+;
+  };
+
+  const approveProvider = async (uid) => {
+    try {
+      await updateDoc(doc(db, 'users', uid), { status: 'approved' });
+    } catch (error) {
+      console.error("Approval error:", error);
+    }
+  };
+
+  const handleCreateStaff = async (e) => {
+    e.preventDefault();
+    setIsCreatingStaff(true);
+    try {
+      const res = await createUserWithEmailAndPassword(secondaryAuth, staffForm.email, staffForm.password);
+      await setDoc(doc(db, 'users', res.user.uid), {
+        uid: res.user.uid,
+        email: staffForm.email,
+        fullName: staffForm.name,
+        phone: staffForm.phone,
+        role: 'receptionist',
+        status: 'approved',
+        createdAt: new Date().toISOString()
+      });
+      secondaryAuth.signOut();
+      setShowAddStaff(false);
+      setStaffForm({ name: '', email: '', phone: '', password: '' });
+    } catch (error) {
+      console.error(error);
+      alert("Failed to create staff: " + error.message);
+    } finally {
+      setIsCreatingStaff(false);
+    }
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+    exit: { opacity: 0, y: -15, transition: { duration: 0.3, ease: "easeIn" } }
+  };
+
+  return (
+    <DashboardLayout role="admin">
+      
+OPEN_div  className="w-full relative min-h-[60vh]">
+        
+        {/* Diagnostic Preloader */}
+        
+OPEN_AnimatePresence >
+          {!isDataLoaded && (
+            
+OPEN_motion.div  
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white"
+            >
+              
+OPEN_div  className="relative flex items-center justify-center">
+                 
+OPEN_div  className="absolute inset-0 border-2 border-emerald-100 rounded-full animate-ping opacity-20">
+CLOSE_div
+
+                 
+OPEN_div  className="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center border border-emerald-100 shadow-sm z-10">
+                    <Loader2 size={24} className="text-emerald-500 animate-spin"  SELF_CLOSE
+
+                 
+CLOSE_div
+
+              
+CLOSE_div
+
+              
+OPEN_div  className="mt-4 flex flex-col items-center">
+                 <span className="text-[10px] font-extrabold text-slate-400 tracking-[0.2em] uppercase">Initializing</span>
+                 <span className="text-[11px] font-bold text-slate-900 tracking-tight mt-1">Establishing secure connection...</span>
+              
+CLOSE_div
+
+            
+CLOSE_motion.div
+
+          )}
+        
+CLOSE_AnimatePresence
+
+
+        
+OPEN_AnimatePresence  mode="wait">
+          {isDataLoaded && activeTab === 'overview' && (
+            
+OPEN_motion.div  
+              key="overview"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="space-y-8"
+            >
+             
+OPEN_div  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {stats.map((stat, idx) => (
+                
+OPEN_motion.div  
+                  key={idx} 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.15, duration: 0.15, ease: "easeOut" }}
+                  className={`p-5 ${stat.bg} rounded-xl border border-slate-900/20 transition-all hover:brightness-95`}
+                >
+                  
+OPEN_div  className="flex items-center justify-between mb-4">
+                    
+OPEN_div  className={`w-10 h-10 bg-white ${stat.color} rounded-lg flex items-center justify-center shrink-0 border border-slate-900/5`}>
+                       <stat.icon size={20}  SELF_CLOSE
+
+                    
+CLOSE_div
+
+                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1">
+                       <ArrowUpRight size={10}  SELF_CLOSE
+
+                       {stat.growth}
+                    </span>
+                  
+CLOSE_div
+
+                  <h3 className="text-slate-400 text-[11px] font-bold uppercase tracking-widest">{stat.name}</h3>
+                  <p className="text-2xl font-bold text-med-text tracking-tight mt-1">{stat.value}</p>
+                
+CLOSE_motion.div
+
+              ))}
+             
+CLOSE_div
+
+            
+CLOSE_motion.div
+
+          )}
+
+          {isDataLoaded && activeTab === 'appointments' && (
+            
+OPEN_motion.div  
+              key="appointments"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="space-y-6"
+            >
+              
+OPEN_div  className="flex justify-between items-center bg-white p-6 rounded-xl border border-slate-900/10">
+                
+OPEN_div >
+                  <h2 className="text-[16px] font-extrabold text-slate-900 tracking-tight">Active Appointments</h2>
+                  <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">Manage and view all incoming patient bookings</p>
+                
+CLOSE_div
+
+                <button className="h-10 px-6 bg-slate-900 hover:bg-slate-800 text-white text-[12px] font-bold rounded-lg transition-colors flex items-center gap-2">
+                   <Calendar size={14}  SELF_CLOSE
+
+                   Live Schedule
+                </button>
+              
+CLOSE_div
+
+
+              {/* Empty Data Placeholder */}
+              
+OPEN_div  className="bg-white border border-slate-900/10 rounded-xl p-16 flex flex-col items-center justify-center">
+                 
+OPEN_div  className="w-16 h-16 bg-slate-50 rounded-2xl border border-slate-900/5 flex items-center justify-center text-slate-300 mb-4">
+                    <Calendar size={24}  SELF_CLOSE
+
+                 
+CLOSE_div
+
+                 <h3 className="text-[14px] font-bold text-slate-900 tracking-tight">No Appointments Found</h3>
+                 <p className="text-[12px] text-slate-500 font-medium tracking-tight text-center max-w-sm mt-2">
+                    The appointment engine is currently awaiting patient bookings. Live data will populate here securely.
+                 </p>
+              
+CLOSE_div
+
+            
+CLOSE_motion.div
+
+          )}
+
+          {isDataLoaded && activeTab === 'doctors' && (
+            
+OPEN_motion.div  
+              key="doctors"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="space-y-6"
+            >
+              
+OPEN_div  className="flex justify-between items-center bg-white p-6 rounded-xl border border-slate-900/10">
+                
+OPEN_div >
+                  <h2 className="text-[16px] font-extrabold text-slate-900 tracking-tight">Physician Directory</h2>
+                  <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">Manage and audit approved medical professionals</p>
+                
+CLOSE_div
+
+                <button className="h-10 px-6 bg-slate-900 hover:bg-slate-800 text-white text-[12px] font-bold rounded-lg transition-colors flex items-center gap-2">
+                   <Plus size={14}  SELF_CLOSE
+
+                   Invite Doctor
+                </button>
+              
+CLOSE_div
+
+
+              {/* Empty Data Placeholder */}
+              
+OPEN_div  className="bg-white border border-slate-900/10 rounded-xl p-16 flex flex-col items-center justify-center">
+                 
+OPEN_div  className="w-16 h-16 bg-slate-50 rounded-2xl border border-slate-900/5 flex items-center justify-center text-slate-300 mb-4">
+                    <Stethoscope size={24}  SELF_CLOSE
+
+                 
+CLOSE_div
+
+                 <h3 className="text-[14px] font-bold text-slate-900 tracking-tight">No Physicians Listed</h3>
+                 <p className="text-[12px] text-slate-500 font-medium tracking-tight text-center max-w-sm mt-2">
+                    Start by reviewing applications in the Provider Audits tab, or manually invite a doctor to the platform.
+                 </p>
+              
+CLOSE_div
+
+            
+CLOSE_motion.div
+
+          )}
+
+          {isDataLoaded && activeTab === 'patients' && (
+            
+OPEN_motion.div  
+              key="patients"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="space-y-6"
+            >
+              
+OPEN_div  className="flex justify-between items-center bg-white p-6 rounded-xl border border-slate-900/10">
+                
+OPEN_div >
+                  <h2 className="text-[16px] font-extrabold text-slate-900 tracking-tight">Patient Database</h2>
+                  <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">View patient records, history, and demographics</p>
+                
+CLOSE_div
+
+                
+OPEN_div  className="flex items-center gap-2 h-9 px-4 bg-slate-50 border border-slate-900/20 rounded-lg w-[280px]">
+                   <Search size={14} className="text-slate-400"  SELF_CLOSE
+
+                   <input type="text" placeholder="Search by name, ID, phone..." className="bg-transparent outline-none flex-1 text-[11px] font-bold text-slate-600 placeholder:text-slate-400"  SELF_CLOSE
+
+                
+CLOSE_div
+
+              
+CLOSE_div
+
+
+              {/* Empty Data Placeholder */}
+              
+OPEN_div  className="bg-white border border-slate-900/10 rounded-xl p-16 flex flex-col items-center justify-center">
+                 
+OPEN_div  className="w-16 h-16 bg-slate-50 rounded-2xl border border-slate-900/5 flex items-center justify-center text-slate-300 mb-4">
+                    <UserCircle size={24}  SELF_CLOSE
+
+                 
+CLOSE_div
+
+                 <h3 className="text-[14px] font-bold text-slate-900 tracking-tight">Patient Directory Empty</h3>
+                 <p className="text-[12px] text-slate-500 font-medium tracking-tight text-center max-w-sm mt-2">
+                    Registered patient profiles will appear here securely when accounts are created across the platform.
+                 </p>
+              
+CLOSE_div
+
+            
+CLOSE_motion.div
+
+          )}
+
+          {activeTab === 'receptionists' && (
+            
+OPEN_motion.div  
+              key="receptionists"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+               
+OPEN_div  className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100">
+              
+OPEN_div  className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                 
+OPEN_div >
+                    <h2 className="text-lg font-bold text-med-text leading-none">Administrative Staff Management</h2>
+                    <p className="text-[11px] text-slate-400 mt-1 uppercase tracking-wider font-medium">Control platform access for receptionists and staff members</p>
+                 
+CLOSE_div
+
+                 <button 
+                   onClick={() => setShowAddStaff(true)}
+                   className="h-9 px-4 bg-slate-900 text-white rounded-xl text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-slate-800 transition-all shadow-lg shadow-slate-200"
+                 >
+                    <Plus size={14}  SELF_CLOSE
+
+                    Register New Staff
+                 </button>
+              
+CLOSE_div
+
+
+              
+OPEN_div  className="overflow-x-auto">
+                 <table className="w-full text-left">
+                    <thead>
+                       <tr className="bg-slate-50/50">
+                          <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Name & Identity</th>
+                          <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Contact Info</th>
+                          <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Joined Date</th>
+                          <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Status</th>
+                          <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Actions</th>
+                       </tr>
+                    </thead>
+                    <tbody className="">
+                       {staff.map((member) => (
+                          <tr key={member.id} className="hover:bg-slate-50/50 transition-colors">
+                             <td className="px-6 py-4">
+                                
+OPEN_div  className="flex items-center gap-3">
+                                   
+OPEN_div  className="w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 font-bold text-[13px]">
+                                      {member.name.split(' ').map(n => n[0]).join('')}
+                                   
+CLOSE_div
+
+                                   
+OPEN_div  className="flex flex-col">
+                                      <span className="text-[13px] font-bold text-med-text">{member.name}</span>
+                                      <span className="text-[10px] text-slate-400 font-medium">Receptionist ID: #{1000 + member.id}</span>
+                                   
+CLOSE_div
+
+                                
+CLOSE_div
+
+                             </td>
+                             <td className="px-6 py-4">
+                                
+OPEN_div  className="space-y-1">
+                                   
+OPEN_div  className="flex items-center gap-2 text-[11px] font-medium text-slate-600 italic">
+                                      <Mail size={12} className="text-slate-300"  SELF_CLOSE
+ {member.email}
+                                   
+CLOSE_div
+
+                                   
+OPEN_div  className="flex items-center gap-2 text-[11px] font-medium text-slate-600">
+                                      <Phone size={12} className="text-slate-300"  SELF_CLOSE
+ {member.phone}
+                                   
+CLOSE_div
+
+                                
+CLOSE_div
+
+                             </td>
+                             <td className="px-6 py-4">
+                                <span className="text-[12px] font-medium text-slate-600">{member.joined}</span>
+                             </td>
+                             <td className="px-6 py-4">
+                                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 text-[10px] font-bold">
+                                   
+OPEN_div  className="w-1 h-1 bg-emerald-600 rounded-full"  SELF_CLOSE
+
+                                   {member.status}
+                                </span>
+                             </td>
+                             <td className="px-6 py-4">
+                                <button className="w-8 h-8 rounded-lg border border-slate-300 flex items-center justify-center text-slate-400 hover:text-med-text hover:bg-slate-50 transition-all">
+                                   <MoreHorizontal size={14}  SELF_CLOSE
+
+                                </button>
+                             </td>
+                          </tr>
+                       ))}
+                    </tbody>
+                 </table>
+              
+CLOSE_div
+
+           
+CLOSE_div
+
+            
+CLOSE_motion.div
+
+          )}
+
+          {activeTab === 'audits' && (
+            
+OPEN_motion.div  
+              key="audits"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+            >
+               
+OPEN_div  className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100">
+              
+OPEN_div  className="p-6">
+                 <h2 className="text-lg font-bold text-med-text leading-none">Professional Credential Audit</h2>
+                 <p className="text-[11px] text-slate-400 mt-1 uppercase tracking-wider font-medium">Review pending provider applications for clinical network access</p>
+              
+CLOSE_div
+
+
+              {pendingProviders.length === 0 ? (
+                 
+OPEN_div  className="py-20 flex flex-col items-center justify-center text-center">
+                    
+OPEN_div  className="w-16 h-16 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 mb-4">
+                       <ShieldCheck size={32}  SELF_CLOSE
+
+                    
+CLOSE_div
+
+                    <p className="text-[14px] text-slate-500 font-medium">No pending applications found.</p>
+                    <p className="text-[11px] text-slate-400 mt-1 uppercase tracking-widest font-bold opacity-50 italic">Clinical network is fully synchronized</p>
+                 
+CLOSE_div
+
+              ) : (
+ 
+               
+OPEN_div  className="overflow-x-auto">
+                    <table className="w-full text-left">
+                       <thead>
+                          <tr className="bg-slate-50/50">
+                             <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Provider & Role</th>
+                             <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Contact Details</th>
+                             <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Submission Date</th>
+                             <th className="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Approval Controls</th>
+                          </tr>
+                       </thead>
+                       <tbody className="">
+                          {pendingProviders.map((provider) => (
+                             <tr key={provider.uid} className="hover:bg-slate-50/50 transition-colors">
+                                <td className="px-6 py-4">
+                                   
+OPEN_div  className="flex items-center gap-3">
+                                      
+OPEN_div  className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 font-bold text-[13px]">
+                                         {provider.fullName ? provider.fullName[0] : 'P'}
+                                      
+CLOSE_div
+
+                                      
+OPEN_div  className="flex flex-col">
+                                         <span className="text-[13px] font-bold text-med-text">{provider.fullName}</span>
+                                         <span className="text-[9px] text-white bg-slate-900 px-1.5 py-0.5 rounded-full uppercase tracking-widest font-bold self-start mt-1 leading-none">{provider.role}</span>
+                                      
+CLOSE_div
+
+                                   
+CLOSE_div
+
+                                </td>
+                                <td className="px-6 py-4">
+                                   
+OPEN_div  className="space-y-1">
+                                      
+OPEN_div  className="flex items-center gap-2 text-[11px] font-medium text-slate-600 italic">
+                                         <Mail size={12} className="text-slate-300"  SELF_CLOSE
+ {provider.email}
+                                      
+CLOSE_div
+
+                                      
+OPEN_div  className="flex items-center gap-2 text-[11px] font-medium text-slate-600">
+                                         <Phone size={12} className="text-slate-300"  SELF_CLOSE
+ {provider.phone}
+                                      
+CLOSE_div
+
+                                   
+CLOSE_div
+
+                                </td>
+                                <td className="px-6 py-4">
+                                   
+OPEN_div  className="flex items-center gap-2 text-[11px] font-medium text-slate-600">
+                                      <Clock size={12} className="text-slate-300"  SELF_CLOSE
+
+                                      {new Date(provider.createdAt).toLocaleDateString()}
+                                   
+CLOSE_div
+
+                                </td>
+                                <td className="px-6 py-4">
+                                   
+OPEN_div  className="flex items-center gap-2">
+                                      <button 
+                                        onClick={() => approveProvider(provider.uid)}
+                                        className="h-8 px-4 bg-emerald-600 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 hover:bg-emerald-700 transition-all shadow-md shadow-emerald-100"
+                                      >
+                                         <UserCheck size={12}  SELF_CLOSE
+
+                                         Approve
+                                      </button>
+                                      <button className="h-8 w-8 bg-rose-50 text-rose-500 rounded-lg flex items-center justify-center hover:bg-rose-100 transition-all">
+                                         <X size={14}  SELF_CLOSE
+
+                                      </button>
+                                   
+CLOSE_div
+
+                                </td>
+                             </tr>
+                          ))}
+                       </tbody>
+                    </table>
+                 
+CLOSE_div
+
+              )}
+           
+CLOSE_div
+
+            
+CLOSE_motion.div
+
+          )}
+
+          {activeTab === 'medical-setup' && (
+            
+OPEN_motion.div  
+              key="medical-setup"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="space-y-6"
+            >
+              {!selectedSpecialty && (
+                <>
+                 
+OPEN_div  className="flex justify-between items-center bg-white p-6 rounded-xl border border-slate-900/10">
+                   
+OPEN_div >
+                     <h2 className="text-[16px] font-extrabold text-slate-900 tracking-tight">System Medical Framework</h2>
+                     <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">Configure global specialties, service pricing, and telemedicine availability</p>
+                   
+CLOSE_div
+
+                   <button 
+                     onClick={() => setShowAddSpecialty(true)}
+                     className="h-10 px-6 bg-slate-900 hover:bg-slate-800 text-white text-[12px] font-bold rounded-lg transition-colors flex items-center gap-2"
+                   >
+                      <Plus size={14}  SELF_CLOSE
+
+                      Add New Specialty
+                   </button>
+                 
+CLOSE_div
+
+
+                 
+OPEN_div  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                   {specialties.map((spec) => (
+                     <button 
+                       key={spec.id}
+                       onClick={() => setSelectedSpecialty(spec)}
+                       className="group bg-white p-6 rounded-2xl border border-slate-900/10 hover:border-med-primary/30 transition-all text-left relative overflow-hidden"
+                     >
+                       
+OPEN_div  className={`w-12 h-12 ${spec.bg || 'bg-slate-50'} ${spec.color || 'text-slate-600'} rounded-xl flex items-center justify-center mb-6 transition-transform group-hover:scale-105`}>
+                          <IconComponent name={spec.icon} size={24}  SELF_CLOSE
+
+                       
+CLOSE_div
+
+                       <h3 className="text-lg font-bold text-med-text mb-1">{spec.name}</h3>
+                       <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest">{spec.services?.length || 0} Professional Services</p>
+                       
+                       
+OPEN_div  className="absolute top-6 right-6 flex items-center gap-2">
+                          <button 
+                           onClick={(e) => { e.stopPropagation(); handleDeleteSpecialty(spec.id); }}
+                           className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-300 hover:text-rose-500 hover:bg-rose-50 hover:border-rose-100 transition-all opacity-0 group-hover:opacity-100"
+                          >
+                             <Trash2 size={14}  SELF_CLOSE
+
+                          </button>
+                          <ChevronRight size={18} className="text-slate-300 group-hover:translate-x-1 transition-transform"  SELF_CLOSE
+
+                       
+CLOSE_div
+
+                     </button>
+                   ))}
+                 
+CLOSE_div
+
+                < SELF_CLOSE
+
+              )}
+
+              {selectedSpecialty && (
+                
+OPEN_div  className="space-y-6">
+                   
+OPEN_div  className="flex items-center gap-4">
+                     <button 
+                       onClick={() => setSelectedSpecialty(null)}
+                       className="w-10 h-10 rounded-xl border border-slate-900/10 flex items-center justify-center text-slate-400 hover:text-med-text hover:bg-slate-50 transition-all bg-white"
+                     >
+                        <X size={18}  SELF_CLOSE
+
+                     </button>
+                     
+OPEN_div  className="flex items-center gap-3">
+                        
+OPEN_div  className={`w-9 h-9 ${selectedSpecialty.bg} ${selectedSpecialty.color} rounded-lg flex items-center justify-center`}>
+                           <IconComponent name={selectedSpecialty.icon} size={18}  SELF_CLOSE
+
+                        
+CLOSE_div
+
+                        
+OPEN_div >
+                           <h2 className="text-[16px] font-extrabold text-slate-900 leading-none">{selectedSpecialty.name} Management</h2>
+                           <p className="text-[11px] text-slate-400 mt-1 uppercase tracking-widest font-bold">Configure treatment codes and consultation pricing</p>
+                        
+CLOSE_div
+
+                     
+CLOSE_div
+
+                   
+CLOSE_div
+
+
+                   
+OPEN_div  className="bg-white rounded-2xl border border-slate-900/10 overflow-hidden">
+                      
+OPEN_div  className="p-6 border-b border-slate-900/5 flex justify-between items-center bg-slate-50/50">
+                         <h3 className="text-[12px] font-bold text-slate-900 uppercase tracking-widest">Active Services ({selectedSpecialty.services?.length || 0})</h3>
+                         <button 
+                           onClick={() => { setEditingService(null); setServiceForm({ name: '', price: '', telemed: false, telemedPrice: '' }); setShowAddService(true); }}
+                           className="h-8 px-4 bg-slate-900 text-white text-[10px] font-bold rounded-lg uppercase tracking-widest hover:bg-slate-800 transition-all"
+                         >
+                            Add New Service
+                         </button>
+                      
+CLOSE_div
+
+                      
+                      
+OPEN_div  className="divide-y divide-slate-900/5">
+                         {selectedSpecialty.services?.map((service, idx) => (
+                            
+OPEN_div  key={idx} className="p-6 hover:bg-slate-50/30 transition-all flex items-center justify-between group">
+                               
+OPEN_div  className="space-y-1">
+                                  <h4 className="text-[14px] font-extrabold text-slate-900">{service.name}</h4>
+                                  
+OPEN_div  className="flex items-center gap-3">
+                                     
+OPEN_div  className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold">
+                                        In-Person: ৳{service.price}
+                                     
+CLOSE_div
+
+                                     {service.telemed && (
+                                       
+OPEN_div  className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 text-[10px] font-bold">
+                                          Telemedicine: ৳{service.telemedPrice}
+                                       
+CLOSE_div
+
+                                     )}
+                                     {!service.telemed && (
+                                       
+OPEN_div  className="text-[9px] text-slate-300 font-bold uppercase tracking-widest border border-slate-200 px-2 py-0.5 rounded-full">
+                                          Telemed Disabled
+                                       
+CLOSE_div
+
+                                     )}
+                                  
+CLOSE_div
+
+                               
+CLOSE_div
+
+                               
+OPEN_div  className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all">
+                                  <button 
+                                   onClick={() => { setEditingService(idx); setServiceForm({ ...service }); setShowAddService(true); }}
+                                   className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400 hover:text-med-primary hover:bg-med-primary/5 transition-all"
+                                  >
+                                     <Edit3 size={14}  SELF_CLOSE
+
+                                  </button>
+                                  <button 
+                                   onClick={() => handleDeleteService(idx)}
+                                   className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-all"
+                                  >
+                                     <Trash2 size={14}  SELF_CLOSE
+
+                                  </button>
+                               
+CLOSE_div
+
+                            
+CLOSE_div
+
+                         ))}
+                         
+                         {(!selectedSpecialty.services || selectedSpecialty.services.length === 0) && (
+                           
+OPEN_div  className="p-12 text-center">
+                              <p className="text-[12px] text-slate-400 font-medium">No services configured for this specialty yet.</p>
+                           
+CLOSE_div
+
+                         )}
+                      
+CLOSE_div
+
+                   
+CLOSE_div
+
+                   
+                   
+OPEN_div  className="p-4 bg-amber-50 rounded-xl border border-amber-200/50 flex items-start gap-4">
+                      <Settings2 size={18} className="text-amber-600 mt-0.5"  SELF_CLOSE
+
+                      <p className="text-[11px] text-amber-800 font-medium leading-relaxed">
+                         **Administrative Note:** Modifications to pricing and telemedicine status will apply immediately across the global booking engine. Current appointments will not be affected by pricing adjustments.
+                      </p>
+                   
+CLOSE_div
+
+                
+CLOSE_div
+
+              )}
+            
+CLOSE_motion.div
+
+          )}
+        
+CLOSE_AnimatePresence
+
+
+        
+OPEN_AnimatePresence >
+            {showAddSpecialty && (
+              
+OPEN_div  className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                 
+OPEN_motion.div  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => setShowAddSpecialty(false)}  SELF_CLOSE
+
+                 
+OPEN_motion.div  initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} className="relative w-full max-w-lg bg-white rounded-2xl shadow-xl overflow-hidden">
+                    
+OPEN_form  onSubmit={handleSaveSpecialty} className="p-6 space-y-6">
+                       
+OPEN_div  className="flex items-center justify-between">
+                          <h3 className="text-[16px] font-bold text-med-text tracking-tight uppercase">New Medical Specialty</h3>
+                          <button type="button" onClick={() => setShowAddSpecialty(false)} className="text-slate-400 hover:text-slate-600"><X size={20}  SELF_CLOSE
+</button>
+                       
+CLOSE_div
+
+                       
+                       
+OPEN_div  className="space-y-4">
+                          
+OPEN_div  className="space-y-1.5">
+                             <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-1">Specialty Name</label>
+                             <input required type="text" value={specForm.name} onChange={(e) => setSpecForm({...specForm, name: e.target.value})} className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-[13px] font-bold text-slate-700 outline-none focus:border-med-primary/30 transition-all" placeholder="e.g. Orthopedics, Psychology..."  SELF_CLOSE
+
+                          
+CLOSE_div
+
+                          
+                          
+OPEN_div  className="space-y-2">
+                             <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-1">Visual Identity (Icon)</label>
+                             
+OPEN_div  className="grid grid-cols-6 gap-2 p-4 bg-slate-50 rounded-2xl border border-slate-100 max-h-[160px] overflow-y-auto">
+                                {Object.keys(ICON_MAP).map((iconName) => (
+                                   <button 
+                                     key={iconName} type="button" onClick={() => setSpecForm({...specForm, icon: iconName})}
+                                     className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${specForm.icon === iconName ? 'bg-slate-900 text-white shadow-lg shadow-slate-200 scale-105' : 'bg-white border border-slate-100 text-slate-400 hover:border-slate-300'}`}
+                                   >
+                                      <IconComponent name={iconName} size={18}  SELF_CLOSE
+
+                                   </button>
+                                ))}
+                             
+CLOSE_div
+
+                          
+CLOSE_div
+
+
+                          
+OPEN_div  className="flex gap-4">
+                             
+OPEN_div  className="flex-1 space-y-1.5">
+                                <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-1">Brand Color</label>
+                                <select value={specForm.color} onChange={(e) => setSpecForm({...specForm, color: e.target.value, bg: e.target.value.replace('text', 'bg').replace('500', '50')})} className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-[13px] font-bold text-slate-700 outline-none">
+                                   <option value="text-emerald-500">Emerald Green</option>
+                                   <option value="text-blue-500">Ocean Blue</option>
+                                   <option value="text-indigo-500">Indigo</option>
+                                   <option value="text-rose-500">Rose Red</option>
+                                   <option value="text-amber-500">Amber Yellow</option>
+                                   <option value="text-cyan-500">Cyan Teal</option>
+                                   <option value="text-purple-500">Vibrant Purple</option>
+                                </select>
+                             
+CLOSE_div
+
+                             
+OPEN_div  className="w-11 h-11 rounded-xl flex items-center justify-center self-end border border-slate-100 bg-slate-50">
+                                <IconComponent name={specForm.icon} size={20} className={specForm.color}  SELF_CLOSE
+
+                             
+CLOSE_div
+
+                          
+CLOSE_div
+
+                       
+CLOSE_div
+
+
+                       
+OPEN_div  className="pt-2 flex justify-end gap-3">
+                          <button type="button" onClick={() => setShowAddSpecialty(false)} className="h-11 px-6 text-[12px] font-bold text-slate-400 hover:text-slate-600">Cancel</button>
+                          <button type="submit" disabled={isSaving} className="h-11 px-8 bg-slate-900 text-white rounded-xl text-[12px] font-bold hover:bg-black transition-all shadow-lg shadow-slate-200 disabled:opacity-50">
+                             {isSaving ? 'Initializing...' : 'Register Specialty'}
+                          </button>
+                       
+CLOSE_div
+
+                    
+CLOSE_form
+
+                 
+CLOSE_motion.div
+
+              
+CLOSE_div
+
+            )}
+
+            {showAddService && (
+              
+OPEN_div  className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                 
+OPEN_motion.div  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => setShowAddService(false)}  SELF_CLOSE
+
+                 
+OPEN_motion.div  initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} className="relative w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden">
+                    
+OPEN_form  onSubmit={handleSaveService} className="p-6 space-y-6">
+                       
+OPEN_div  className="flex items-center justify-between">
+                          <h3 className="text-[14px] font-bold text-med-text tracking-tight uppercase">{editingService !== null ? 'Modify Treatment' : 'Define New Treatment'}</h3>
+                          <button type="button" onClick={() => setShowAddService(false)} className="text-slate-400 hover:text-slate-600"><X size={18}  SELF_CLOSE
+</button>
+                       
+CLOSE_div
+
+                       
+                       
+OPEN_div  className="space-y-4">
+                          
+OPEN_div  className="space-y-1.5">
+                             <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-1">Treatment Name</label>
+                             <input required type="text" value={serviceForm.name} onChange={(e) => setServiceForm({...serviceForm, name: e.target.value})} className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-[13px] font-bold text-slate-700 outline-none focus:border-med-primary/30" placeholder="e.g. Heart Rhythm Monitoring..."  SELF_CLOSE
+
+                          
+CLOSE_div
+
+                          
+                          
+OPEN_div  className="grid grid-cols-2 gap-4">
+                             
+OPEN_div  className="space-y-1.5">
+                                <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-1">Base Price (৳)</label>
+                                <input required type="number" value={serviceForm.price} onChange={(e) => setServiceForm({...serviceForm, price: e.target.value})} className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-[13px] font-bold text-slate-700 outline-none" placeholder="1500"  SELF_CLOSE
+
+                             
+CLOSE_div
+
+                             
+OPEN_div  className="flex items-center gap-3 pt-6 pl-2">
+                                <button type="button" onClick={() => setServiceForm({...serviceForm, telemed: !serviceForm.telemed})} className={`w-10 h-5 rounded-full transition-all relative ${serviceForm.telemed ? 'bg-blue-600' : 'bg-slate-200'}`}>
+                                   
+OPEN_div  className={`absolute top-1 w-3 h-3 rounded-full bg-white transition-all ${serviceForm.telemed ? 'left-6' : 'left-1'}`}  SELF_CLOSE
+
+                                </button>
+                                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-tighter">Telemed</span>
+                             
+CLOSE_div
+
+                          
+CLOSE_div
+
+
+                          {serviceForm.telemed && (
+                            
+OPEN_motion.div  initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="space-y-1.5 p-4 bg-blue-50/50 border border-blue-100 rounded-xl">
+                               <label className="text-[10px] font-extrabold text-blue-400 uppercase tracking-widest px-1">Telemedicine Pricing (৳)</label>
+                               <input required type="number" value={serviceForm.telemedPrice} onChange={(e) => setServiceForm({...serviceForm, telemedPrice: e.target.value})} className="w-full h-11 bg-white border border-blue-100 rounded-lg px-4 text-[13px] font-bold text-blue-700 outline-none" placeholder="800"  SELF_CLOSE
+
+                            
+CLOSE_motion.div
+
+                          )}
+                       
+CLOSE_div
+
+
+                       
+OPEN_div  className="pt-2 flex justify-end gap-3">
+                          <button type="button" onClick={() => setShowAddService(false)} className="h-10 px-6 text-[11px] font-bold text-slate-400">Discard</button>
+                          <button type="submit" disabled={isSaving} className="h-10 px-8 bg-slate-900 text-white rounded-lg text-[11px] font-bold hover:bg-black transition-all shadow-lg shadow-slate-200 disabled:opacity-50">
+                             {isSaving ? 'Processing...' : (editingService !== null ? 'Update Service' : 'Confirm Service')}
+                          </button>
+                       
+CLOSE_div
+
+                    
+CLOSE_form
+
+                 
+CLOSE_motion.div
+
+              
+CLOSE_div
+
+            )}
+        
+CLOSE_AnimatePresence
+
+
+         
+OPEN_AnimatePresence >
+           {showAddStaff && (
+             
+OPEN_div  className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                
+OPEN_motion.div  
+                  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                  className="absolute inset-0 bg-slate-900/40"
+                  onClick={() => setShowAddStaff(false)}
+                 SELF_CLOSE
+
+                
+OPEN_motion.div  
+                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                  className="relative w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden"
+                >
+                   
+OPEN_div  className="p-5 flex items-center justify-between">
+                      
+OPEN_div  className="flex items-center gap-3">
+                         
+OPEN_div  className="w-7 h-7 rounded-md bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100">
+                            <UserPlus size={14}  SELF_CLOSE
+
+                         
+CLOSE_div
+
+                         <h3 className="text-[14px] font-bold text-med-text tracking-tight">Staff Registration</h3>
+                      
+CLOSE_div
+
+                      <button onClick={() => setShowAddStaff(false)} className="w-7 h-7 rounded-md hover:bg-slate-50 flex items-center justify-center text-slate-400 transition-all border border-transparent hover:border-slate-200">
+                         <X size={16}  SELF_CLOSE
+
+                      </button>
+                   
+CLOSE_div
+
+
+                   
+OPEN_form  className="p-5 space-y-4" onSubmit={handleCreateStaff}>
+                      
+OPEN_div  className="grid grid-cols-2 gap-4">
+                         
+OPEN_div  className="space-y-1.5 col-span-2">
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-0.5">Identity Name</label>
+                            <input type="text" value={staffForm.name} onChange={e => setStaffForm({...staffForm, name: e.target.value})} placeholder="Full Name" required className="w-full h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-emerald-500/40 focus:bg-white text-[12px] font-medium transition-all"  SELF_CLOSE
+
+                         
+CLOSE_div
+
+                         
+OPEN_div  className="space-y-1.5">
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-0.5">Work Email</label>
+                            <input type="email" value={staffForm.email} onChange={e => setStaffForm({...staffForm, email: e.target.value})} placeholder="staff@meditaj.com" required className="w-full h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-emerald-500/40 focus:bg-white text-[12px] font-medium transition-all"  SELF_CLOSE
+
+                         
+CLOSE_div
+
+                         
+OPEN_div  className="space-y-1.5">
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-0.5">Phone Contact</label>
+                            <input type="tel" value={staffForm.phone} onChange={e => setStaffForm({...staffForm, phone: e.target.value})} placeholder="+880 1---" required className="w-full h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-emerald-500/40 focus:bg-white text-[12px] font-medium transition-all"  SELF_CLOSE
+
+                         
+CLOSE_div
+
+                         
+OPEN_div  className="space-y-1.5 col-span-2">
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-0.5">Initial Password</label>
+                            <input type="password" value={staffForm.password} onChange={e => setStaffForm({...staffForm, password: e.target.value})} placeholder="••••••••" required className="w-full h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-emerald-500/40 focus:bg-white text-[12px] font-medium transition-all"  SELF_CLOSE
+
+                         
+CLOSE_div
+
+                      
+CLOSE_div
+
+
+                      
+OPEN_div  className="pt-2 flex justify-end gap-2 text-[11px] font-bold">
+                         <button type="button" onClick={() => setShowAddStaff(false)} className="h-9 px-4 border border-transparent rounded-lg text-slate-500 hover:bg-slate-50 transition-all">Cancel</button>
+                         <button type="submit" disabled={isCreatingStaff} className="h-9 px-5 bg-slate-900 border border-slate-700 text-white rounded-lg flex items-center justify-center gap-2 hover:bg-black transition-all shadow-sm disabled:opacity-50">
+                            {isCreatingStaff ? <span className="animate-spin text-lg leading-none">↻</span> : <Check size={14}  SELF_CLOSE
+}
+                            {isCreatingStaff ? 'Processing...' : 'Complete Registration'}
+                         </button>
+                      
+CLOSE_div
+
+                   
+CLOSE_form
+
+                
+CLOSE_motion.div
+
+             
+CLOSE_div
+
+           )}
+         
+CLOSE_AnimatePresence
+
+
+      
+CLOSE_div
+
+    </DashboardLayout>
+  );
+}
+
+export default function AdminDashboard() {
+  return (
+    <Suspense fallback={
+OPEN_div  className="h-screen bg-white flex items-center justify-center">Loading Console...
+CLOSE_div
+}>
+      <AdminDashboardContent  SELF_CLOSE
+
+    </Suspense>
+  );
+}

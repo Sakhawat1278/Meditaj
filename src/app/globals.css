@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+:root {
+  --med-bg: #FCFDFD;
+  --med-card: #FFFFFF;
+  --med-primary: #10B981;
+  --med-primary-light: #F0FDF4;
+  --med-text-main: #27272A;
+  --med-text-muted: #71717A;
+  --med-border: #E2E8F0; /* Increased contrast for flatter design */
+  --med-shadow: none;
+}
+
+@theme inline {
+  --color-med-bg: var(--med-bg);
+  --color-med-card: var(--med-card);
+  --color-med-primary: var(--med-primary);
+  --color-med-primary-light: var(--med-primary-light);
+  --color-med-text: var(--med-text-main);
+  --color-med-muted: var(--med-text-muted);
+  --color-med-border: var(--med-border);
+  
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui;
+  
+  --radius-xl: 0.5rem; /* Reduced from 12px to 8px for sharper edges */
+  --radius-2xl: 0.75rem;
+}
+
+/* Custom Minimalist Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #e2e8f0;
+}
+
+@layer base {
+  body {
+    @apply bg-med-bg text-med-text font-sans font-light antialiased;
+  }
+}
+
+@layer components {
+  .btn-med-primary {
+    @apply h-10 px-4 bg-med-primary text-white rounded-lg font-medium text-xs flex items-center justify-center gap-2 hover:bg-emerald-600 transition-all active:scale-[0.98];
+  }
+
+  .btn-med-outline {
+    @apply h-10 px-4 bg-white border border-med-border text-med-text rounded-lg font-medium text-xs flex items-center justify-center gap-2 hover:bg-slate-50 transition-all;
+  }
+}
