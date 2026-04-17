@@ -1211,19 +1211,26 @@ function AdminDashboardContent() {
       }
 
       let successes = 0;
-      // 2. Process updates sequentially
+      // 2. Process updates sequentially with existence checks
       for (const booking of related) {
         if (booking?.id && booking?.collection) {
           try {
-            await updateDoc(doc(db, booking.collection, booking.id), {
-              status: 'confirmed',
-              paymentStatus: 'paid',
-              confirmedAt: new Date().toISOString(),
-              manualVerificationId: payment.id
-            });
-            successes++;
+            const bookingRef = doc(db, booking.collection, booking.id);
+            const bookingSnap = await getDoc(bookingRef);
+            
+            if (bookingSnap.exists()) {
+              await updateDoc(bookingRef, {
+                status: 'confirmed',
+                paymentStatus: 'paid',
+                confirmedAt: new Date().toISOString(),
+                manualVerificationId: payment.id
+              });
+              successes++;
+            } else {
+              console.warn(`Booking document missing: ${booking.collection}/${booking.id}`);
+            }
           } catch (e) {
-            console.error(`Booking update failed [${booking.id}]:`, e);
+            console.error(`Status update failed for ${booking.id}:`, e);
           }
         }
       }
@@ -1314,7 +1321,11 @@ function AdminDashboardContent() {
       for (const booking of related) {
         if (booking?.id && booking?.collection) {
           try {
-            await deleteDoc(doc(db, booking.collection, booking.id));
+            const bookingRef = doc(db, booking.collection, booking.id);
+            const bookingSnap = await getDoc(bookingRef);
+            if (bookingSnap.exists()) {
+              await deleteDoc(bookingRef);
+            }
           } catch (e) {
             console.error("Link delete failed:", e);
           }
