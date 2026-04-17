@@ -678,13 +678,6 @@ function AdminDashboardContent() {
    });
  }, [allAppointments, labBookings, nursingBookings, productOrders, globalSettings, doctors, coupons]);
 
- // Update main stats
- setStats(prev => [
- prev[0], prev[1], prev[2],
- { ...prev[3], value: `৳${(earnings / 1000).toFixed(1)}k` }
- ]);
- }, [allAppointments, globalSettings, doctors, coupons]);
-
  const getDoctorBalance = (doctorId) => {
  return allAppointments
  .filter(a => a.doctorId === doctorId && (a.status === 'completed' || a.paymentStatus === 'paid') && a.payoutStatus !== 'released')
