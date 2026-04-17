@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { 
   Mail, ArrowRight, ChevronLeft, Globe, 
@@ -101,7 +101,7 @@ export default function ForgotPasswordPage() {
       {/* ── Left Branding ── */}
       <section className="hidden lg:flex lg:w-1/2 relative bg-[#1e4a3a] overflow-hidden sticky top-0 h-screen shrink-0">
         <motion.div initial={{ scale: 1.1, opacity: 0 }} animate={{ scale: 1, opacity: 0.7 }} transition={{ duration: 1.5 }} className="absolute inset-0 z-0">
-          <img src="/curate_medical_concept_1776363557484.png" className="w-full h-full object-cover grayscale brightness-50" />
+          <img src="/curate_medical_concept_1776363557484.webp" className="w-full h-full object-cover grayscale brightness-50" />
         </motion.div>
         <div className="relative z-10 w-full p-16 flex flex-col justify-between h-full text-white">
           <div>

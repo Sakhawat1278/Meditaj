@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { 
   Ambulance, Navigation, MapPin, Clock, ShieldCheck, 
   Phone, AlertTriangle, ChevronRight, FileText, Check, Calendar, ArrowRight, Info
@@ -121,6 +121,7 @@ export default function AmbulancePage() {
                     onChange={(val) => setBookingData({ ...bookingData, dateTime: val })}
                     placeholder="Select date"
                     icon={Calendar}
+                    minDate={new Date()}
                   />
                 </div>
                 
@@ -264,7 +265,7 @@ export default function AmbulancePage() {
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }} 
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-[#1e4a3a]/40 backdrop-blur-sm"
+              className="absolute inset-0 bg-[#1e4a3a]/40"
               onClick={() => setBookingSuccess(false)}
             />
             <motion.div 

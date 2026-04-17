@@ -4,9 +4,10 @@ import {
   Ambulance, Navigation, MapPin, Clock, Phone, 
   Search, Filter, Check, X, AlertCircle, Calendar,
   MoreVertical, UserCheck, Activity, Plus, MoreHorizontal,
-  ChevronRight, ArrowRight, ShieldCheck, HeartPulse
+  ChevronRight, ArrowRight, ShieldCheck, HeartPulse, Edit3
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
+import CustomDropdown from '@/components/UI/CustomDropdown';
 
 export default function AmbulanceManagement({ 
   bookings, 
@@ -223,16 +224,19 @@ export default function AmbulanceManagement({
                                 Dispatch
                               </button>
                             ) : (
-                              <select 
-                                value={booking.status}
-                                onChange={(e) => onUpdateStatus(booking, e.target.value)}
-                                className="h-10 bg-white border border-slate-200 rounded-xl px-4 text-[11px] font-black uppercase tracking-widest outline-none focus:border-[#1e4a3a] transition-all cursor-pointer"
-                              >
-                                <option value="assigned">Assigned</option>
-                                <option value="ongoing">On Trip</option>
-                                <option value="completed">Completed</option>
-                                <option value="cancelled">Cancelled</option>
-                              </select>
+                              <div className="w-[160px] inline-block text-left">
+                                <CustomDropdown 
+                                  options={[
+                                    { label: 'Assigned', value: 'assigned' },
+                                    { label: 'On Trip', value: 'ongoing' },
+                                    { label: 'Completed', value: 'completed' },
+                                    { label: 'Cancelled', value: 'cancelled' }
+                                  ]}
+                                  value={booking.status}
+                                  onChange={(val) => onUpdateStatus(booking, val)}
+                                  className="!h-10"
+                                />
+                              </div>
                             )}
                           </div>
                         </td>

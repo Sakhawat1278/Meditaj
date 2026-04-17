@@ -1,8 +1,8 @@
 'use client';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { Plus, Info, Check } from 'lucide-react';
 
-export default function LabTestCard({ test, onAddToCart, isInCart }) {
+export default function LabTestCard({ test, onBookNow }) {
   return (
     <motion.div 
       initial={{ opacity: 0, y: 10 }}
@@ -42,28 +42,13 @@ export default function LabTestCard({ test, onAddToCart, isInCart }) {
         )}
       </div>
 
-      <div className="mt-4 pt-3 border-t border-slate-50 flex items-center justify-between">
+      <div className="mt-4 pt-3 border-t border-slate-50">
         <button
-          onClick={() => onAddToCart(test)}
-          disabled={isInCart}
-          className={`h-9 px-4 rounded-lg text-[11px] font-black uppercase tracking-widest transition-all flex items-center gap-2
-            ${isInCart 
-              ? 'bg-emerald-50 text-emerald-600 border border-emerald-100 cursor-default' 
-              : 'bg-white border border-slate-300 text-slate-600 hover:bg-[#1e4a3a] hover:text-white hover:border-[#1e4a3a] active:scale-95'
-            }
-          `}
+          onClick={() => onBookNow(test)}
+          className="w-full h-9 rounded-lg text-[11px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 bg-white border border-slate-300 text-[#1e4a3a] hover:bg-[#1e4a3a] hover:text-white hover:border-[#1e4a3a] active:scale-95"
         >
-          {isInCart ? (
-            <>
-              <Check size={14} strokeWidth={3} />
-              Added to cart
-            </>
-          ) : (
-            <>
-              <Plus size={14} strokeWidth={3} />
-              Add to cart
-            </>
-          )}
+          <Plus size={14} strokeWidth={3} />
+          Book Test
         </button>
       </div>
     </motion.div>

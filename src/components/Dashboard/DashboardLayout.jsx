@@ -2,13 +2,13 @@
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { 
   LayoutDashboard, Users, Calendar, ClipboardList, 
   Settings, LogOut, Search, Bell, Menu, X, 
   UserCircle, Activity, HeartPulse, CreditCard,
   ChevronRight, ChevronDown, Sparkles, ShieldCheck, Home, Stethoscope, LayoutGrid,
-  Ambulance, FlaskConical, ClipboardPlus, Boxes, LayoutPanelLeft, UserCog, Loader2, MapPin
+  Ambulance, FlaskConical, ClipboardPlus, Boxes, LayoutPanelLeft, UserCog, Loader2, MapPin, ShoppingCart
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { db } from '@/lib/firebase';
@@ -111,6 +111,7 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  { name: 'Nursing & Care', icon: ClipboardPlus, href: '/dashboard/admin', view: 'nursing', color: 'text-rose-500' },
  { name: 'Ambulance Fleet', icon: Ambulance, href: '/dashboard/admin', view: 'ambulance', color: 'text-red-600' },
  { name: 'Lab Diagnostics', icon: FlaskConical, href: '/dashboard/admin', view: 'lab-tests', color: 'text-sky-500' },
+ { name: 'Health Store', icon: ShoppingCart, href: '/dashboard/admin', view: 'store', color: 'text-orange-500' },
  ]
  },
  

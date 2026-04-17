@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { 
   Upload, FileText, ChevronRight, Phone, MessageSquare, 
   ShieldCheck, CheckCircle2, Video, Activity, Info, 

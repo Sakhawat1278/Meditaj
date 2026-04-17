@@ -1,5 +1,5 @@
 'use client';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { Lock, Phone, ArrowLeft, ShieldAlert } from 'lucide-react';
 
 export default function RestrictedAccessPopup({ isOpen, onClose, referenceId }) {

@@ -6,7 +6,7 @@
   --med-primary: #1e4a3a;
   --med-primary-light: #F0FDF4;
   --med-text-main: #27272A;
-  --med-text-muted: #71717A;
+  --med-text-muted: #52525B; /* Darker Zinc-600 instead of 500 for better contrast */
   --med-border: #E2E8F0; /* Increased contrast for flatter design */
   --med-shadow: none;
 }

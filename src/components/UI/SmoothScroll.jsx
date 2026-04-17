@@ -1,5 +1,5 @@
 'use client';
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { m as motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
@@ -31,19 +31,27 @@ export default function SmoothScroll({ children }) {
   // Map the scrolled value to a translation
   const y = useTransform(smoothY, (value) => -value);
 
+  // Respect users who prefer reduced motion
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mediaQuery.matches) setContentHeight(0);
+  }, []);
+
   // Update the 'ghost' height when content changes
   useEffect(() => {
     if (isExcluded) return;
 
+    let rafId;
     const updateHeight = () => {
-      if (scrollRef.current) {
-        // Use getBoundingClientRect for more precise measurement of the rendered content
-        const height = scrollRef.current.getBoundingClientRect().height;
-        setContentHeight(height);
-      }
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        if (scrollRef.current) {
+          const height = scrollRef.current.getBoundingClientRect().height;
+          setContentHeight(height);
+        }
+      });
     };
 
-    // Use ResizeObserver for high-fidelity height tracking
     const resizeObserver = new ResizeObserver(() => {
       updateHeight();
     });
@@ -52,15 +60,13 @@ export default function SmoothScroll({ children }) {
       resizeObserver.observe(scrollRef.current);
     }
 
-    // Initial check
     updateHeight();
-    
-    // Fallback for dynamic content/images loading
-    const timeout = setTimeout(updateHeight, 1000);
+    const timeout = setTimeout(updateHeight, 1500);
     
     return () => {
       resizeObserver.disconnect();
       clearTimeout(timeout);
+      cancelAnimationFrame(rafId);
     };
   }, [children, isExcluded, pathname]);
 

@@ -1,6 +1,6 @@
 'use client';
 import React, { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 
 /**
  * Magnetic Component

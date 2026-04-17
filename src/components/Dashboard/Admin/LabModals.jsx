@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { X, MapPin, Navigation, Plus, Info, Globe, ChevronRight } from 'lucide-react';
 import CustomDropdown from '@/components/UI/CustomDropdown';
 import { bdLocations, getDivisions, getDistricts, getAreas } from '@/lib/locationData';

@@ -2,19 +2,20 @@
 import { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/Dashboard/DashboardLayout';
 import { 
- Calendar, Clock, HeartPulse, FileText, 
- Search, Bell, Sparkles, Navigation, 
- MapPin, User, ChevronRight, Activity,
- ShieldCheck, CreditCard, ArrowRight,
- TrendingUp, Download, Lock, Loader2,
- AlertCircle, Phone
+Calendar, Clock, HeartPulse, FileText, 
+Search, Bell, Sparkles, Navigation, 
+MapPin, User, ChevronRight, Activity,
+ShieldCheck, CreditCard, ArrowRight,
+TrendingUp, Download, Lock, Loader2,
+AlertCircle, Phone, Pill
 } from 'lucide-react';
 import Link from 'next/link';
-import { doc, onSnapshot, query, collection, where } from 'firebase/firestore';
+import { doc, onSnapshot, query, collection, where, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
-import { motion } from 'framer-motion';
-import RestrictedAccessPopup from '@/components/Auth/RestrictedAccessPopup';
+import { m as motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
+const RestrictedAccessPopup = dynamic(() => import('@/components/Auth/RestrictedAccessPopup'), { ssr: false });
 
 export default function PatientDashboard() {
  const { user, logout } = useAuth();
@@ -24,9 +25,11 @@ export default function PatientDashboard() {
  
  const [appointments, setAppointments] = useState([]);
  const [labBookings, setLabBookings] = useState([]);
+ const [nursingBookings, setNursingBookings] = useState([]);
+ const [productOrders, setProductOrders] = useState([]);
 
  const stats = [
- { name: 'Active Bookings', value: (appointments.length + labBookings.length).toString().padStart(2, '0'), icon: Calendar, color: 'text-med-primary', bg: 'bg-emerald-50' },
+ { name: 'Active Bookings', value: (appointments.length + labBookings.length + nursingBookings.length + productOrders.length).toString().padStart(2, '0'), icon: Calendar, color: 'text-med-primary', bg: 'bg-emerald-50' },
  { name: 'Medical Reports', value: '14', icon: FileText, color: 'text-blue-600', bg: 'bg-blue-50' },
  { name: 'Health Coins', value: '250', icon: Sparkles, color: 'text-amber-600', bg: 'bg-amber-50' },
  { name: 'Total Visits', value: '38', icon: Activity, color: 'text-purple-600', bg: 'bg-purple-50' },
@@ -46,22 +49,64 @@ export default function PatientDashboard() {
  setIsDataLoading(false);
  });
 
- // Fetch Live Appointments
- const qAppts = query(collection(db, 'appointments'), where('userId', '==', user.uid));
- const unAppts = onSnapshot(qAppts, (snapshot) => {
- setAppointments(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
- });
+  // Fetch Live Appointments
+  const qAppts = query(collection(db, 'appointments'), where('userId', '==', user.uid));
+  const unAppts = onSnapshot(qAppts, (snapshot) => {
+    const sorted = snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .sort((a, b) => {
+        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+        return dateB - dateA;
+      });
+    setAppointments(sorted);
+  });
 
- // Fetch Live Lab Bookings
- const qLabs = query(collection(db, 'lab_bookings'), where('userId', '==', user.uid));
- const unLabs = onSnapshot(qLabs, (snapshot) => {
- setLabBookings(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
- });
+  // Fetch Live Lab Bookings
+  const qLabs = query(collection(db, 'lab_bookings'), where('userId', '==', user.uid));
+  const unLabs = onSnapshot(qLabs, (snapshot) => {
+    const sorted = snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .sort((a, b) => {
+        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+        return dateB - dateA;
+      });
+    setLabBookings(sorted);
+  });
+
+  // Fetch Live Nursing Bookings
+  const qNursing = query(collection(db, 'nursing_bookings'), where('userId', '==', user.uid));
+  const unNursing = onSnapshot(qNursing, (snapshot) => {
+    const sorted = snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .sort((a, b) => {
+        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+        return dateB - dateA;
+      });
+    setNursingBookings(sorted);
+  });
+
+  // Fetch Live Product Orders
+  const qProducts = query(collection(db, 'product_orders'), where('userId', '==', user.uid));
+  const unProducts = onSnapshot(qProducts, (snapshot) => {
+    const sorted = snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .sort((a, b) => {
+        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+        return dateB - dateA;
+      });
+    setProductOrders(sorted);
+  });
 
  return () => {
  unSub();
  unAppts();
  unLabs();
+ unNursing();
+ unProducts();
  };
  }, [user]);
 
@@ -141,21 +186,38 @@ export default function PatientDashboard() {
  </div>
  <div className="p-5 space-y-4">
  {(() => {
- const combined = [
- ...appointments.map(a => ({ ...a, serviceType: 'Specialist' })),
- ...labBookings.map(l => ({ 
- ...l, 
- doctor: l.providerName || 'Lab Service', 
- service: `Diagnostics (${l.items?.length || 0} Tests)`,
- serviceType: 'Lab'
- }))
- ].sort((a, b) => new Date(b.createdAt?.toDate ? b.createdAt.toDate() : b.createdAt) - new Date(a.createdAt?.toDate ? a.createdAt.toDate() : a.createdAt));
+  const combined = [
+    ...appointments.map(a => ({ ...a, serviceType: 'Specialist', service: a.specialty || 'General Consultation', doctor: a.doctorName })),
+    ...labBookings.map(l => ({ 
+      ...l, 
+      doctor: l.providerName || 'Lab Service', 
+      service: l.items?.map(i => i.name).join(', ') || 'Diagnostics',
+      serviceType: 'Lab'
+    })),
+    ...nursingBookings.map(n => ({
+      ...n,
+      doctor: n.caregiverName || 'Nursing Care',
+      service: n.packageName || 'Care Service',
+      serviceType: 'Nursing'
+    })),
+    ...productOrders.map(p => ({
+      ...p,
+      doctor: 'Health Store',
+      service: p.items?.map(i => i.name).join(', ') || 'Pharmacy',
+      serviceType: 'Pharmacy',
+      date: p.date || p.createdAt?.toDate?.()?.toLocaleDateString('en-GB') || 'Recent'
+    }))
+  ].sort((a, b) => {
+    const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+    const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+    return dateB - dateA;
+  });
 
  return combined.map((appt) => (
  <div key={appt.id} className="p-4 rounded-xl border border-slate-200 hover:border-med-primary/30 transition-all grid grid-cols-1 md:grid-cols-3 gap-4 items-center group relative">
  <div className="flex items-center gap-3">
- <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-slate-300 ${appt.serviceType === 'Lab' ? 'bg-sky-50 text-sky-500' : 'bg-slate-100'}`}>
- {appt.serviceType === 'Lab' ? <Activity size={20} /> : <User size={24} className="translate-y-1.5" />}
+ <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-slate-300 ${appt.serviceType === 'Lab' ? 'bg-sky-50 text-sky-500' : appt.serviceType === 'Nursing' ? 'bg-purple-50 text-purple-600' : appt.serviceType === 'Pharmacy' ? 'bg-amber-50 text-amber-600' : 'bg-slate-100'}`}>
+ {appt.serviceType === 'Lab' ? <Activity size={20} /> : appt.serviceType === 'Nursing' ? <HeartPulse size={20} /> : appt.serviceType === 'Pharmacy' ? <Pill size={20} /> : <User size={24} className="translate-y-1.5" />}
  </div>
  <div>
  <h4 className="text-[14px] font-bold text-med-text leading-tight">{appt.doctor || appt.doctorName}</h4>
@@ -185,7 +247,7 @@ export default function PatientDashboard() {
  </div>
  ));
  })()}
- {appointments.length === 0 && labBookings.length === 0 && (
+ {appointments.length === 0 && labBookings.length === 0 && nursingBookings.length === 0 && productOrders.length === 0 && (
  <div className="text-center py-10">
  <p className="text-slate-400 text-[11px] font-bold uppercase tracking-widest">No active medical bookings</p>
  </div>
@@ -279,5 +341,3 @@ export default function PatientDashboard() {
  </DashboardLayout>
  );
 }
-
-

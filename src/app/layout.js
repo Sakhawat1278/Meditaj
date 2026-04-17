@@ -4,6 +4,7 @@ import "./globals.css";
 const inter = Inter({ 
   subsets: ["latin"],
   variable: '--font-inter',
+  display: 'swap',
   weight: ['300', '400', '500', '600', '700', '800', '900'],
 });
 
@@ -12,8 +13,15 @@ import { CartProvider } from "@/context/CartContext";
 import { ConfirmationProvider } from "@/context/ConfirmationContext";
 import { Toaster } from "react-hot-toast";
 
+export const metadata = {
+  title: "Meditaj | Modern Healthcare Precision",
+  description: "Synchronizing expert clinical specialization with a fluid, patient-first diagnostic interface.",
+};
+
+
 import NavigationWrapper from "@/components/Home/NavigationWrapper";
 import FooterWrapper from "@/components/Home/FooterWrapper";
+import MotionProvider from "@/components/UI/MotionProvider";
 
 export default function RootLayout({ children }) {
   return (
@@ -22,9 +30,11 @@ export default function RootLayout({ children }) {
         <AuthProvider>
           <CartProvider>
             <ConfirmationProvider>
-              <NavigationWrapper />
-              <main>{children}</main>
-              <FooterWrapper />
+              <MotionProvider>
+                <NavigationWrapper />
+                <main>{children}</main>
+                <FooterWrapper />
+              </MotionProvider>
               <Toaster position="bottom-right" toastOptions={{ duration: 3000 }} />
             </ConfirmationProvider>
           </CartProvider>

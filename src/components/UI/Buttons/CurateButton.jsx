@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m as motion } from 'framer-motion';
 import { ArrowRight, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -23,6 +23,7 @@ const CurateButton = ({
   variant = 'primary', 
   className = '',
   isLoading = false,
+  disabled = false,
   type = 'button'
 }) => {
   const isPrimary = variant === 'primary';
@@ -35,7 +36,7 @@ const CurateButton = ({
         ${isPrimary 
           ? 'bg-[#1e4a3a] text-white hover:bg-[#163529]' 
           : 'bg-white text-[#1e4a3a] border border-slate-200 hover:bg-emerald-50'}
-        ${isLoading ? 'opacity-70 pointer-events-none' : ''}
+        ${isLoading || disabled ? 'opacity-50 pointer-events-none' : ''}
         ${className}
       `}
     >
@@ -67,12 +68,12 @@ const CurateButton = ({
               viewport={{ once: true }}
               transition={{ delay: 0.1, type: "spring", stiffness: 200, damping: 15 }}
               className={`
-                w-[28px] h-[28px] rounded-full flex items-center justify-center mr-2
+                w-[32px] h-[32px] rounded-full flex items-center justify-center mr-1.5
                 transition-transform duration-500 group-hover:rotate-[-45deg] flex-shrink-0
                 ${isPrimary ? 'bg-white text-[#1e4a3a]' : 'bg-[#1e4a3a] text-white'}
               `}
             >
-              <ArrowRight size={16} strokeWidth={2.5} />
+              <ArrowRight size={18} strokeWidth={2.5} />
             </motion.div>
           </>
         )}
@@ -80,7 +81,7 @@ const CurateButton = ({
     </motion.div>
   );
 
-  if (href && !isLoading) {
+  if (href && !isLoading && !disabled) {
     return (
       <Link href={href} onClick={onClick} className="inline-block">
         {buttonContent}
@@ -89,7 +90,7 @@ const CurateButton = ({
   }
 
   return (
-    <button type={type} onClick={onClick} disabled={isLoading} className="inline-block focus:outline-none">
+    <button type={type} onClick={onClick} disabled={isLoading || disabled} className="inline-block focus:outline-none">
       {buttonContent}
     </button>
   );

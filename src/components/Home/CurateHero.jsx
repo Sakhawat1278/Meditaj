@@ -1,26 +1,25 @@
 'use client';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
-import Link from 'next/link';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect } from 'react';
-import CurateButton from '@/components/UI/Buttons/CurateButton';
+import Link from 'next/link';
 import Image from 'next/image';
+import CurateButton from '@/components/UI/Buttons/CurateButton';
 
 const slides = [
   {
-    image: "/images/hero-bg.jpg",
+    image: "/images/hero-bg.webp",
     title: "Healthcare",
-    sub: "Precision"
+    sub: "Solution"
   },
   {
-    image: "/images/hero/sunrise_hero.png",
-    title: "Seamless",
-    sub: "Diagnosis"
+    image: "/images/hero/sunrise_hero.webp",
+    title: "Find Doctors",
+    sub: "Everywhere"
   },
   {
-    image: "/images/hero/hospital_hero.png",
-    title: "Expert",
-    sub: "Treatment"
+    image: "/images/hero/hospital_hero.webp",
+    title: "Book Lab",
+    sub: "Tests"
   }
 ];
 
@@ -28,14 +27,29 @@ const CurateHero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 6000); // 6 seconds per slide
-    return () => clearInterval(timer);
+    let timer;
+    const observer = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      if (entry.isIntersecting) {
+        timer = setInterval(() => {
+          setCurrentSlide((prev) => (prev + 1) % slides.length);
+        }, 6000);
+      } else {
+        clearInterval(timer);
+      }
+    }, { threshold: 0.1 });
+
+    const el = document.querySelector('section');
+    if (el) observer.observe(el);
+
+    return () => {
+      clearInterval(timer);
+      observer.disconnect();
+    };
   }, []);
 
   return (
-    <section className="relative h-[calc(100vh-88px)] w-full px-2 lg:px-3 pt-1 pb-3">
+    <section className="relative h-[600px] lg:h-[680px] w-full px-2 lg:px-4 pt-2 pb-4">
       
       {/* ── Main Rounded Container ── */}
       <div className="relative w-full h-full rounded-[16px] lg:rounded-[24px] overflow-hidden group">
@@ -48,104 +62,105 @@ const CurateHero = () => {
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
-              transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
-              style={{ willChange: "transform" }}
+              transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }}
               className="absolute inset-0 w-full h-full"
             >
               <Image 
                 src={slides[currentSlide].image} 
-                alt="Medical Background"
+                alt={slides[currentSlide].title}
                 fill
-                priority={true}
-                unoptimized={true}
+                priority
                 className="object-cover"
                 sizes="100vw"
+                quality={95}
               />
             </motion.div>
           </AnimatePresence>
-          {/* Multi-stage overlay for text legibility */}
-          <div className="absolute inset-0 bg-black/30 z-10" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/10 to-transparent z-10" />
         </div>
-
-        {/* ── Content Layer (Curate Design Structure) ── */}
-        <div className="relative z-20 w-full h-full flex flex-col justify-center px-8 lg:px-24">
           
-          <div className="max-w-4xl space-y-10 lg:space-y-14">
-            
-            {/* Functional Badge */}
-            <motion.div
-              initial={currentSlide === 0 ? false : { opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="inline-flex items-center gap-3 px-3 py-1.5 rounded-lg bg-white/5 backdrop-blur-md border border-white/10"
-            >
-              <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/80">Diagnostic Framework 2.0</span>
-            </motion.div>
-
-            {/* Cinematic Headline */}
-            <motion.div
-              key={`content-${currentSlide}`}
-              initial={currentSlide === 0 ? false : { opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-              style={{ willChange: "opacity, transform" }}
-              className="space-y-4"
-            >
-              <h1 className="text-6xl md:text-8xl lg:text-[110px] font-black text-white leading-[0.85] tracking-[-0.04em] uppercase">
-                {slides[currentSlide].title} <br />
-                <span className="text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.4)]">Medical</span> <span className="text-emerald-400">Care</span>
-              </h1>
-              <p className="max-w-xl text-[13px] lg:text-[14px] font-bold text-white/40 uppercase tracking-[0.4em] leading-relaxed">
-                Synchronizing expert clinical specialization with <br className="hidden lg:block" /> a fluid, patient-first diagnostic interface.
-              </p>
-            </motion.div>
-
-            {/* High-End Action Group */}
+        {/* --- Aesthetic Overlays (Linear Gradient Style) --- */}
+        
+        {/* Full Cinematic Gradient: Bottom-Left to Top-Right */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-tr from-emerald-950/80 via-emerald-900/40 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/20 to-transparent pointer-events-none" />
+ 
+        {/* ── Content Layer (Bottom Left) ── */}
+        <div className="absolute bottom-10 left-8 lg:bottom-16 lg:left-16 z-20 max-w-6xl">
+          <motion.div
+            key={`content-${currentSlide}`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="space-y-6 lg:space-y-8"
+          >
+            {/* Headline */}
+            <h2 className="text-4xl lg:text-7xl font-normal text-white tracking-tight leading-[1.05]">
+              {slides[currentSlide].title} <br />
+              {slides[currentSlide].sub}
+            </h2>
+ 
+            {/* Subtext */}
+            <p className="text-white/80 text-[14px] lg:text-[17px] leading-relaxed max-w-lg font-medium">
+              We help patients access world-class clinical expertise, <br className="hidden lg:block" /> streamline diagnostic pathways, and manage <br className="hidden lg:block" /> healthcare with confidence.
+            </p>
+ 
+            {/* Action Button */}
             <motion.div 
-              initial={currentSlide === 0 ? false : { opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-              className="flex flex-wrap items-center gap-8 pt-4"
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="pt-2"
             >
               <CurateButton 
                 href="/signup" 
-                label="Initiate Diagnosis" 
+                label="Get Started" 
                 variant="secondary" 
-                className="h-16 px-12 text-[13px] shadow-2xl shadow-emerald-950/20"
+                className="h-12 px-1 text-[12px]"
               />
-              <Link 
-                href="/how-it-works" 
-                className="group flex items-center gap-4 text-[11px] font-black uppercase tracking-[0.25em] text-white/40 hover:text-white transition-all"
-              >
-                <span>Our Protocol</span>
-                <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
-                  <ArrowRight size={18} />
-                </div>
-              </Link>
             </motion.div>
-
-          </div>
-
+          </motion.div>
         </div>
+ 
+        {/* ── Trust Badge (Bottom Right) ── */}
+        <motion.div 
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 1, duration: 0.8 }}
+          className="absolute bottom-10 right-8 lg:bottom-16 lg:right-16 z-20 hidden md:block"
+        >
+          <div className="bg-white border border-slate-100 rounded-[18px] p-6 max-w-[240px] shadow-2xl shadow-emerald-950/10">
+            <div className="flex -space-x-3 mb-4">
+              {[1,2,3,4].map((i) => (
+                <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-200 overflow-hidden shadow-sm">
+                  <Image src={`https://i.pravatar.cc/100?u=${i}`} alt="User" width={40} height={40} className="object-cover" />
+                </div>
+              ))}
+              <div className="w-10 h-10 rounded-full border-2 border-white bg-emerald-500 flex items-center justify-center text-white text-[12px] font-black shadow-sm">
+                +
+              </div>
+            </div>
+            <div className="space-y-1">
+              <div className="text-[#1e4a3a] font-black text-2xl tracking-tighter">30k+</div>
+              <div className="text-slate-400 text-[10px] uppercase font-black tracking-[0.2em] leading-snug">
+                Happy clients we have world-wide.
+              </div>
+            </div>
+          </div>
+        </motion.div>
 
-        {/* ── Precision Pagination Dots ── */}
-        <div className="absolute bottom-12 left-12 lg:left-24 z-30 flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            {slides.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => setCurrentSlide(idx)}
-                className={`transition-all duration-700 rounded-full h-1 ${currentSlide === idx ? 'w-12 bg-emerald-400' : 'w-4 bg-white/20 hover:bg-white/40'}`}
-                aria-label={`Cycle to slide ${idx + 1}`}
-              />
-            ))}
-          </div>
-          <div className="w-px h-4 bg-white/10 mx-2" />
-          <div className="text-[10px] font-black uppercase tracking-widest text-white/20">
-            Phase 0{currentSlide + 1}
-          </div>
+        {/* ── Navigation Dots (Bottom Middle) ── */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3">
+          {slides.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentSlide(idx)}
+              className="group py-2 px-1 focus:outline-none"
+              aria-label={`Cycle to slide ${idx + 1}`}
+            >
+              <div className={`transition-all duration-500 rounded-full h-1 ${currentSlide === idx ? 'w-8 bg-white' : 'w-1.5 bg-white/30 hover:bg-white/60'}`} />
+            </button>
+          ))}
         </div>
 
       </div>

@@ -1,14 +1,15 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { Search, User, ChevronDown, ArrowRight, Globe, Clock, Star, ShoppingCart, Menu, X, AlignLeft } from 'lucide-react';
 import { db } from '@/lib/firebase';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import CurateButton from '@/components/UI/Buttons/CurateButton';
 import Logo from '@/components/UI/Logo';
 import { useAuth } from '@/context/AuthContext';
+import { useCart } from '@/context/CartContext';
 import Image from 'next/image';
 
 const getUserColor = (uid) => {
@@ -33,6 +34,7 @@ const CurateHeader = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const router = useRouter();
   const { user, profile, role } = useAuth();
+  const { cartCount } = useCart();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
@@ -54,7 +56,7 @@ const CurateHeader = () => {
   const [allSuggestions, setAllSuggestions] = useState([]);
 
   useEffect(() => {
-    if (!db) return;
+    if (!db || !isSearchOpen) return;
 
     // Fetch Specialties
     const unsubSpec = onSnapshot(collection(db, 'specialties'), (snapshot) => {
@@ -90,11 +92,13 @@ const CurateHeader = () => {
       unsubSpec();
       unsubDoctors();
     };
-  }, []);
+  }, [isSearchOpen]);
 
-  const filteredSuggestions = searchValue.trim().length >= 1 
-    ? allSuggestions.filter(s => s.name.toLowerCase().includes(searchValue.toLowerCase()))
-    : [];
+  const filteredSuggestions = useMemo(() => {
+    if (searchValue.trim().length < 1) return [];
+    const searchLower = searchValue.toLowerCase();
+    return allSuggestions.filter(s => s.name.toLowerCase().includes(searchLower));
+  }, [searchValue, allSuggestions]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -186,7 +190,8 @@ const CurateHeader = () => {
           <div className="flex-shrink-0 w-12 lg:hidden">
             <button 
               onClick={() => setIsMobileMenuOpen(true)}
-              className="w-10 h-10 border border-slate-300 rounded-full flex items-center justify-center text-[#1e4a3a] active:scale-95 transition-transform"
+              className="w-11 h-11 border border-slate-300 rounded-full flex items-center justify-center text-[#1e4a3a] active:scale-95 transition-transform"
+              aria-label="Open Mobile Menu"
             >
               <AlignLeft size={20} />
             </button>
@@ -215,7 +220,7 @@ const CurateHeader = () => {
 
           {/* Logo (Centered) */}
           <motion.div variants={logoVariants} initial="hidden" animate="visible" className={`flex-1 flex justify-center transition-all duration-500 overflow-visible ${isSearchOpen ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100'}`}>
-            <Link href="/" className="flex items-center gap-2 lg:gap-3 group whitespace-nowrap">
+            <Link href="/" className="flex items-center gap-2 lg:gap-3 group whitespace-nowrap" aria-label="Meditaj Home">
               <Logo size="md" className="group-hover:rotate-45 transition-transform duration-500 flex-shrink-0" />
               <div className="flex items-center text-lg lg:text-xl font-bold tracking-tight text-[#1e4a3a] uppercase overflow-visible">
                 <motion.div 
@@ -338,6 +343,7 @@ const CurateHeader = () => {
                   else setIsSearchOpen(false);
                 }}
                 className={`relative z-10 w-11 h-11 rounded-full flex items-center justify-center transition-all ${isSearchOpen ? 'bg-[#1e4a3a] text-white shadow-lg' : 'bg-white border border-slate-300 text-slate-800 hover:bg-[#1e4a3a] hover:text-white'}`}
+                aria-label={isSearchOpen ? "Perform Search" : "Open Search Bar"}
               >
                 <AnimatePresence mode="wait">
                   {isSearchOpen && !searchValue ? (
@@ -358,6 +364,7 @@ const CurateHeader = () => {
               <Link 
                 href={user ? `/dashboard/${role || 'patient'}` : "/login"} 
                 className="w-11 h-11 border border-slate-300 rounded-full flex items-center justify-center text-slate-800 hover:opacity-90 transition-all overflow-hidden relative"
+                aria-label={user ? "Go to Dashboard" : "Login or Register"}
               >
                 {profile?.photoURL || user?.photoURL ? (
                   <Image 
@@ -381,12 +388,23 @@ const CurateHeader = () => {
                   <User size={20}/>
                 )}
               </Link>
-              <Link href="/cart" className="w-11 h-11 border border-slate-300 rounded-full flex items-center justify-center text-slate-800 hover:bg-[#1e4a3a] hover:text-white transition-all"><ShoppingCart size={20}/></Link>
+              <Link href="/cart" className="w-11 h-11 border border-slate-300 rounded-full flex items-center justify-center text-slate-800 hover:bg-[#1e4a3a] hover:text-white transition-all relative" aria-label="View Shopping Cart">
+                <ShoppingCart size={20}/>
+                {cartCount > 0 && (
+                  <motion.span 
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute -top-1 -right-1 bg-[#1e4a3a] text-white text-[9px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm"
+                  >
+                    {cartCount}
+                  </motion.span>
+                )}
+              </Link>
             </motion.div>
 
-            {/* Desktop Book Now */}
+            {/* Desktop Become Provider CTA */}
             <motion.div variants={itemVariants} initial="hidden" animate="visible" className="hidden lg:block">
-              <CurateButton href="/specialist" label="Book now" variant="primary" />
+              <CurateButton href="/become-provider" label="Become Provider" variant="primary" />
             </motion.div>
           </div>
         </div>
@@ -434,6 +452,7 @@ const CurateHeader = () => {
                   <button 
                     onClick={handleSearch}
                     className="absolute right-1 top-1/2 -translate-y-1/2 w-9 h-9 bg-[#1e4a3a] text-white rounded-full flex items-center justify-center hover:bg-[#163529] transition-all"
+                    aria-label="Search"
                   >
                     <Search size={14} />
                   </button>
@@ -453,7 +472,7 @@ const CurateHeader = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="absolute inset-0 bg-[#1e4a3a]/20 backdrop-blur-sm"
+              className="absolute inset-0 bg-[#1e4a3a]/20"
             />
             <motion.div 
               initial={{ x: "-100%" }}
@@ -469,7 +488,7 @@ const CurateHeader = () => {
                   </div>
                   <span className="text-sm font-bold uppercase tracking-tight">Curate <span className="text-[#1e4a3a]/30 font-medium">Menu</span></span>
                 </div>
-                <button onClick={() => setIsMobileMenuOpen(false)} className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-50 text-slate-500 hover:text-[#1e4a3a]">
+                <button onClick={() => setIsMobileMenuOpen(false)} className="w-10 h-10 flex items-center justify-center rounded-full bg-slate-50 text-slate-500 hover:text-[#1e4a3a]" aria-label="Close Mobile Menu">
                   <X size={20} />
                 </button>
               </div>
@@ -505,11 +524,11 @@ const CurateHeader = () => {
                     </div>
                   ))}
 
-                  {/* Integrated Book Now Action */}
+                  {/* Integrated Become Provider Action */}
                   <div className="pt-6 flex justify-start">
                     <CurateButton 
-                      href="/specialist"
-                      label="Book now"
+                      href="/become-provider"
+                      label="Become Provider"
                       variant="primary"
                       onClick={() => setIsMobileMenuOpen(false)}
                     />

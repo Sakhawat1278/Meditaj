@@ -1,6 +1,10 @@
 'use client';
 import { usePathname } from 'next/navigation';
-import CurateHeader from '@/components/Home/CurateHeader';
+import dynamic from 'next/dynamic';
+const CurateHeader = dynamic(() => import('@/components/Home/CurateHeader'), { 
+  ssr: true,
+  loading: () => <div className="h-[88px] w-full bg-white border-b border-slate-200" />
+});
 
 export default function NavigationWrapper() {
   const pathname = usePathname();

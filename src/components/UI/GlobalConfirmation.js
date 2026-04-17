@@ -1,6 +1,6 @@
 'use client';
-import { motion } from 'framer-motion';
-import { AlertTriangle, Info, X, ShieldAlert, Loader2 } from 'lucide-react';
+import { m as motion } from 'framer-motion';
+import { AlertTriangle, Info, X, ShieldAlert, Loader2, CheckCircle2 } from 'lucide-react';
 import { useState } from 'react';
 
 export default function GlobalConfirmation({ 
@@ -46,6 +46,13 @@ export default function GlobalConfirmation({
  button: 'bg-blue-600 hover:bg-blue-700',
  border: 'border-blue-100',
  accent: 'bg-blue-500'
+ },
+ success: {
+ bg: 'bg-emerald-50',
+ icon: 'text-emerald-500',
+ button: 'bg-emerald-600 hover:bg-emerald-700',
+ border: 'border-emerald-100',
+ accent: 'bg-emerald-500'
  }
  };
 
@@ -58,7 +65,7 @@ export default function GlobalConfirmation({
  animate={{ opacity: 1 }}
  exit={{ opacity: 0 }}
  onClick={onCancel}
- className="absolute inset-0 bg-[#1e4a3a]/40 backdrop-blur-[1px]"
+ className="absolute inset-0 bg-[#1e4a3a]/40"
  />
  
  <motion.div 
@@ -73,6 +80,7 @@ export default function GlobalConfirmation({
  {type === 'danger' && <ShieldAlert size={18} strokeWidth={2.5} />}
  {type === 'warning' && <AlertTriangle size={18} strokeWidth={2.5} />}
  {type === 'info' && <Info size={18} strokeWidth={2.5} />}
+ {type === 'success' && <CheckCircle2 size={18} strokeWidth={2.5} />}
  </div>
  
  <div className="pt-1">

@@ -1,6 +1,7 @@
 'use client';
 import { usePathname } from 'next/navigation';
-import CurateFooter from '@/components/Home/CurateFooter';
+import dynamic from 'next/dynamic';
+const CurateFooter = dynamic(() => import('@/components/Home/CurateFooter'), { ssr: true });
 
 export default function FooterWrapper() {
   const pathname = usePathname();

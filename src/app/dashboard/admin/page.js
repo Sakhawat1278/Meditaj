@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, Suspense, useRef } from 'react';
+import { useState, useEffect, Suspense, useRef, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import DashboardLayout from '@/components/Dashboard/DashboardLayout';
 import { 
@@ -12,17 +12,32 @@ import {
  MessageSquare, FolderOpen, Upload, FileText, ChevronDown, Landmark, CreditCard, Smartphone, Wallet,
  Camera, Lock, MapPin, Briefcase, ShieldAlert, LogOut, Navigation, Tag, MoreVertical, ImagePlus
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { collection, query, where, getDocs, getDoc, doc, updateDoc, onSnapshot, setDoc, deleteDoc, addDoc, arrayUnion } from 'firebase/firestore';
+import { m as motion, AnimatePresence } from 'framer-motion';
+import { collection, query, where, getDocs, getDoc, doc, updateDoc, onSnapshot, setDoc, deleteDoc, addDoc, arrayUnion, orderBy } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, auth, secondaryAuth, storage } from '@/lib/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useConfirm } from '@/context/ConfirmationContext';
 import { toast } from 'react-hot-toast';
-import LabModals from '@/components/Dashboard/Admin/LabModals';
-import AmbulanceManagement from '@/components/Dashboard/Admin/AmbulanceManagement';
-import CustomDropdown from '@/components/UI/CustomDropdown';
-import DatePicker from '@/components/UI/DatePicker';
+import dynamic from 'next/dynamic';
+
+const LabModals = dynamic(() => import('@/components/Dashboard/Admin/LabModals'), { 
+  ssr: false, 
+  loading: () => <div className="p-8 flex justify-center"><Loader2 className="animate-spin text-[#1e4a3a]" size={24} /></div> 
+});
+
+const AmbulanceManagement = dynamic(() => import('@/components/Dashboard/Admin/AmbulanceManagement'), { 
+  ssr: false, 
+  loading: () => <div className="p-8 flex justify-center"><Loader2 className="animate-spin text-[#1e4a3a]" size={24} /></div> 
+});
+
+const StoreManagement = dynamic(() => import('@/components/Dashboard/Admin/StoreManagement'), { 
+  ssr: false, 
+  loading: () => <div className="p-8 flex justify-center"><Loader2 className="animate-spin text-[#1e4a3a]" size={24} /></div> 
+});
+
+const DatePicker = dynamic(() => import('@/components/UI/DatePicker'), { ssr: false });
+const CustomDropdown = dynamic(() => import('@/components/UI/CustomDropdown'), { ssr: false });
 import { bdLocations, getDivisions, getDistricts, getAreas, mergeLocations } from '@/lib/locationData';
 
 function AdminDashboardContent() {
@@ -68,13 +83,6 @@ function AdminDashboardContent() {
  const [isDoctorsLoading, setIsDoctorsLoading] = useState(true);
  const [selectedDoctor, setSelectedDoctor] = useState(null);
  const [editingDoctor, setEditingDoctor] = useState(null);
- const [confirmModal, setConfirmModal] = useState({
- show: false,
- title: '',
- message: '',
- onConfirm: () => {},
- type: 'danger'
- });
  const [isEditingPatient, setIsEditingPatient] = useState(false);
  const [profileTab, setProfileTab] = useState('history'); // history, files
  const [patientFile, setPatientFile] = useState(null);
@@ -332,6 +340,13 @@ function AdminDashboardContent() {
   };
 
   const handleUpdateAmbulanceBookingStatus = async (booking, newStatus) => {
+    const isConfirmed = await confirm({
+      title: 'Update Trip Status?',
+      message: `Change medical transport status to "${newStatus}"? This will be reflected in the patient's tracker.`,
+      confirmText: 'Update Status',
+      type: 'warning'
+    });
+    if (!isConfirmed) return;
     try {
       await updateDoc(doc(db, 'ambulance_bookings', booking.id), { status: newStatus });
       
@@ -346,6 +361,13 @@ function AdminDashboardContent() {
 
   const handleCompleteAssignment = async (ambulance) => {
     if (!selectedBookingForAssignment) return;
+    const isConfirmed = await confirm({
+      title: 'Confirm Dispatch?',
+      message: `Assign ambulance ${ambulance.plateNumber} to ${selectedBookingForAssignment.patientName}'s request?`,
+      confirmText: 'Confirm & Dispatch',
+      type: 'success'
+    });
+    if (!isConfirmed) return;
     setIsSaving(true);
     try {
       // 1. Update Booking
@@ -390,10 +412,16 @@ function AdminDashboardContent() {
  setPendingProviders(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
  });
 
- const qStaff = query(collection(db, 'users'), where('role', '==', 'receptionist'));
- const unStaff = onSnapshot(qStaff, (snapshot) => {
- setStaff(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
- });
+    const unStaff = onSnapshot(query(collection(db, 'users'), where('role', '==', 'receptionist')), (snapshot) => {
+      const sorted = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .sort((a, b) => {
+          const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+          const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+          return dateB - dateA;
+        });
+      setStaff(sorted);
+    });
 
  const unAllUsers = onSnapshot(collection(db, 'users'), (snapshot) => {
  let doctors = 0;
@@ -420,17 +448,31 @@ function AdminDashboardContent() {
  setIsSpecialtiesLoaded(true);
  });
 
- const qPatients = query(collection(db, 'users'), where('role', '==', 'patient'));
- const unPatients = onSnapshot(qPatients, (snapshot) => {
- setPatients(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
- setIsPatientsLoading(false);
- });
+    const qPatients = query(collection(db, 'users'), where('role', '==', 'patient'));
+    const unPatients = onSnapshot(qPatients, (snapshot) => {
+      const sorted = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .sort((a, b) => {
+          const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+          const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+          return dateB - dateA;
+        });
+      setPatients(sorted);
+      setIsPatientsLoading(false);
+    });
 
- const qDoctors = query(collection(db, 'users'), where('role', '==', 'doctor'));
- const unDoctors = onSnapshot(qDoctors, (snapshot) => {
- setDoctors(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
- setIsDoctorsLoading(false);
- });
+    const qDoctors = query(collection(db, 'users'), where('role', '==', 'doctor'));
+    const unDoctors = onSnapshot(qDoctors, (snapshot) => {
+      const sorted = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .sort((a, b) => {
+          const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+          const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+          return dateB - dateA;
+        });
+      setDoctors(sorted);
+      setIsDoctorsLoading(false);
+    });
 
  // Settings listeners
  const unSettings = onSnapshot(doc(db, 'settings', 'global'), (snapshot) => {
@@ -445,13 +487,27 @@ function AdminDashboardContent() {
  setCoupons(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
  });
 
- const unManualPayments = onSnapshot(query(collection(db, 'manual_payments'), where('status', '==', 'pending')), (snapshot) => {
- setPendingPayments(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
- });
+    const unManualPayments = onSnapshot(query(collection(db, 'manual_payments'), where('status', '==', 'pending')), (snapshot) => {
+      const sorted = snapshot.docs
+        .map(doc => ({ id: doc.id, ...doc.data() }))
+        .sort((a, b) => {
+          const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+          const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+          return dateB - dateA;
+        });
+      setPendingPayments(sorted);
+    });
 
- const unAllAppts = onSnapshot(collection(db, 'appointments'), (snapshot) => {
- setAllAppointments(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
- });
+  const unAllAppts = onSnapshot(collection(db, 'appointments'), (snapshot) => {
+    const sorted = snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .sort((a, b) => {
+        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+        return dateB - dateA;
+      });
+    setAllAppointments(sorted);
+  });
 
   const unProviders = onSnapshot(collection(db, 'lab_providers'), (snap) => {
   setLabProviders(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
@@ -459,7 +515,7 @@ function AdminDashboardContent() {
   const unTests = onSnapshot(collection(db, 'lab_tests'), (snap) => {
   setLabTests(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
   });
-  const unLabBookings = onSnapshot(collection(db, 'lab_bookings'), (snap) => {
+  const unLabBookings = onSnapshot(query(collection(db, 'lab_bookings'), orderBy('createdAt', 'desc')), (snap) => {
     setLabBookings(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
   });
 
@@ -474,7 +530,7 @@ function AdminDashboardContent() {
     setIsNursingLoading(false);
   });
 
-  const unNursingBookings = onSnapshot(collection(db, 'nursing_bookings'), (snap) => {
+  const unNursingBookings = onSnapshot(query(collection(db, 'nursing_bookings'), orderBy('createdAt', 'desc')), (snap) => {
     setNursingBookings(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
   });
 
@@ -510,7 +566,7 @@ function AdminDashboardContent() {
  }, []);
 
  useEffect(() => {
-  const unAmbulanceBookings = onSnapshot(collection(db, 'ambulance_bookings'), (snap) => {
+  const unAmbulanceBookings = onSnapshot(query(collection(db, 'ambulance_bookings'), orderBy('createdAt', 'desc')), (snap) => {
     setAmbulanceBookings(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
   });
   const unAmbulanceFleet = onSnapshot(collection(db, 'ambulance_fleet'), (snap) => {
@@ -659,53 +715,66 @@ function AdminDashboardContent() {
  };
  }, [selectedPatient]);
 
- const filteredPatients = patients.filter(p => {
- const matchesSearch = (p.fullName?.toLowerCase().includes(patientSearch.toLowerCase()) || 
- p.email?.toLowerCase().includes(patientSearch.toLowerCase()) ||
- p.phone?.includes(patientSearch));
- 
- if (filterStatus === 'active') return matchesSearch && (p.status === 'active' || p.status === 'approved');
- if (filterStatus === 'deactivated') return matchesSearch && (p.status !== 'active' && p.status !== 'approved');
- return matchesSearch;
- });
+  const filteredPatients = useMemo(() => patients.filter(p => {
+    const matchesSearch = (p.fullName?.toLowerCase().includes(patientSearch.toLowerCase()) || 
+      p.email?.toLowerCase().includes(patientSearch.toLowerCase()) ||
+      p.phone?.includes(patientSearch));
+      
+    if (filterStatus === 'active') return matchesSearch && (p.status === 'active' || p.status === 'approved');
+    if (filterStatus === 'deactivated') return matchesSearch && (p.status !== 'active' && p.status !== 'approved');
+    return matchesSearch;
+  }), [patients, patientSearch, filterStatus]);
 
- const filteredDoctors = doctors.filter(d => {
- return (
- d.fullName?.toLowerCase().includes(doctorSearch.toLowerCase()) || 
- d.email?.toLowerCase().includes(doctorSearch.toLowerCase()) ||
- d.phone?.includes(doctorSearch) ||
- d.specialties?.some(s => s.toLowerCase().includes(doctorSearch.toLowerCase()))
- );
- });
+  const filteredDoctors = useMemo(() => doctors.filter(d => {
+    return (
+      d.fullName?.toLowerCase().includes(doctorSearch.toLowerCase()) || 
+      d.email?.toLowerCase().includes(doctorSearch.toLowerCase()) ||
+      d.phone?.includes(doctorSearch) ||
+      d.specialties?.some(s => s.toLowerCase().includes(doctorSearch.toLowerCase()))
+    );
+  }), [doctors, doctorSearch]);
 
- const filteredStaff = staff.filter(s => {
- const searchLower = staffSearch.toLowerCase();
- return (
- (s.fullName || s.name || '').toLowerCase().includes(searchLower) ||
- (s.email || '').toLowerCase().includes(searchLower) ||
- (s.phone || '').includes(staffSearch)
- );
- });
+  const filteredStaff = useMemo(() => staff.filter(s => {
+    const searchLower = staffSearch.toLowerCase();
+    return (
+      (s.fullName || s.name || '').toLowerCase().includes(searchLower) ||
+      (s.email || '').toLowerCase().includes(searchLower) ||
+      (s.phone || '').includes(staffSearch)
+    );
+  }), [staff, staffSearch]);
 
- const filteredAppointments = allAppointments.filter(appt => {
- const matchesSearch = 
- appt.patientName?.toLowerCase().includes(apptSearch.toLowerCase()) ||
- appt.doctorName?.toLowerCase().includes(apptSearch.toLowerCase()) ||
- appt.id?.toLowerCase().includes(apptSearch.toLowerCase());
- 
- if (!matchesSearch) return false;
- 
- if (apptFilter === 'all') return true;
- if (apptFilter === 'today') {
- const today = new Date().toLocaleDateString();
- const apptDate = appt.date ? (appt.date.toDate ? appt.date.toDate().toLocaleDateString() : new Date(appt.date).toLocaleDateString()) : '';
- return apptDate === today;
- }
- if (apptFilter === 'upcoming') return appt.status === 'confirmed' || appt.status === 'pending';
- if (apptFilter === 'completed') return appt.status === 'completed';
- if (apptFilter === 'cancelled') return appt.status === 'cancelled';
- return true;
- });
+  const allClinicalRecords = useMemo(() => {
+    return [
+      ...allAppointments.map(a => ({ ...a, category: 'Specialist', providerName: a.doctorName || 'General Physician' })),
+      ...labBookings.map(l => ({ ...l, category: 'Laboratory', providerName: 'Diagnostic Wing' })),
+      ...nursingBookings.map(n => ({ ...n, category: 'Nursing', providerName: n.caregiverName || 'Healthcare Provider' }))
+    ].sort((a, b) => {
+      const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+      const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+      return dateB - dateA;
+    });
+  }, [allAppointments, labBookings, nursingBookings]);
+
+  const filteredAppointments = useMemo(() => allClinicalRecords.filter(appt => {
+    const searchLower = (apptSearch || '').toLowerCase();
+    const matchesSearch = 
+      (appt.patientName || '').toLowerCase().includes(searchLower) ||
+      (appt.providerName || '').toLowerCase().includes(searchLower) ||
+      (appt.id || '').toLowerCase().includes(searchLower);
+      
+    if (!matchesSearch) return false;
+    
+    if (apptFilter === 'all') return true;
+    if (apptFilter === 'today') {
+      const today = new Date().toLocaleDateString();
+      const apptDate = appt.date ? (appt.date.toDate ? appt.date.toDate().toLocaleDateString() : new Date(appt.date).toLocaleDateString()) : '';
+      return apptDate === today;
+    }
+    if (apptFilter === 'upcoming') return appt.status === 'confirmed' || appt.status === 'pending';
+    if (apptFilter === 'completed') return appt.status === 'completed';
+    if (apptFilter === 'cancelled') return appt.status === 'cancelled';
+    return true;
+  }), [allClinicalRecords, apptSearch, apptFilter]);
 
  const handleCancelAppointment = async (apptId) => {
  const isConfirmed = await confirm({
@@ -986,13 +1055,49 @@ function AdminDashboardContent() {
  return <Icon {...props} />;
  };
 
- const approveProvider = async (uid) => {
- try {
- await updateDoc(doc(db, 'users', uid), { status: 'approved' });
- } catch (error) {
- console.error("Approval error:", error);
- }
- };
+  const approveProvider = async (uid) => {
+    const isConfirmed = await confirm({
+      title: 'Approve Specialist?',
+      message: 'This will grant the specialist full access to their dashboard and list them as an active provider in the directory.',
+      confirmText: 'Approve Access',
+      type: 'success'
+    });
+    
+    if (!isConfirmed) return;
+
+    try {
+      await updateDoc(doc(db, 'users', uid), { 
+        status: 'approved',
+        approvedAt: new Date().toISOString()
+      });
+      toast.success('Provider approved successfully');
+    } catch (error) {
+      console.error("Approval error:", error);
+      toast.error('Failed to approve provider');
+    }
+  };
+
+  const rejectProvider = async (uid) => {
+    const isConfirmed = await confirm({
+      title: 'Reject Application?',
+      message: 'This will deny the specialist access and notify them of the rejection. You can still review their details in the archive.',
+      confirmText: 'Reject & Notify',
+      type: 'danger'
+    });
+    
+    if (!isConfirmed) return;
+
+    try {
+      await updateDoc(doc(db, 'users', uid), { 
+        status: 'rejected',
+        rejectedAt: new Date().toISOString()
+      });
+      toast.error('Application rejected');
+    } catch (error) {
+      console.error("Rejection error:", error);
+      toast.error('Failed to reject application');
+    }
+  };
 
  const handleCreateStaff = async (e) => {
  e.preventDefault();
@@ -1087,43 +1192,144 @@ function AdminDashboardContent() {
     }
   };
 
- const approveManualPayment = async (paymentId, appointmentId) => {
- setIsProcessingPayment(true);
- try {
- await updateDoc(doc(db, 'manual_payments', paymentId), {
- status: 'approved',
- processedAt: new Date().toISOString()
- });
- if (appointmentId) {
- await updateDoc(doc(db, 'appointments', appointmentId), {
- status: 'confirmed',
- paymentStatus: 'paid',
- confirmedAt: new Date().toISOString()
- });
- }
- toast.success('Payment verified & Appointment confirmed');
- } catch (error) {
- console.error(error);
- toast.error('Verification failed');
- } finally {
- setIsProcessingPayment(false);
- }
- };
+  const approveManualPayment = async (payment) => {
+    const isConfirmed = await confirm({
+      title: 'Verify & Approve Payment?',
+      message: `You are about to verify the transaction for ${payment.userName}. This will automatically confirm all related clinical bookings and notify the patient.`,
+      confirmText: 'Approve & Confirm',
+      type: 'success'
+    });
+    
+    if (!isConfirmed) return;
+    
+    setIsProcessingPayment(true);
+    const toastId = toast.loading('Processing approval...');
+    try {
+      // 1. Identify all related bookings (handle legacy single-entry and new array-based entries)
+      const related = payment.relatedBookings || [
+        { id: payment.appointmentId, collection: payment.appointmentCollection || 'appointments' }
+      ];
+      
+      let successCount = 0;
+      // 2. Update status for all linked services/products
+      for (const booking of related) {
+        if (booking.id && booking.collection) {
+          try {
+            await updateDoc(doc(db, booking.collection, booking.id), {
+              status: 'confirmed',
+              paymentStatus: 'paid',
+              confirmedAt: new Date().toISOString()
+            });
+            successCount++;
+          } catch (err) {
+            console.error(`Failed to update booking ${booking.id}:`, err);
+          }
+        }
+      }
+      
+      // 3. Update the manual payment record
+      await updateDoc(doc(db, 'manual_payments', payment.id), {
+        status: 'approved',
+        processedAt: new Date().toISOString(),
+        successCount
+      });
+      
+      toast.success(successCount > 0 ? 'Payment verified & all related bookings confirmed' : 'Payment marked approved, but no related bookings were found', { id: toastId });
+    } catch (error) {
+      console.error(error);
+      toast.error('Verification failed: ' + (error.message || 'Unknown error'), { id: toastId });
+    } finally {
+      setIsProcessingPayment(false);
+    }
+  };
 
- const rejectManualPayment = async (paymentId) => {
- setIsProcessingPayment(true);
- try {
- await updateDoc(doc(db, 'manual_payments', paymentId), {
- status: 'rejected',
- processedAt: new Date().toISOString()
- });
- toast.error('Payment rejected');
- } catch (error) {
- console.error(error);
- } finally {
- setIsProcessingPayment(false);
- }
- };
+  const rejectManualPayment = async (payment) => {
+    const isConfirmed = await confirm({
+      title: 'Reject Payment Request?',
+      message: 'This will mark the payment as failed and cancel all associated clinical bookings. The patient will be notified of the rejection.',
+      confirmText: 'Reject & Cancel',
+      type: 'danger'
+    });
+    
+    if (!isConfirmed) return;
+    
+    setIsProcessingPayment(true);
+    const toastId = toast.loading('Processing rejection...');
+    try {
+      // 1. Identify all related bookings
+      const related = payment.relatedBookings || [
+        { id: payment.appointmentId, collection: payment.appointmentCollection || 'appointments' }
+      ];
+
+      for (const booking of related) {
+        if (booking.id && booking.collection) {
+          try {
+            await updateDoc(doc(db, booking.collection, booking.id), {
+              status: 'cancelled',
+              paymentStatus: 'failed',
+              rejectionReason: 'Payment verification failed'
+            });
+          } catch (err) {
+            console.error(`Failed to cancel booking ${booking.id}:`, err);
+          }
+        }
+      }
+
+      // 2. Update the manual payment record
+      await updateDoc(doc(db, 'manual_payments', payment.id), {
+        status: 'rejected',
+        processedAt: new Date().toISOString()
+      });
+
+      toast.success('Payment rejected & bookings cancelled', { id: toastId });
+    } catch (error) {
+      console.error(error);
+      toast.error('Rejection failed', { id: toastId });
+    } finally {
+      setIsProcessingPayment(false);
+    }
+  };
+
+  const deleteManualPayment = async (payment) => {
+    const isConfirmed = await confirm({
+      title: 'Delete Payment Request?',
+      message: 'This will permanently remove the payment log AND all associated clinical bookings. This action is irreversible.',
+      confirmText: 'Delete Everything',
+      type: 'danger'
+    });
+    
+    if (!isConfirmed) return;
+    
+    setIsProcessingPayment(true);
+    const toastId = toast.loading('Deleting records...');
+    try {
+      // 1. Identify all related bookings
+      const related = payment.relatedBookings || [
+        { id: payment.appointmentId, collection: payment.appointmentCollection || 'appointments' }
+      ];
+      
+      // 2. Delete all linked services/products
+      for (const booking of related) {
+        if (booking.id && booking.collection) {
+          try {
+            await deleteDoc(doc(db, booking.collection, booking.id));
+          } catch (err) {
+            console.error(`Failed to delete booking ${booking.id}:`, err);
+          }
+        }
+      }
+      
+      // 3. Delete the manual payment record
+      await deleteDoc(doc(db, 'manual_payments', payment.id));
+      
+      toast.success('Payment and associated bookings deleted successfully', { id: toastId });
+    } catch (error) {
+      console.error(error);
+      toast.error('Deletion failed', { id: toastId });
+    } finally {
+      setIsProcessingPayment(false);
+    }
+  };
 
 
  const handleRegisterDoctor = async (e) => {
@@ -1373,13 +1579,13 @@ function AdminDashboardContent() {
  <table className="w-full text-left border-collapse">
  <thead>
  <tr className="bg-slate-50/50 border-b border-slate-300">
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Booking ID</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Patient Identity</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Assigned Physician</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Consultation Type</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Schedule</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Status</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-right">Action</th>
+  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Booking ID</th>
+  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Patient Identity</th>
+  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Category</th>
+  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Provider / Dept</th>
+  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-center">Schedule</th>
+  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-center">Status</th>
+  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-right">Action</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-slate-200">
@@ -1392,27 +1598,27 @@ function AdminDashboardContent() {
  className="group hover:bg-slate-50/50 transition-all cursor-default"
  >
  <td className="px-6 py-4">
- <span className="text-[11px] font-bold text-slate-400">#{appt.id?.slice(0, 8).toUpperCase()}</span>
+  <span className="text-[11px] font-bold text-slate-400">#{appt.id?.slice(0, 8).toUpperCase()}</span>
  </td>
  <td className="px-6 py-4">
- <div className="flex items-center gap-3">
- <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-[11px] font-bold text-slate-400 border border-slate-200">
- {appt.patientName?.[0] || 'P'}
- </div>
- <span className="text-[12px] font-bold text-[#1e4a3a] truncate max-w-[120px]">{appt.patientName || 'Anonymous'}</span>
- </div>
+  <div className="flex flex-col">
+  <span className="text-[12px] font-black text-[#1e4a3a] leading-tight">{appt.patientName || 'Anonymous'}</span>
+  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{appt.patientPhone || 'No Phone'}</span>
+  </div>
  </td>
  <td className="px-6 py-4">
- <div className="flex items-center gap-2">
- <Stethoscope size={14} className="text-slate-300" />
- <span className="text-[12px] font-bold text-slate-700">{appt.doctorName || 'General Staff'}</span>
- </div>
+  <span className="px-2 py-0.5 bg-slate-50 border border-slate-200 rounded text-[9px] font-bold text-slate-500 uppercase tracking-tight">
+  {appt.category || 'Service'}
+  </span>
  </td>
- <td className="px-6 py-4">
- <span className={`px-2 py-0.5 text-[9px] font-black uppercase tracking-widest rounded-md border ${appt.appointmentType === 'Online' ? 'bg-blue-50 border-blue-200 text-blue-600' : 'bg-slate-50 border-slate-300 text-slate-600'}`}>
- {appt.appointmentType || 'In-Person'}
- </span>
- </td>
+                        <td className="px-6 py-4">
+                          <div className="flex flex-col">
+                            <span className="text-[12px] font-bold text-slate-700 leading-tight">{appt.providerName || 'Healthcare Provider'}</span>
+                            <span className="text-[9px] text-slate-400 font-bold uppercase tracking-widest truncate max-w-[200px]" title={appt.items?.map(i => i.name).join(', ')}>
+                              {appt.items?.length > 0 ? appt.items.map(i => i.name).join(', ') : (appt.type || 'Clinical Service')}
+                            </span>
+                          </div>
+                        </td>
  <td className="px-6 py-4">
  <div className="flex flex-col">
  <span className="text-[11px] font-bold text-[#1e4a3a] tracking-tight">
@@ -1607,15 +1813,14 @@ function AdminDashboardContent() {
 
                           {doc.status === 'deactivated' ? (
                             <button 
-                              onClick={() => {
+                              onClick={async () => {
                                 setActiveMenuId(null);
-                                setConfirmModal({
-                                  show: true,
+                                const isConfirmed = await confirm({
                                   title: 'Reactivate Doctor Access?',
                                   message: `You are about to restore clinical access for ${doc.fullName}. They will once again be able to log in and manage patient appointments.`,
-                                  type: 'success',
-                                  onConfirm: () => handleReactivateDoctor(doc.id)
+                                  type: 'success'
                                 });
+                                if (isConfirmed) handleReactivateDoctor(doc.id);
                               }}
                               className="w-full flex items-center gap-3 p-3 text-emerald-600 hover:bg-emerald-50 transition-all font-bold text-[12px] text-left"
                             >
@@ -1624,15 +1829,14 @@ function AdminDashboardContent() {
                             </button>
                           ) : (
                             <button 
-                              onClick={() => {
+                              onClick={async () => {
                                 setActiveMenuId(null);
-                                setConfirmModal({
-                                  show: true,
+                                const isConfirmed = await confirm({
                                   title: 'Revoke Doctor Access?',
                                   message: 'This will temporarily prevent the doctor from creating new sessions. Active appointments must be handled manually.',
-                                  type: 'danger',
-                                  onConfirm: () => handleDeactivateDoctor(doc.id)
+                                  type: 'danger'
                                 });
+                                if (isConfirmed) handleDeactivateDoctor(doc.id);
                               }}
                               className="w-full flex items-center gap-3 p-3 text-rose-500 hover:bg-rose-50 transition-all font-bold text-[12px] text-left"
                             >
@@ -1695,7 +1899,7 @@ function AdminDashboardContent() {
  <div className="relative">
  <button 
  onClick={() => setShowFilterDropdown(!showFilterDropdown)}
- className={`h-10 px-5 rounded-xl text-[11px] font-bold flex items-center gap-2 transition-all ${filterStatus !== 'all' ? 'bg-med-primary text-white -primary/20' : 'bg-[#1e4a3a] text-white hover:bg-black -100'}`}
+ className={`h-10 px-5 rounded-xl text-[11px] font-bold flex items-center gap-2 transition-all ${filterStatus !== 'all' ? 'bg-med-primary text-white -primary/20' : 'bg-[#1e4a3a] text-white hover:bg-black'}`}
  >
  <Filter size={14} />
  {filterStatus === 'all' ? 'Filter' : filterStatus.charAt(0).toUpperCase() + filterStatus.slice(1)}
@@ -1835,15 +2039,14 @@ function AdminDashboardContent() {
  <div className="h-px bg-[#1e4a3a]/5 my-1" />
  {patient.status === 'deactivated' ? (
  <button 
- onClick={() => { 
+ onClick={async () => { 
  setActiveMenuId(null); 
- setConfirmModal({
- show: true,
+ const isConfirmed = await confirm({
  title: 'Reactivate Patient Access?',
  message: `You are about to restore clinical access for ${patient.fullName}. They will once again be able to log in and manage patient appointments.`,
- type: 'success',
- onConfirm: () => handleReactivatePatient(patient.id)
+ type: 'success'
  });
+ if (isConfirmed) handleReactivatePatient(patient.id);
  }} 
  className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50 text-emerald-600 transition-all font-bold text-[12px]"
  >
@@ -1852,15 +2055,14 @@ function AdminDashboardContent() {
  </button>
  ) : (
  <button 
- onClick={() => { 
+ onClick={async () => { 
  setActiveMenuId(null); 
- setConfirmModal({
- show: true,
+ const isConfirmed = await confirm({
  title: 'Revoke Patient Access?',
  message: `You are about to deactivate access for ${patient.fullName}. They will no longer be able to log in or manage patient appointments until manually reinstated.`,
- type: 'danger',
- onConfirm: () => handleDeactivatePatient(patient.id)
+ type: 'danger'
  });
+ if (isConfirmed) handleDeactivatePatient(patient.id);
  }} 
  className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-rose-50 text-rose-500 transition-all font-bold text-[12px]"
  >
@@ -1933,7 +2135,7 @@ function AdminDashboardContent() {
  </div>
  <button 
  onClick={() => setShowAddStaff(true)}
- className="h-10 px-6 bg-[#1e4a3a] hover:bg-black text-white text-[11px] font-bold rounded-xl transition-all flex items-center gap-2 -100"
+ className="h-10 px-6 bg-[#1e4a3a] hover:bg-black text-white text-[11px] font-bold rounded-xl transition-all flex items-center gap-2"
  >
  <Plus size={14} />
  Register Staff
@@ -2025,15 +2227,14 @@ function AdminDashboardContent() {
  <div className="h-px bg-[#1e4a3a]/5 my-1" />
  {isActive ? (
  <button 
- onClick={() => { 
+ onClick={async () => { 
  setActiveMenuId(null); 
- setConfirmModal({
- show: true,
+ const isConfirmed = await confirm({
  title: 'Revoke Staff Access?',
  message: `You are about to deactivate system access for ${name}. They will be immediately logged out and blocked.`,
- type: 'danger',
- onConfirm: () => handleDeactivateDoctor(member.id)
+ type: 'danger'
  });
+ if (isConfirmed) handleDeactivateDoctor(member.id);
  }} 
  className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-rose-50 text-rose-500 transition-all font-bold text-[12px]"
  >
@@ -2042,19 +2243,18 @@ function AdminDashboardContent() {
  </button>
  ) : (
  <button 
- onClick={() => { 
+ onClick={async () => { 
  setActiveMenuId(null); 
- setConfirmModal({
- show: true,
+ const isConfirmed = await confirm({
  title: 'Restore Staff Access?',
- message: `Do you want to re-enable administrative access for ${name}?`,
- type: 'success',
- onConfirm: () => handleReactivateDoctor(member.id)
+ message: `Re-enable clinical portal access for ${name}?`,
+ type: 'success'
  });
+ if (isConfirmed) handleReactivateDoctor(member.id);
  }} 
  className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50 text-emerald-600 transition-all font-bold text-[12px]"
  >
- <div className="w-7 h-7 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center"><CheckCircle2 size={14} /></div>
+ <div className="w-7 h-7 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center"><CheckCircle2 size={14} /></div>
  Restore Access
  </button>
  )}
@@ -2164,12 +2364,15 @@ function AdminDashboardContent() {
  <div className="flex items-center justify-end gap-2">
  <button 
  onClick={() => approveProvider(provider.uid)}
- className="h-8 px-4 bg-emerald-600 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-emerald-700 transition-all -100"
+ className="h-8 px-4 bg-emerald-600 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-emerald-700 transition-all"
  >
  <UserCheck size={12} />
  Approve
  </button>
- <button className="h-8 w-8 bg-rose-50 text-rose-500 border border-rose-100 rounded-lg flex items-center justify-center hover:bg-rose-100 transition-all">
+ <button 
+ onClick={() => rejectProvider(provider.uid)}
+ className="h-8 w-8 bg-rose-50 text-rose-500 border border-rose-100 rounded-lg flex items-center justify-center hover:bg-rose-100 transition-all"
+ >
  <X size={14} />
  </button>
  </div>
@@ -2302,6 +2505,7 @@ function AdminDashboardContent() {
  <thead>
  <tr className="bg-slate-50/50 border-b border-[#1e4a3a]/10">
  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Transaction ID</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Patient Identity</th>
  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Appointment</th>
  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Method</th>
  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Amount</th>
@@ -2315,28 +2519,52 @@ function AdminDashboardContent() {
  initial={{ opacity: 0, y: 10 }}
  animate={{ opacity: 1, y: 0 }}
  transition={{ delay: idx * 0.05 }}
- className="group hover:bg-slate-50/50 transition-all"
+ className="group hover:bg-slate-50/50 transition-all border-b border-slate-200"
  >
- <td className="px-6 py-4 text-[12px] font-bold text-[#1e4a3a] uppercase tracking-tight">{payment.transactionId}</td>
- <td className="px-6 py-4 text-[12px] font-bold text-slate-600">#{payment.appointmentId.slice(-6)}</td>
+ <td className="px-6 py-4">
+ <div className="flex flex-col gap-1">
+ <span className="text-[12px] font-black text-[#1e4a3a] uppercase tracking-tight">{payment.transactionId || 'N/A'}</span>
+ <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{payment.type || 'Booking'}</span>
+ </div>
+ </td>
+ <td className="px-6 py-4">
+ <div className="flex flex-col">
+ <span className="text-[12px] font-black text-[#1e4a3a] leading-tight">{payment.userName || 'Anonymous'}</span>
+ <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{payment.userPhone || 'No Phone'}</span>
+ </div>
+ </td>
+ <td className="px-6 py-4 text-[12px] font-bold text-slate-600">#{payment.appointmentId ? payment.appointmentId.slice(-6) : 'REF'}</td>
  <td className="px-6 py-4">
  <span className="text-[9px] text-[#1e4a3a] uppercase tracking-widest px-2 py-0.5 bg-slate-100 border border-slate-200 rounded-md font-bold">{payment.method}</span>
  </td>
  <td className="px-6 py-4 text-[12px] font-black text-[#1e4a3a]">৳{payment.amount}</td>
  <td className="px-6 py-4">
- <div className="flex justify-end gap-2">
- <button 
- onClick={() => approveManualPayment(payment.id, payment.appointmentId)}
- disabled={isProcessingPayment}
- className="h-8 px-4 bg-emerald-600 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-700 transition-all -100"
- >
- Approve
- </button>
- <button className="h-8 w-8 bg-rose-50 text-rose-500 border border-rose-100 rounded-lg flex items-center justify-center hover:bg-rose-100 transition-all">
- <X size={14} />
- </button>
- </div>
- </td>
+    <div className="flex justify-end gap-2">
+      <button 
+        onClick={() => approveManualPayment(payment)}
+        disabled={isProcessingPayment}
+        className="h-8 px-4 bg-emerald-600 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-700 transition-all disabled:opacity-50"
+      >
+        Approve
+      </button>
+      <button 
+        onClick={() => rejectManualPayment(payment)}
+        disabled={isProcessingPayment}
+        title="Reject Payment"
+        className="h-8 w-8 bg-amber-50 text-amber-600 border border-amber-100 rounded-lg flex items-center justify-center hover:bg-amber-100 transition-all disabled:opacity-50"
+      >
+        <X size={14} />
+      </button>
+      <button 
+        onClick={() => deleteManualPayment(payment)}
+        disabled={isProcessingPayment}
+        title="Permanently Delete"
+        className="h-8 w-8 bg-rose-50 text-rose-500 border border-rose-100 rounded-lg flex items-center justify-center hover:bg-rose-100 transition-all disabled:opacity-50"
+      >
+        <Trash2 size={14} />
+      </button>
+    </div>
+  </td>
  </motion.tr>
  ))}
  {pendingPayments.length === 0 && (
@@ -2375,7 +2603,7 @@ function AdminDashboardContent() {
  }); 
  setShowPaymentModal(true); 
  }}
- className="h-9 px-5 bg-emerald-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-700 transition-all -100 flex items-center gap-2"
+ className="h-9 px-5 bg-emerald-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-700 transition-all flex items-center gap-2"
  >
  <Plus size={14} /> Add Account
  </button>
@@ -2387,9 +2615,9 @@ function AdminDashboardContent() {
  <div className="flex items-start justify-between mb-6">
  <div className="flex items-center gap-3">
  <div className="w-10 h-10 rounded-xl border border-[#1e4a3a]/10 flex items-center justify-center p-1.5 bg-slate-50 overflow-hidden shrink-0">
- {method.provider === 'bkash' && <img src="/bkash.png" className="w-full h-full object-contain" />}
- {method.provider === 'nagad' && <img src="/nagad.png" className="w-full h-full object-contain" />}
- {method.provider === 'rocket' && <img src="/rocket.png" className="w-full h-full object-contain" />}
+ {method.provider === 'bkash' && <img src="/bkash.webp" className="w-full h-full object-contain" />}
+ {method.provider === 'nagad' && <img src="/nagad.webp" className="w-full h-full object-contain" />}
+ {method.provider === 'rocket' && <img src="/rocket.webp" className="w-full h-full object-contain" />}
  {method.provider === 'bank' && <Building2 size={24} className="text-blue-600" />}
  </div>
  <div>
@@ -2412,18 +2640,17 @@ function AdminDashboardContent() {
  <Edit3 size={14} />
  </button>
  <button 
- onClick={() => {
- setConfirmModal({
- show: true,
+ onClick={async () => {
+ const isConfirmed = await confirm({
  title: 'Delete Account?',
  message: 'This payment method will be immediately removed from clinical bookings.',
  confirmText: 'Delete',
- type: 'danger',
- onConfirm: async () => {
+ type: 'danger'
+ });
+ if (isConfirmed) {
  await deleteDoc(doc(db, 'payment_methods', method.id));
  toast.success('Account removed');
  }
- });
  }}
  className="w-8 h-8 rounded-lg border border-[#1e4a3a]/10 flex items-center justify-center text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all"
  >
@@ -2486,7 +2713,7 @@ function AdminDashboardContent() {
  <div className="flex items-start justify-between">
  <div className="space-y-4">
  <div className="flex items-center gap-3">
- <div className="w-10 h-10 rounded-xl bg-[#1e4a3a] text-white flex items-center justify-center shrink-0 -200">
+ <div className="w-10 h-10 rounded-xl bg-[#1e4a3a] text-white flex items-center justify-center shrink-0">
  <Zap size={20} />
  </div>
  <h4 className="text-[20px] font-black text-[#1e4a3a] tracking-wider">#{coupon.code}</h4>
@@ -2509,18 +2736,17 @@ function AdminDashboardContent() {
  <Edit3 size={14} />
  </button>
  <button 
- onClick={() => {
- setConfirmModal({
- show: true,
+ onClick={async () => {
+ const isConfirmed = await confirm({
  title: 'Delete Coupon?',
  message: `The coupon code #${coupon.code} will be immediately invalidated.`,
  confirmText: 'Delete',
- type: 'danger',
- onConfirm: async () => {
+ type: 'danger'
+ });
+ if (isConfirmed) {
  await deleteDoc(doc(db, 'coupons', coupon.id));
  toast.success('Coupon removed');
  }
- });
  }}
  className="w-8 h-8 rounded-lg border border-[#1e4a3a]/10 flex items-center justify-center text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all"
  >
@@ -2543,7 +2769,7 @@ function AdminDashboardContent() {
  {financeTab === 'economics' && (
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
  {/* Fee Config */}
- <div className="bg-white rounded-2xl border border-[#1e4a3a]/10 overflow-hidden -200/50">
+ <div className="bg-white rounded-2xl border border-[#1e4a3a]/10 overflow-hidden/50">
  <div className="p-6 border-b border-slate-50 bg-slate-50/30">
  <div className="flex items-center gap-3">
  <div className="w-10 h-10 rounded-xl border border-[#1e4a3a]/10 flex items-center justify-center text-[#1e4a3a] bg-white">
@@ -2603,7 +2829,7 @@ function AdminDashboardContent() {
  setIsUpdatingSettings(false);
  }}
  disabled={isUpdatingSettings}
- className="w-full h-12 bg-[#1e4a3a] text-white rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-black transition-all active:scale-[0.98] disabled:opacity-50 -200"
+ className="w-full h-12 bg-[#1e4a3a] text-white rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-black transition-all active:scale-[0.98] disabled:opacity-50"
  >
  {isUpdatingSettings ? 'Saving...' : 'Save Settings'}
  </button>
@@ -3208,18 +3434,17 @@ function AdminDashboardContent() {
               </div>
               <div className="flex gap-2">
                 <button onClick={() => { setEditingCaregiver(nc.id); setCaregiverForm({...nc}); setShowAddCaregiver(true); }} className="w-8 h-8 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#1e4a3a] hover:border-slate-400 transition-all shadow-sm"><Edit3 size={12} /></button>
-                <button onClick={() => {
-                  setConfirmModal({
-                    show: true,
+                <button onClick={async () => {
+                  const isConfirmed = await confirm({
                     title: 'Remove Specialist?',
                     message: `Are you sure you want to remove ${nc.name}? This will invalidate their current profile.`,
                     confirmText: 'Delete Profile',
-                    type: 'danger',
-                    onConfirm: async () => {
-                      await deleteDoc(doc(db, 'nursing_providers', nc.id));
-                      toast.success('Profile removed');
-                    }
+                    type: 'danger'
                   });
+                  if (isConfirmed) {
+                    await deleteDoc(doc(db, 'nursing_providers', nc.id));
+                    toast.success('Profile removed');
+                  }
                 }} className="w-8 h-8 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-200 transition-all shadow-sm"><Trash2 size={12} /></button>
               </div>
             </div>
@@ -3272,7 +3497,14 @@ function AdminDashboardContent() {
                     <p className="text-[13px] font-bold text-[#1e4a3a]">{pkg.label} <span className="text-slate-400 font-medium">{pkg.duration}</span></p>
                     <p className="text-[12px] font-black text-emerald-600 mt-1">৳{pkg.price}</p>
                   </div>
-                  <button onClick={() => deleteDoc(doc(db, 'nursing_packages', pkg.id))} className="text-slate-300 hover:text-rose-500 transition-colors"><Trash2 size={16} /></button>
+                  <button onClick={async () => {
+                    const isConfirmed = await confirm({
+                      title: 'Delete Package?',
+                      message: `Remove "${pkg.label}" from pricing options? This cannot be undone.`,
+                      type: 'danger'
+                    });
+                    if (isConfirmed) deleteDoc(doc(db, 'nursing_packages', pkg.id));
+                  }} className="text-slate-300 hover:text-rose-500 transition-colors"><Trash2 size={16} /></button>
                </div>
              ))}
              {nursingPackages.length === 0 && <p className="text-center py-10 text-[10px] text-slate-400 font-bold uppercase tracking-widest">No packages defined</p>}
@@ -3293,7 +3525,14 @@ function AdminDashboardContent() {
                     </div>
                     <p className="text-[13px] font-bold text-[#1e4a3a] uppercase tracking-tight">{type.label}</p>
                   </div>
-                  <button onClick={() => deleteDoc(doc(db, 'nursing_types', type.id))} className="text-slate-300 hover:text-rose-500 transition-colors"><Trash2 size={16} /></button>
+                  <button onClick={async () => {
+                    const isConfirmed = await confirm({
+                      title: 'Delete Category?',
+                      message: `Remove "${type.label}" from specialties? This will hide all associated specialists from this category.`,
+                      type: 'danger'
+                    });
+                    if (isConfirmed) deleteDoc(doc(db, 'nursing_types', type.id));
+                  }} className="text-slate-300 hover:text-rose-500 transition-colors"><Trash2 size={16} /></button>
                </div>
              ))}
              {nursingTypes.length === 0 && <p className="text-center py-10 text-[10px] text-slate-400 font-bold uppercase tracking-widest">No specialist types defined</p>}
@@ -3335,6 +3574,18 @@ function AdminDashboardContent() {
           setShowAssignModal(true);
         }}
       />
+    </motion.div>
+  )}
+
+  {activeTab === 'store' && (
+    <motion.div 
+      key="store"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+    >
+      <StoreManagement />
     </motion.div>
   )}
 
@@ -3468,19 +3719,18 @@ function AdminDashboardContent() {
  </div>
   <div className="flex gap-2">
  <button onClick={() => { setEditingLabProvider(lp.id); setLabProviderForm({...lp}); setShowAddLabProvider(true); }} className="w-8 h-8 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#1e4a3a] hover:border-slate-400 transition-all shadow-sm"><Edit3 size={12} /></button>
- <button onClick={() => {
- setConfirmModal({
- show: true,
- title: 'Terminate Provider?',
- message: `Are you sure you want to remove ${lp.name}? This will affect all associated clinical tests.`,
- confirmText: 'Delete Provider',
- type: 'danger',
- onConfirm: async () => {
- await deleteDoc(doc(db, 'lab_providers', lp.id));
- toast.success('Provider removed');
- }
- });
- }} className="w-8 h-8 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-200 transition-all shadow-sm"><Trash2 size={12} /></button>
+ <button onClick={async () => {
+  const isConfirmed = await confirm({
+  title: 'Terminate Provider?',
+  message: `Are you sure you want to remove ${lp.name}? This will affect all associated clinical tests.`,
+  confirmText: 'Delete Provider',
+  type: 'danger'
+  });
+  if (isConfirmed) {
+  await deleteDoc(doc(db, 'lab_providers', lp.id));
+  toast.success('Provider removed');
+  }
+  }} className="w-8 h-8 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-200 transition-all shadow-sm"><Trash2 size={12} /></button>
  </div>
  </div>
  <h4 className="text-[14px] font-black text-[#1e4a3a] uppercase tracking-tight">{lp.name}</h4>
@@ -3532,19 +3782,18 @@ function AdminDashboardContent() {
  <td className="px-6 py-4 text-right">
   <div className="flex justify-end gap-2">
  <button onClick={() => { setEditingLabTest(test.id); setLabTestForm({...test}); setShowAddLabTest(true); }} className="w-8 h-8 bg-slate-50 border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#1e4a3a] hover:bg-white transition-all"><Edit3 size={12} /></button>
- <button onClick={() => {
- setConfirmModal({
- show: true,
- title: 'Remove Test from Catalog?',
- message: `This will permanently remove ${test.name} from the diagnostic offerings.`,
- confirmText: 'Delete Test',
- type: 'danger',
- onConfirm: async () => {
- await deleteDoc(doc(db, 'lab_tests', test.id));
- toast.success('Test removed from catalog');
- }
- });
- }} className="w-8 h-8 bg-slate-50 border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-white transition-all"><Trash2 size={12} /></button>
+ <button onClick={async () => {
+  const isConfirmed = await confirm({
+  title: 'Remove Test from Catalog?',
+  message: `This will permanently remove ${test.name} from the diagnostic offerings.`,
+  confirmText: 'Delete Test',
+  type: 'danger'
+  });
+  if (isConfirmed) {
+  await deleteDoc(doc(db, 'lab_tests', test.id));
+  toast.success('Test removed from catalog');
+  }
+  }} className="w-8 h-8 bg-slate-50 border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-white transition-all"><Trash2 size={12} /></button>
  </div>
  </td>
  </tr>
@@ -4650,7 +4899,7 @@ function AdminDashboardContent() {
  <div className="p-5 border-t border-slate-200 bg-white sticky bottom-0 z-20 flex flex-col items-center gap-4">
  <div className="flex gap-4 w-full max-w-md">
  <button type="button" onClick={() => setShowRegisterDoctor(false)} className="flex-1 h-10 text-[11px] font-bold text-slate-400 hover:text-slate-600 transition-all uppercase tracking-widest">Discard</button>
- <button type="submit" disabled={isCreatingDoctor} className="flex-[2] h-10 bg-emerald-500 text-white rounded-lg font-bold text-[11px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-emerald-600 -100 transition-all disabled:opacity-50">
+ <button type="submit" disabled={isCreatingDoctor} className="flex-[2] h-10 bg-emerald-500 text-white rounded-lg font-bold text-[11px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-emerald-600 transition-all disabled:opacity-50">
  {isCreatingDoctor ? <Loader2 size={14} className="animate-spin" /> : <ShieldCheck size={16} />}
  {isCreatingDoctor ? (editingDoctor ? 'Updating...' : 'Creating...') : (editingDoctor ? 'Synchronize Credentials' : 'Finalize Registration')}
  </button>
@@ -4876,7 +5125,7 @@ function AdminDashboardContent() {
  </div>
  <div className="pt-2 flex gap-3">
  <button type="button" onClick={() => setIsEditingPatient(false)} className="flex-1 h-10 border border-slate-300 rounded-lg text-[11px] font-bold text-slate-500 hover:bg-slate-50 uppercase tracking-widest">Cancel</button>
- <button type="submit" disabled={isSaving} className="flex-1 h-10 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold hover:bg-black transition-all -100 uppercase tracking-widest">
+ <button type="submit" disabled={isSaving} className="flex-1 h-10 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold hover:bg-black transition-all uppercase tracking-widest">
  {isSaving ? 'Updating...' : 'Save Changes'}
  </button>
  </div>
@@ -5014,7 +5263,7 @@ function AdminDashboardContent() {
  </button>
  <button 
  onClick={() => setProfileTab('files')}
- className="flex-1 h-10 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold hover:bg-black transition-all -100 uppercase tracking-widest flex items-center justify-center gap-2"
+ className="flex-1 h-10 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold hover:bg-black transition-all uppercase tracking-widest flex items-center justify-center gap-2"
  >
  <FolderOpen size={14} className="text-slate-400" />
  Audit Files
@@ -5201,7 +5450,7 @@ function AdminDashboardContent() {
  setIsUpdatingSettings(false);
  }}
  disabled={isUpdatingSettings}
- className="flex-[1.5] h-11 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-black transition-all -200 disabled:opacity-50"
+ className="flex-[1.5] h-11 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-black transition-all disabled:opacity-50"
  >
  {isUpdatingSettings ? 'Saving...' : (editingPayment ? 'Push Updates' : 'Add Gateway')}
  </button>
@@ -5211,46 +5460,6 @@ function AdminDashboardContent() {
  )}
  </AnimatePresence>
  
- <AnimatePresence>
- {/* Confirmation Modal */}
- {confirmModal.show && (
- <div key="confirm-modal" className="fixed inset-0 z-[200] flex items-center justify-center p-4">
- <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setConfirmModal({ ...confirmModal, show: false })} />
- <motion.div 
- initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }}
- className="relative w-full max-w-sm bg-white rounded-xl overflow-hidden p-6 border border-slate-300"
- >
- <div className="flex items-start gap-4 mb-6">
- <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 border ${confirmModal.type === 'danger' ? 'bg-rose-50 text-rose-500 border-rose-100' : 'bg-amber-50 text-amber-500 border-amber-100'}`}>
- {confirmModal.type === 'danger' ? <LogOut size={16} /> : <AlertCircle size={16} />}
- </div>
- <div className="pt-0.5">
- <h3 className="text-[14px] font-bold text-[#1e4a3a] tracking-tight">{confirmModal.title}</h3>
- <p className="text-[12px] text-slate-500 leading-relaxed mt-1">{confirmModal.message}</p>
- </div>
- </div>
- 
- <div className="flex items-center justify-end gap-2">
- <button 
- onClick={() => setConfirmModal({ ...confirmModal, show: false })}
- className="h-8 px-4 rounded-lg text-[11px] font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-all border border-transparent hover:border-slate-300 uppercase tracking-wider"
- >
- Cancel
- </button>
- <button 
- onClick={() => {
- confirmModal.onConfirm();
- setConfirmModal({ ...confirmModal, show: false });
- }}
- className={`h-8 px-5 rounded-lg text-[11px] font-bold transition-all border uppercase tracking-wider ${confirmModal.type === 'danger' ? 'bg-rose-500 text-white border-rose-600 hover:bg-rose-600 -100' : 'bg-[#1e4a3a] text-white border-[#1e4a3a] hover:bg-black -100'}`}
- >
- Confirm Action
- </button>
- </div>
- </motion.div>
- </div>
- )}
- </AnimatePresence>
 
  <style jsx global>{`
  .input-label-premium {
@@ -5367,7 +5576,7 @@ function AdminDashboardContent() {
  <button type="button" onClick={() => setShowCouponModal(false)} className="flex-1 h-11 text-[11px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-600">Cancel</button>
  <button 
  type="submit" disabled={isSavingCoupon}
- className="flex-1 h-11 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-bold uppercase tracking-[0.2em] -200 hover:bg-black transition-all disabled:opacity-50"
+ className="flex-1 h-11 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-black transition-all disabled:opacity-50"
  >
  {isSavingCoupon ? 'Preparing...' : 'Save Coupon'}
  </button>

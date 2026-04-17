@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { 
   ShieldCheck, CreditCard, ArrowRight, X, 
   CheckCircle2, Loader2, Info, Lock, Zap,
@@ -11,11 +11,13 @@ import {
 import { collection, addDoc, serverTimestamp, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
+import { useCart } from '@/context/CartContext';
 import { toast } from 'react-hot-toast';
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { user, profile } = useAuth();
+  const { clearCart } = useCart();
   const [checkoutData, setCheckoutData] = useState(null);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState(null);
@@ -62,17 +64,28 @@ export default function CheckoutPage() {
       toast.error('Please select a payment method');
       return;
     }
-    if (!trxId) {
+    // Only require TrxID if it's a manual payment method
+    const providerName = selectedPayment.provider?.toLowerCase() || '';
+    const isManual = providerName.includes('bkash') || 
+                     providerName.includes('nagad') || 
+                     providerName.includes('rocket') ||
+                     selectedPayment.type === 'Manual';
+                     
+    if (isManual && !trxId) {
       toast.error('Please enter the Transaction ID');
+      setIsSubmitting(false);
       return;
     }
 
     setIsSubmitting(true);
     try {
-      const finalBooking = {
-        ...checkoutData,
+      const splitBookings = []; // To track all created docs
+      const items = checkoutData.items || [];
+      const userBase = {
         userId: user.uid,
         userName: profile?.fullName || user.email || 'Patient',
+        patientPhone: checkoutData.patientPhone || '',
+        location: checkoutData.location || '',
         paymentMethod: selectedPayment.provider,
         trxId: trxId,
         status: 'pending',
@@ -80,13 +93,97 @@ export default function CheckoutPage() {
         createdAt: serverTimestamp(),
       };
 
-      let collectionName = 'appointments';
-      if (checkoutData.type === 'lab') collectionName = 'lab_bookings';
-      if (checkoutData.type === 'nursing') collectionName = 'nursing_bookings';
-      
-      await addDoc(collection(db, collectionName), finalBooking);
-      
+      // 1. Handle Specialized Items (Lab, Nursing, Products, Specialist)
+      const categories = {
+        lab: { coll: 'lab_bookings', items: items.filter(i => i.type === 'lab') },
+        nursing: { coll: 'nursing_bookings', items: items.filter(i => i.type === 'nursing') },
+        product: { coll: 'product_orders', items: items.filter(i => i.type === 'product') },
+        specialist: { coll: 'appointments', items: items.filter(i => i.type === 'specialist') },
+      };
+
+      // If no items (e.g. direct specialist booking), use the top-level type
+      if (items.length === 0 && checkoutData.type) {
+        let coll = 'appointments';
+        if (checkoutData.type === 'lab') coll = 'lab_bookings';
+        if (checkoutData.type === 'nursing') coll = 'nursing_bookings';
+        if (checkoutData.type === 'product') coll = 'product_orders';
+        
+        const docRef = await addDoc(collection(db, coll), { ...userBase, ...checkoutData });
+        splitBookings.push({ id: docRef.id, collection: coll });
+      } else {
+        // Process each category
+        for (const [key, cat] of Object.entries(categories)) {
+          if (cat.items.length > 0) {
+            // Special Case: Specialists should each have their OWN individual document
+            if (key === 'specialist') {
+              for (const specItem of cat.items) {
+                const specData = { 
+                  ...userBase, 
+                  ...specItem, 
+                  type: 'specialist',
+                  totalAmount: specItem.price 
+                };
+                const docRef = await addDoc(collection(db, cat.coll), specData);
+                splitBookings.push({ id: docRef.id, collection: cat.coll });
+              }
+            } else {
+              // Grouped items for Labs, Nursing, and Products
+              const bookingData = { 
+                ...userBase, 
+                items: cat.items,
+                type: key,
+                totalAmount: cat.items.reduce((sum, i) => sum + (i.price * (i.quantity || 1)), 0)
+              };
+              
+              if (key === 'product') {
+                bookingData.customerName = userBase.userName;
+                bookingData.phone = userBase.patientPhone;
+                bookingData.total = bookingData.totalAmount;
+              }
+
+              const docRef = await addDoc(collection(db, cat.coll), bookingData);
+              splitBookings.push({ id: docRef.id, collection: cat.coll });
+            }
+          }
+        }
+      }
+
+      // 2. Create manual payment record for Admin verification
+      if (isManual && splitBookings.length > 0) {
+        // Create a human-readable summary of what's in this order
+        const uniqueCategories = [...new Set(splitBookings.map(b => {
+          if (b.collection === 'appointments') return 'Specialist';
+          if (b.collection === 'lab_bookings') return 'Laboratory';
+          if (b.collection === 'nursing_bookings') return 'Nursing';
+          if (b.collection === 'product_orders') return 'Store';
+          return 'Booking';
+        }))];
+        const categorySummary = uniqueCategories.join(' + ');
+
+        const itemSummary = items.length > 0 
+          ? items.map(i => i.name).join(', ') 
+          : (checkoutData.doctorName || checkoutData.packageName || checkoutData.tests?.map(t => t.name).join(', ') || categorySummary);
+
+        await addDoc(collection(db, 'manual_payments'), {
+          relatedBookings: splitBookings,
+          categorySummary: categorySummary,
+          itemSummary: itemSummary,
+          appointmentId: splitBookings[0].id,
+          appointmentCollection: splitBookings[0].collection,
+          userId: user.uid,
+          userName: userBase.userName,
+          userPhone: checkoutData.patientPhone || '',
+          amount: checkoutData.totalAmount,
+          method: selectedPayment.provider,
+          transactionId: trxId,
+          status: 'pending',
+          type: categorySummary,
+          createdAt: serverTimestamp()
+        });
+      }
+
       setIsSuccess(true);
+      clearCart(); // NEW: Clear the cart after success
       sessionStorage.removeItem('medita_checkout');
       toast.success('Successfully booked!');
       
@@ -155,38 +252,40 @@ export default function CheckoutPage() {
             {/* LEFT COLUMN: ORDER SUMMARY & CONTEXT */}
             <div className="space-y-6">
               {/* Booking Context */}
-              <div className="bg-white border border-slate-300 rounded-xl p-6 space-y-6">
+              <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6">
                 <div className="flex items-center justify-between pb-4 border-b border-slate-200">
                   <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Booking Context</h3>
                   <div className="p-1.5 bg-slate-50 rounded-lg"><Phone className="text-slate-400" size={14} /></div>
                 </div>
                 <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-300 flex items-center justify-center text-[#1e4a3a] shrink-0">
-                      <Calendar size={18} />
+                  {checkoutData.date && (
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#1e4a3a] shrink-0">
+                        <Calendar size={18} />
+                      </div>
+                      <div>
+                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">Schedule</p>
+                        <p className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">{checkoutData.date}</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter mt-0.5">{checkoutData.time}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">Schedule</p>
-                      <p className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">{checkoutData.date || 'Today (Instant)'}</p>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter mt-0.5">{checkoutData.time || 'As soon as possible'}</p>
-                    </div>
-                  </div>
+                  )}
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-300 flex items-center justify-center text-[#1e4a3a] shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#1e4a3a] shrink-0">
                       <Phone size={18} />
                     </div>
                     <div>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">Verified Contact</p>
+                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">{checkoutData.date ? 'Verified Contact' : 'Recipient Phone'}</p>
                       <p className="text-[14px] font-black text-[#1e4a3a] tracking-widest font-mono">{checkoutData.patientPhone || 'N/A'}</p>
                     </div>
                   </div>
                   {checkoutData.location && (
                     <div className="flex items-start gap-4 pt-4 border-t border-slate-200">
-                      <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-300 flex items-center justify-center text-[#1e4a3a] shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#1e4a3a] shrink-0">
                         <MapPin size={18} />
                       </div>
                       <div className="flex-1">
-                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">Point of Service</p>
+                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">{checkoutData.date ? 'Point of Service' : 'Shipping Address'}</p>
                         <p className="text-[12px] font-bold text-slate-700 leading-relaxed tracking-tight">{checkoutData.location}</p>
                       </div>
                     </div>
@@ -195,8 +294,8 @@ export default function CheckoutPage() {
               </div>
 
               {/* Order Summary */}
-              <div className="bg-white border border-slate-300 rounded-xl overflow-hidden flex flex-col">
-                <div className="px-5 py-4 bg-slate-50 border-b border-slate-300 flex items-center justify-between">
+              <div className="bg-white border border-slate-200 rounded-xl overflow-hidden flex flex-col">
+                <div className="px-5 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
                   <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Order Summary</h3>
                   <span className="text-[9px] font-black bg-[#1e4a3a] text-white px-2 py-0.5 rounded uppercase tracking-widest">
                     {checkoutData.type || 'Clinical'}
@@ -209,11 +308,13 @@ export default function CheckoutPage() {
                         <div key={i} className="flex justify-between items-center group">
                           <div className="flex items-center gap-3">
                             <div>
-                              <p className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">{item.name}</p>
+                              <p className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">
+                                {item.name} {(item.quantity || 1) > 1 && <span className="text-[10px] text-slate-400 font-black ml-1 uppercase">x{(item.quantity || 1)}</span>}
+                              </p>
                               <p className="text-[9px] font-black text-slate-400 uppercase tracking-tight leading-none mt-1">{item.type} • {item.category || item.providerName}</p>
                             </div>
                           </div>
-                          <span className="text-[13px] font-black text-[#1e4a3a] font-mono tracking-tighter">৳{item.price}</span>
+                          <span className="text-[13px] font-black text-[#1e4a3a] font-mono tracking-tighter">৳{Number(item.price) * (item.quantity || 1)}</span>
                         </div>
                       ))
                     ) : checkoutData.type === 'lab' ? (
@@ -255,7 +356,7 @@ export default function CheckoutPage() {
                     )}
                   </div>
 
-                  <div className="flex justify-between items-center pt-5 border-t border-slate-300">
+                  <div className="flex justify-between items-center pt-5 border-t border-slate-200">
                     <span className="text-[12px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Total Amount</span>
                     <span className="text-[24px] font-black text-[#1e4a3a] font-mono tracking-tighter">৳{checkoutData.totalAmount}</span>
                   </div>
@@ -265,7 +366,7 @@ export default function CheckoutPage() {
 
             {/* RIGHT COLUMN: PAYMENT ACTIONS */}
             <div className="space-y-6">
-              <div className="bg-white border border-slate-300 rounded-xl p-6 lg:p-8 xl:sticky xl:top-40 overflow-hidden relative">
+              <div className="bg-white border border-slate-200 rounded-xl p-6 lg:p-8 xl:sticky xl:top-40 overflow-hidden relative">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full blur-3xl -z-10 -mr-16 -mt-16" />
                 
                 <div className="flex items-center justify-between mb-8">
@@ -313,7 +414,7 @@ export default function CheckoutPage() {
                         initial={{ opacity: 0, y: 10 }} 
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.98 }}
-                        className="bg-slate-50 rounded-lg p-5 border border-slate-300 space-y-5"
+                        className="bg-slate-50 rounded-lg p-5 border border-slate-200 space-y-5"
                       >
                         <div className="space-y-6">
                           {/* Payment Configuration Header */}
@@ -369,7 +470,7 @@ export default function CheckoutPage() {
                           {/* Recipient Account Component */}
                           <div 
                             onClick={() => copyToClipboard(selectedPayment.accountNumber)}
-                            className="bg-white px-6 py-5 rounded-2xl border border-slate-200 cursor-pointer group hover:border-[#1e4a3a] transition-all active:scale-[0.99] shadow-sm relative overflow-hidden"
+                            className="bg-white px-6 py-5 rounded-2xl border border-slate-200 cursor-pointer group hover:border-[#1e4a3a] transition-all active:scale-[0.99] relative overflow-hidden"
                           >
                             <div className="flex items-center justify-between relative z-10">
                               <div>
@@ -395,21 +496,21 @@ export default function CheckoutPage() {
                             value={trxId}
                             onChange={(e) => setTrxId(e.target.value.toUpperCase())}
                             placeholder="ABC123XYZ"
-                            className="w-full h-12 px-4 bg-white border border-slate-300 rounded-xl outline-none text-[15px] font-black tracking-[0.3em] focus:border-[#1e4a3a] transition-all placeholder:text-slate-200 uppercase text-center focus:bg-slate-50 shadow-sm"
+                            className="w-full h-12 px-8 bg-white border border-slate-200 rounded-full outline-none text-[15px] font-black tracking-[0.3em] focus:border-[#1e4a3a] transition-all placeholder:text-slate-200 uppercase text-center focus:bg-slate-50"
                           />
                         </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
 
-                  <div className="pt-4">
+                  <div className="pt-6 flex justify-center">
                     <button
                       onClick={handleFinalizeBooking}
                       disabled={isSubmitting || isSuccess}
-                      className={`w-full h-11 rounded-lg font-black uppercase tracking-[0.15em] text-[11px] flex items-center justify-center gap-3 transition-all active:scale-[0.98] border shadow-md group/btn ${
+                      className={`w-fit px-12 h-11 rounded-full font-black uppercase tracking-[0.15em] text-[11px] flex items-center justify-center gap-3 transition-all active:scale-[0.98] border group/btn ${
                         isSubmitting || isSuccess 
                           ? 'bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed' 
-                          : 'bg-[#1e4a3a] border-[#1e4a3a] text-white hover:bg-emerald-600 hover:border-emerald-600'
+                          : 'bg-[#1e4a3a] border-[#1e4a3a] text-white hover:bg-emerald-600 hover:border-emerald-600 shadow-lg shadow-[#1e4a3a]/10'
                       }`}
                     >
                       {isSubmitting ? (

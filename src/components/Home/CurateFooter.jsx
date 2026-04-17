@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m as motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { ArrowRight, Globe } from 'lucide-react';
 import Link from 'next/link';
 import { useRef } from 'react';
@@ -41,7 +41,7 @@ const CurateFooter = () => {
           
           {/* Left: Company Links */}
           <div className="space-y-4">
-            <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Company</h4>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Company</p>
             <nav className="flex flex-col gap-2">
               <FooterLink href="/" label="Home" />
               <FooterLink href="/weight-loss" label="Weight Loss" />
@@ -64,7 +64,7 @@ const CurateFooter = () => {
           {/* Right: Other Links */}
           <div className="flex flex-col lg:items-end space-y-4">
             <div className="lg:text-right space-y-4">
-              <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Other</h4>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Other</p>
               <nav className="flex flex-col lg:items-end gap-2">
                 <FooterLink href="/terms" label="Terms of Use" />
                 <FooterLink href="/privacy" label="Privacy Statement" />
@@ -83,9 +83,9 @@ const CurateFooter = () => {
             <motion.div style={{ rotate }}>
               <Logo size="xxl" color="white" className="font-bold" />
             </motion.div>
-            <h1 className="text-[36px] md:text-[60px] lg:text-[110px] font-black tracking-[-0.05em] uppercase leading-none text-white whitespace-nowrap">
+            <div className="text-[36px] md:text-[60px] lg:text-[110px] font-black tracking-[-0.05em] uppercase leading-none text-white whitespace-nowrap">
               CURATE HEALTH
-            </h1>
+            </div>
           </div>
           
           {/* Copyright Centered at Bottom */}
@@ -102,7 +102,7 @@ const CurateFooter = () => {
 };
 
 const FooterLink = ({ href, label }) => (
-  <Link href={href} className="text-[11px] lg:text-[13px] font-medium text-white/50 hover:text-white transition-colors duration-300">
+  <Link href={href} className="text-[11px] lg:text-[13px] font-medium text-white/70 hover:text-white transition-colors duration-300">
     {label}
   </Link>
 );

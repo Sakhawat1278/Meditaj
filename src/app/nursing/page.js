@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m as motion, AnimatePresence } from 'framer-motion';
 import { 
   User, Check, ChevronRight, Star, ShieldCheck, 
   Baby, Activity, HeartPulse, Stethoscope, Clock, Briefcase, Package
@@ -17,8 +17,7 @@ import { collection, onSnapshot, query, where } from 'firebase/firestore';
 
 export default function NursingPage() {
   const router = useRouter();
-  const { user } = useAuth();
-  const { addToCart } = useCart();
+  const { user, profile } = useAuth();
   const [selectedType, setSelectedType] = useState(null);
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [liveCaregivers, setLiveCaregivers] = useState([]);
@@ -57,18 +56,26 @@ export default function NursingPage() {
     const pkg = nursingPackages.find(p => p.id === selectedPackage);
     const type = nursingTypes.find(t => t.id === selectedType);
 
-    addToCart({
-      id: `${caregiver.id}-${pkg.id}`,
-      name: caregiver.name,
-      price: pkg.price,
+    // Direct Checkout Preparation
+    const checkoutPayload = {
       type: 'nursing',
-      category: type.label,
-      providerId: caregiver.id,
-      providerName: `${pkg.label} ${pkg.duration}`
-    });
+      items: [{
+        id: `${caregiver.id}-${pkg.id}`,
+        name: caregiver.name,
+        price: pkg.price,
+        type: 'nursing',
+        category: type.label,
+        providerName: `${pkg.label} ${pkg.duration}`
+      }],
+      totalAmount: pkg.price,
+      patientName: profile?.userName || user.displayName || 'Patient',
+      patientPhone: profile?.phone || '',
+      date: new Date().toISOString(),
+      time: 'Immediate Coordination'
+    };
 
-    toast.success('Added to cart');
-    router.push('/cart');
+    sessionStorage.setItem('medita_checkout', JSON.stringify(checkoutPayload));
+    router.push('/checkout');
   };
 
   return (
