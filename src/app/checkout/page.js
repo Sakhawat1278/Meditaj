@@ -271,13 +271,6 @@ export default function CheckoutPage() {
             
             {/* LEFT COLUMN: ORDER SUMMARY & CONTEXT */}
             <div className="space-y-6">
-                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">{checkoutData.date ? 'Point of Service' : 'Shipping Address'}</p>
-                        <p className="text-[12px] font-bold text-slate-700 leading-relaxed tracking-tight">{checkoutData.location}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
 
               {/* Order Summary */}
               <div className="bg-white border border-slate-200 rounded-xl overflow-hidden flex flex-col">
