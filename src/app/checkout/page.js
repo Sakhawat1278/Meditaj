@@ -313,8 +313,8 @@ export default function CheckoutPage() {
                     </div>
                   </div>
 
-                  {/* Date & Time Selection (Conditional for Nursing/Clinical) */}
-                  {(checkoutData?.type === 'nursing' || !checkoutData?.date) && (
+                  {/* Date & Time Selection (Conditional: Only for Nursing or missing schedule, NOT for products) */}
+                  {(checkoutData?.type === 'nursing' || (!checkoutData?.date && checkoutData?.type !== 'product')) && (
                     <div className="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-slate-100">
                       <div className="space-y-1.5">
                         <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Preferred Start Date</label>
