@@ -12,7 +12,6 @@ import { collection, addDoc, serverTimestamp, onSnapshot } from 'firebase/firest
 import { db } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from 'react-hot-toast';
-import LandingNavbar from '@/components/Home/LandingNavbar';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -116,14 +115,14 @@ export default function CheckoutPage() {
           <div className="w-20 h-20 bg-emerald-50 rounded-xl flex items-center justify-center mb-8 border border-emerald-200">
             <CheckCircle2 size={40} className="text-emerald-500" />
           </div>
-          <h2 className="text-xl font-bold text-slate-900 mb-4 tracking-tight uppercase">Booking Confirmed</h2>
+          <h2 className="text-xl font-bold text-[#1e4a3a] mb-4 tracking-tight uppercase">Booking Confirmed</h2>
           <p className="text-slate-400 font-bold uppercase tracking-widest leading-loose mb-8 text-[11px]">
             Your scheduling request has been received. Our clinical team is verifying your payment. 
             Redirecting to dashboard...
           </p>
           <button 
             onClick={() => router.push('/dashboard/patient')} 
-            className="h-12 px-10 bg-slate-950 text-white rounded-lg font-bold text-[11px] uppercase tracking-[0.3em] hover:bg-black transition-all"
+            className="h-12 px-10 bg-[#1e4a3a] text-white rounded-lg font-bold text-[11px] uppercase tracking-[0.3em] hover:bg-black transition-all"
           >
             Enter Dashboard
           </button>
@@ -134,17 +133,16 @@ export default function CheckoutPage() {
 
   return (
     <main className="min-h-screen bg-white">
-      <LandingNavbar />
 
-      <div className="pt-52 pb-12 w-full max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16">
+      <div className="pt-28 lg:pt-36 pb-24 w-full max-w-[1825px] mx-auto px-4 lg:px-10">
         <div className="w-full">
           
           <div className="flex items-center gap-4 mb-8">
-            <div className="w-10 h-10 bg-slate-950 rounded-lg flex items-center justify-center text-white border border-black">
+            <div className="w-10 h-10 bg-[#1e4a3a] rounded-lg flex items-center justify-center text-white border border-black">
               <ShieldCheck size={20} strokeWidth={2.5} />
             </div>
             <div>
-              <h1 className="text-[20px] font-black text-slate-900 tracking-tighter uppercase">Secure Checkout</h1>
+              <h1 className="text-[20px] font-black text-[#1e4a3a] tracking-tighter uppercase">Secure Checkout</h1>
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                 <Lock size={12} className="text-emerald-500" /> 
                 Professional Grade Encryption Enabled
@@ -159,32 +157,32 @@ export default function CheckoutPage() {
               {/* Booking Context */}
               <div className="bg-white border border-slate-300 rounded-xl p-6 space-y-6">
                 <div className="flex items-center justify-between pb-4 border-b border-slate-200">
-                  <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.2em]">Booking Context</h3>
+                  <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Booking Context</h3>
                   <div className="p-1.5 bg-slate-50 rounded-lg"><Phone className="text-slate-400" size={14} /></div>
                 </div>
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-300 flex items-center justify-center text-slate-950 shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-300 flex items-center justify-center text-[#1e4a3a] shrink-0">
                       <Calendar size={18} />
                     </div>
                     <div>
                       <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">Schedule</p>
-                      <p className="text-[13px] font-bold text-slate-900 tracking-tight">{checkoutData.date || 'Today (Instant)'}</p>
+                      <p className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">{checkoutData.date || 'Today (Instant)'}</p>
                       <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter mt-0.5">{checkoutData.time || 'As soon as possible'}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-300 flex items-center justify-center text-slate-950 shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-300 flex items-center justify-center text-[#1e4a3a] shrink-0">
                       <Phone size={18} />
                     </div>
                     <div>
                       <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">Verified Contact</p>
-                      <p className="text-[14px] font-black text-slate-900 tracking-widest font-mono">{checkoutData.patientPhone || 'N/A'}</p>
+                      <p className="text-[14px] font-black text-[#1e4a3a] tracking-widest font-mono">{checkoutData.patientPhone || 'N/A'}</p>
                     </div>
                   </div>
                   {checkoutData.location && (
                     <div className="flex items-start gap-4 pt-4 border-t border-slate-200">
-                      <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-300 flex items-center justify-center text-slate-950 shrink-0">
+                      <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-300 flex items-center justify-center text-[#1e4a3a] shrink-0">
                         <MapPin size={18} />
                       </div>
                       <div className="flex-1">
@@ -199,8 +197,8 @@ export default function CheckoutPage() {
               {/* Order Summary */}
               <div className="bg-white border border-slate-300 rounded-xl overflow-hidden flex flex-col">
                 <div className="px-5 py-4 bg-slate-50 border-b border-slate-300 flex items-center justify-between">
-                  <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.2em]">Order Summary</h3>
-                  <span className="text-[9px] font-black bg-slate-950 text-white px-2 py-0.5 rounded uppercase tracking-widest">
+                  <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Order Summary</h3>
+                  <span className="text-[9px] font-black bg-[#1e4a3a] text-white px-2 py-0.5 rounded uppercase tracking-widest">
                     {checkoutData.type || 'Clinical'}
                   </span>
                 </div>
@@ -211,11 +209,11 @@ export default function CheckoutPage() {
                         <div key={i} className="flex justify-between items-center group">
                           <div className="flex items-center gap-3">
                             <div>
-                              <p className="text-[13px] font-bold text-slate-900 tracking-tight">{item.name}</p>
+                              <p className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">{item.name}</p>
                               <p className="text-[9px] font-black text-slate-400 uppercase tracking-tight leading-none mt-1">{item.type} • {item.category || item.providerName}</p>
                             </div>
                           </div>
-                          <span className="text-[13px] font-black text-slate-950 font-mono tracking-tighter">৳{item.price}</span>
+                          <span className="text-[13px] font-black text-[#1e4a3a] font-mono tracking-tighter">৳{item.price}</span>
                         </div>
                       ))
                     ) : checkoutData.type === 'lab' ? (
@@ -224,28 +222,28 @@ export default function CheckoutPage() {
                           <div className="flex items-center gap-3">
                             <span className="text-[13px] font-bold text-slate-800">{test.name}</span>
                           </div>
-                          <span className="text-[13px] font-black text-slate-950 font-mono tracking-tighter">৳{test.price}</span>
+                          <span className="text-[13px] font-black text-[#1e4a3a] font-mono tracking-tighter">৳{test.price}</span>
                         </div>
                       ))
                     ) : checkoutData.type === 'nursing' ? (
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-3">
                           <div>
-                            <p className="text-[13px] font-bold text-slate-900 tracking-tight">{checkoutData.caregiverName || 'Care Specialist'}</p>
+                            <p className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">{checkoutData.caregiverName || 'Care Specialist'}</p>
                             <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mt-1">{checkoutData.packageName}</p>
                           </div>
                         </div>
-                        <span className="text-[14px] font-black text-slate-950 font-mono tracking-tighter">৳{checkoutData.fees}</span>
+                        <span className="text-[14px] font-black text-[#1e4a3a] font-mono tracking-tighter">৳{checkoutData.fees}</span>
                       </div>
                     ) : (
                       <div className="flex justify-between items-center">
                         <div className="flex items-center gap-3">
                           <div>
-                            <p className="text-[13px] font-bold text-slate-900 tracking-tight">{checkoutData.doctorName || 'General Doctor'}</p>
+                            <p className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">{checkoutData.doctorName || 'General Doctor'}</p>
                             <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mt-1">{checkoutData.specialtyName || checkoutData.specialty}</p>
                           </div>
                         </div>
-                        <span className="text-[14px] font-black text-slate-950 font-mono tracking-tighter">৳{checkoutData.fees}</span>
+                        <span className="text-[14px] font-black text-[#1e4a3a] font-mono tracking-tighter">৳{checkoutData.fees}</span>
                       </div>
                     )}
 
@@ -258,8 +256,8 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="flex justify-between items-center pt-5 border-t border-slate-300">
-                    <span className="text-[12px] font-black text-slate-900 uppercase tracking-[0.2em]">Total Amount</span>
-                    <span className="text-[24px] font-black text-slate-900 font-mono tracking-tighter">৳{checkoutData.totalAmount}</span>
+                    <span className="text-[12px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Total Amount</span>
+                    <span className="text-[24px] font-black text-[#1e4a3a] font-mono tracking-tighter">৳{checkoutData.totalAmount}</span>
                   </div>
                 </div>
               </div>
@@ -271,7 +269,7 @@ export default function CheckoutPage() {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full blur-3xl -z-10 -mr-16 -mt-16" />
                 
                 <div className="flex items-center justify-between mb-8">
-                  <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.2em]">Select Payment</h3>
+                  <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Select Payment</h3>
                   <div className="flex items-center gap-1.5">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Live Gateway</span>
@@ -284,7 +282,7 @@ export default function CheckoutPage() {
                       <button
                         key={method.id}
                         onClick={() => setSelectedPayment(method)}
-                        className={`group relative h-14 rounded-lg border flex flex-col items-center justify-center gap-1 transition-all ${selectedPayment?.id === method.id ? 'bg-white border-slate-950 scale-[1.02]' : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/50'}`}
+                        className={`group relative h-14 rounded-lg border flex flex-col items-center justify-center gap-1 transition-all ${selectedPayment?.id === method.id ? 'bg-white border-[#1e4a3a] scale-[1.02]' : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/50'}`}
                       >
                         <div className={`w-10 h-10 flex items-center justify-center transition-all ${selectedPayment?.id === method.id ? 'scale-110' : ''}`}>
                           {method.provider.toLowerCase() === 'bkash' ? (
@@ -297,11 +295,11 @@ export default function CheckoutPage() {
                             <CreditCard size={24} className="text-slate-400" />
                           )}
                         </div>
-                        <span className={`text-[8px] font-black uppercase tracking-[0.2em] transition-colors ${selectedPayment?.id === method.id ? 'text-slate-950' : 'text-slate-400 group-hover:text-slate-900'}`}>
+                        <span className={`text-[8px] font-black uppercase tracking-[0.2em] transition-colors ${selectedPayment?.id === method.id ? 'text-[#1e4a3a]' : 'text-slate-400 group-hover:text-[#1e4a3a]'}`}>
                           {method.provider}
                         </span>
                         {selectedPayment?.id === method.id && (
-                          <div className="absolute -top-1 -right-1 w-4 h-4 bg-slate-950 rounded-full flex items-center justify-center text-white border border-white">
+                          <div className="absolute -top-1 -right-1 w-4 h-4 bg-[#1e4a3a] rounded-full flex items-center justify-center text-white border border-white">
                             <Check size={8} strokeWidth={4} />
                           </div>
                         )}
@@ -321,12 +319,12 @@ export default function CheckoutPage() {
                           {/* Payment Configuration Header */}
                           <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                             <div>
-                              <h3 className="text-[11px] font-black text-slate-950 uppercase tracking-[0.2em]">Transaction Setup</h3>
+                              <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Transaction Setup</h3>
                               <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1.5 flex items-center gap-2">
                                 <ShieldCheck size={10} className="text-emerald-500" /> Secure Clinical Gateway
                               </p>
                             </div>
-                            <span className="text-[9px] font-black bg-slate-950 text-white px-3 py-1 rounded uppercase tracking-[0.1em] shadow-sm">
+                            <span className="text-[9px] font-black bg-[#1e4a3a] text-white px-3 py-1 rounded uppercase tracking-[0.1em] shadow-sm">
                               {selectedPayment.type || 'Personal'}
                             </span>
                           </div>
@@ -358,7 +356,7 @@ export default function CheckoutPage() {
                                   selectedPayment.provider?.toLowerCase() === 'bkash' ? 'text-pink-950' :
                                   selectedPayment.provider?.toLowerCase() === 'nagad' ? 'text-orange-950' :
                                   selectedPayment.provider?.toLowerCase() === 'rocket' ? 'text-purple-950' :
-                                  'text-slate-900'
+                                  'text-[#1e4a3a]'
                                 }`}>
                                   Open your <span className="font-black border-b-2 border-current">{selectedPayment.provider}</span> app and choose 
                                   <span className="inline-flex px-2 py-0.5 bg-white border border-current rounded mx-1.5 font-black uppercase">{selectedPayment.type === 'Merchant' ? 'Make Payment' : 'Send Money'}</span> 
@@ -371,17 +369,17 @@ export default function CheckoutPage() {
                           {/* Recipient Account Component */}
                           <div 
                             onClick={() => copyToClipboard(selectedPayment.accountNumber)}
-                            className="bg-white px-6 py-5 rounded-2xl border border-slate-200 cursor-pointer group hover:border-slate-950 transition-all active:scale-[0.99] shadow-sm relative overflow-hidden"
+                            className="bg-white px-6 py-5 rounded-2xl border border-slate-200 cursor-pointer group hover:border-[#1e4a3a] transition-all active:scale-[0.99] shadow-sm relative overflow-hidden"
                           >
                             <div className="flex items-center justify-between relative z-10">
                               <div>
                                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">Recipient Account</p>
                                 <div className="flex items-center gap-5">
-                                  <p className="text-[20px] font-black text-slate-950 font-mono tracking-[0.25em] leading-none">{selectedPayment.accountNumber}</p>
-                                  <div className="px-2 py-1 bg-slate-50 border border-slate-200 rounded text-[8px] font-black uppercase text-slate-400 group-hover:bg-slate-950 group-hover:text-white group-hover:border-slate-950 transition-all">Copy Number</div>
+                                  <p className="text-[20px] font-black text-[#1e4a3a] font-mono tracking-[0.25em] leading-none">{selectedPayment.accountNumber}</p>
+                                  <div className="px-2 py-1 bg-slate-50 border border-slate-200 rounded text-[8px] font-black uppercase text-slate-400 group-hover:bg-[#1e4a3a] group-hover:text-white group-hover:border-[#1e4a3a] transition-all">Copy Number</div>
                                 </div>
                               </div>
-                              <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-slate-950 group-hover:text-white transition-all">
+                              <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-300 group-hover:bg-[#1e4a3a] group-hover:text-white transition-all">
                                 <Copy size={18} />
                               </div>
                             </div>
@@ -397,7 +395,7 @@ export default function CheckoutPage() {
                             value={trxId}
                             onChange={(e) => setTrxId(e.target.value.toUpperCase())}
                             placeholder="ABC123XYZ"
-                            className="w-full h-12 px-4 bg-white border border-slate-300 rounded-xl outline-none text-[15px] font-black tracking-[0.3em] focus:border-slate-950 transition-all placeholder:text-slate-200 uppercase text-center focus:bg-slate-50 shadow-sm"
+                            className="w-full h-12 px-4 bg-white border border-slate-300 rounded-xl outline-none text-[15px] font-black tracking-[0.3em] focus:border-[#1e4a3a] transition-all placeholder:text-slate-200 uppercase text-center focus:bg-slate-50 shadow-sm"
                           />
                         </div>
                       </motion.div>
@@ -411,7 +409,7 @@ export default function CheckoutPage() {
                       className={`w-full h-11 rounded-lg font-black uppercase tracking-[0.15em] text-[11px] flex items-center justify-center gap-3 transition-all active:scale-[0.98] border shadow-md group/btn ${
                         isSubmitting || isSuccess 
                           ? 'bg-slate-100 border-slate-200 text-slate-400 cursor-not-allowed' 
-                          : 'bg-slate-950 border-slate-950 text-white hover:bg-emerald-600 hover:border-emerald-600'
+                          : 'bg-[#1e4a3a] border-[#1e4a3a] text-white hover:bg-emerald-600 hover:border-emerald-600'
                       }`}
                     >
                       {isSubmitting ? (

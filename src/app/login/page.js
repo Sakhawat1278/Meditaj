@@ -4,12 +4,49 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Mail, Lock, ArrowRight, ChevronLeft, Globe, Loader2, AlertCircle } from 'lucide-react';
-import { useLanguage } from '@/context/LanguageContext';
 import { useAuth } from '@/context/AuthContext';
 import RestrictedAccessPopup from '@/components/Auth/RestrictedAccessPopup';
+import CurateButton from '@/components/UI/Buttons/CurateButton';
+import Logo from '@/components/UI/Logo';
+
+const OrbitalAvatar = ({ angle, distance, img, delay }) => {
+  const rad = (angle * Math.PI) / 180;
+  const x = Math.cos(rad) * distance;
+  const y = Math.sin(rad) * distance;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
+      animate={{ opacity: 1, scale: 1, x, y }}
+      transition={{ 
+        delay, 
+        type: "spring", 
+        stiffness: 100, 
+        damping: 15 
+      }}
+      className="absolute"
+    >
+      <motion.div
+        animate={{ 
+          y: [0, -10, 0],
+          rotate: [0, 5, -5, 0]
+        }}
+        transition={{ 
+          duration: 4 + Math.random() * 2, 
+          repeat: Infinity, 
+          ease: "easeInOut" 
+        }}
+        className="w-14 h-14 rounded-full border-2 border-white/20 bg-slate-200 overflow-hidden shadow-2xl p-0.5"
+      >
+        <div className="w-full h-full rounded-full overflow-hidden border border-white/10">
+          <img src={img} alt="person" className="w-full h-full object-cover" />
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
 
 export default function LoginPage() {
-  const { t, locale, switchLanguage } = useLanguage();
   const { login, logout, role, status, user } = useAuth();
   const router = useRouter();
   const [showRestrictedModal, setShowRestrictedModal] = useState(false);
@@ -74,84 +111,94 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white flex selection:bg-black selection:text-white">
+    <main className="min-h-screen bg-white flex selection:bg-[#1e4a3a] selection:text-white">
       
-      {/* ── Left Column: Immersive Visual ── */}
-      <section className="hidden lg:flex lg:w-1/2 relative bg-black overflow-hidden sticky top-0 h-screen">
-        <motion.div
-          initial={{ scale: 1.1, opacity: 0 }}
-          animate={{ scale: 1, opacity: 0.7 }}
-          transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute inset-0 z-0"
-        >
-          <img 
-            src="/curate_medical_concept_1776363557484.png" 
-            alt="Curate Concept" 
-            className="w-full h-full object-cover grayscale brightness-50"
-          />
-        </motion.div>
-        
-        {/* Overlay Branding */}
-        <div className="relative z-10 w-full p-16 flex flex-col justify-between">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.5, duration: 0.8 }}
-          >
-            <div className="flex items-center gap-3">
-              <div className="grid grid-cols-2 gap-0.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-white" />
-                <div className="w-2.5 h-2.5 rounded-full bg-white" />
-                <div className="w-2.5 h-2.5 rounded-full bg-white" />
-                <div className="w-2.5 h-2.5 rounded-full bg-white" />
-              </div>
-              <span className="text-lg font-bold tracking-tight text-white uppercase">Curate <span className="text-white/40">Health</span></span>
-            </div>
-          </motion.div>
+      {/* ── Left Column: Orbital Design ── */}
+      <section className="hidden lg:flex lg:w-1/2 relative bg-[#1e4a3a] overflow-hidden sticky top-0 h-screen shrink-0 items-center justify-center">
+        {/* Abstract Background Gradients */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-emerald-500/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/4" />
+          <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-emerald-600/10 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/4" />
+        </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 1 }}
-          >
-            <h1 className="text-4xl font-black tracking-tighter text-white leading-none mb-4">
-              BETTER <br />HEALTHCARE.
-            </h1>
-            <p className="max-w-xs text-white/50 text-[11px] font-medium leading-relaxed uppercase tracking-widest">
-              Signin to your account and manage your health information easily.
-            </p>
-          </motion.div>
+        {/* Orbiting System Container */}
+        <div className="relative z-10 w-full h-full flex flex-col items-center justify-center p-12">
+          
+          <div className="relative w-[500px] h-[500px] flex items-center justify-center">
+            
+            {/* Concentric Orbit Rings */}
+            <div className="absolute inset-0 border border-white/5 rounded-full" />
+            <div className="absolute inset-[15%] border border-white/10 rounded-full" />
+            <div className="absolute inset-[30%] border border-white/10 rounded-full" />
+            
+            {/* Central Brand Core */}
+            <motion.div 
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.5 }}
+              className="relative z-30 w-32 h-32 bg-white rounded-full shadow-[0_0_50px_rgba(255,255,255,0.2)] flex items-center justify-center"
+            >
+              <Logo size="lg" />
+            </motion.div>
+
+            {/* Orbiting Avatars (Static positions but can be animated) */}
+            <OrbitalAvatar angle={0} distance={250} img="https://i.pravatar.cc/150?u=1" delay={1.0} />
+            <OrbitalAvatar angle={60} distance={250} img="https://i.pravatar.cc/150?u=2" delay={1.2} />
+            <OrbitalAvatar angle={120} distance={250} img="https://i.pravatar.cc/150?u=3" delay={1.4} />
+            <OrbitalAvatar angle={180} distance={250} img="https://i.pravatar.cc/150?u=4" delay={1.6} />
+            <OrbitalAvatar angle={240} distance={250} img="https://i.pravatar.cc/150?u=5" delay={1.8} />
+            <OrbitalAvatar angle={300} distance={250} img="https://i.pravatar.cc/150?u=6" delay={2.0} />
+
+            {/* Inner Ring Avatars */}
+            <OrbitalAvatar angle={45} distance={175} img="https://i.pravatar.cc/150?u=7" delay={2.2} />
+            <OrbitalAvatar angle={165} distance={175} img="https://i.pravatar.cc/150?u=8" delay={2.4} />
+            <OrbitalAvatar angle={285} distance={175} img="https://i.pravatar.cc/150?u=9" delay={2.6} />
+          </div>
+
+          {/* Epic Title Overlay */}
+          <div className="mt-16 text-center">
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+              className="text-3xl font-black text-white tracking-tighter leading-none mb-4 uppercase"
+            >
+              Premium Care <br /><span className="text-white/40"> Everywhere.</span>
+            </motion.h2>
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.2 }}
+              className="max-w-xs mx-auto text-[10px] font-bold text-white/40 uppercase tracking-[0.3em] leading-relaxed"
+            >
+              Compatible with your healthcare needs, pharmacy, and diagnostic systems globally.
+            </motion.p>
+          </div>
         </div>
       </section>
 
       {/* ── Right Column: Minimalist Form ── */}
       <section className="w-full lg:w-1/2 min-h-screen flex flex-col">
         
-        {/* Top bar with back and language */}
+        {/* Top bar with back and branding (mobile-only logo) */}
         <div className="w-full px-8 py-6 flex items-center justify-between shrink-0">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}>
             <Link 
               href="/" 
-              className="group flex items-center gap-2 text-slate-400 hover:text-black transition-colors"
+              className="group flex items-center gap-2 text-slate-400 hover:text-[#1e4a3a] transition-colors"
             >
-              <div className="w-9 h-9 border border-slate-200 rounded-full flex items-center justify-center group-hover:border-black transition-all">
+              <div className="w-9 h-9 border border-slate-200 rounded-full flex items-center justify-center group-hover:border-[#1e4a3a] transition-all">
                 <ChevronLeft size={16} />
               </div>
-              <span className="text-[10px] font-bold uppercase tracking-widest">{t('home')}</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest">Home</span>
             </Link>
           </motion.div>
 
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }}>
-            <button 
-              onClick={() => switchLanguage(locale === 'en' ? 'bn' : 'en')}
-              className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 hover:text-black transition-colors"
-            >
-              <Globe size={12} />
-              <span className={locale === 'en' ? 'text-black' : ''}>EN</span>
-              <span className="text-slate-200">/</span>
-              <span className={locale === 'bn' ? 'text-black' : ''}>BN</span>
-            </button>
-          </motion.div>
+          {/* mobile logo appear only on mobile device */}
+          <div className="lg:hidden flex items-center gap-3">
+            <Logo size="sm" />
+            <span className="text-sm font-black tracking-tighter text-[#1e4a3a] uppercase whitespace-nowrap">CURATE <span className="opacity-40">HEALTH</span></span>
+          </div>
         </div>
 
         {/* Form Container */}
@@ -163,10 +210,10 @@ export default function LoginPage() {
             className="max-w-sm w-full"
           >
             <motion.div variants={itemVariants} className="mb-8">
-              <h2 className="text-2xl font-extrabold tracking-tighter text-black leading-none mb-3">
+              <h2 className="text-2xl font-extrabold tracking-tighter text-[#1e4a3a] leading-none mb-3">
                 SIGN IN
               </h2>
-              <div className="w-8 h-0.5 bg-black rounded-full" />
+              <div className="w-8 h-0.5 bg-[#1e4a3a] rounded-full" />
             </motion.div>
 
             <form className="space-y-6" onSubmit={handleLogin}>
@@ -176,7 +223,7 @@ export default function LoginPage() {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center gap-3 text-black mb-4"
+                    className="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center gap-3 text-[#1e4a3a] mb-4"
                   >
                     <AlertCircle size={16} className="text-slate-400 shrink-0" />
                     <p className="text-[10px] font-bold leading-tight uppercase tracking-tight">{errorMessage}</p>
@@ -196,7 +243,7 @@ export default function LoginPage() {
                     placeholder="name@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full h-11 pl-11 pr-4 bg-white border border-slate-200 rounded-full focus:outline-none focus:border-black transition-all text-[13px] font-medium text-black placeholder:text-slate-200"
+                    className="w-full h-11 pl-11 pr-4 bg-white border border-slate-200 rounded-full focus:outline-none focus:border-[#1e4a3a] transition-all text-[13px] font-medium text-[#1e4a3a] placeholder:text-slate-200"
                   />
                 </div>
               </motion.div>
@@ -206,7 +253,7 @@ export default function LoginPage() {
                   <label className="text-[9px] font-bold uppercase tracking-[0.2em] text-slate-400">
                     PASSWORD
                   </label>
-                  <Link href="/forgot-password" opacity={0.5} className="text-[9px] font-extrabold text-slate-400 hover:text-black transition-colors uppercase tracking-widest">
+                  <Link href="/forgot-password" opacity={0.5} className="text-[9px] font-extrabold text-slate-400 hover:text-[#1e4a3a] transition-colors uppercase tracking-widest">
                     Forgot Password?
                   </Link>
                 </div>
@@ -218,54 +265,20 @@ export default function LoginPage() {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full h-11 pl-11 pr-4 bg-white border border-slate-200 rounded-full focus:outline-none focus:border-black transition-all text-[13px] font-medium text-black placeholder:text-slate-200"
+                    className="w-full h-11 pl-11 pr-4 bg-white border border-slate-200 rounded-full focus:outline-none focus:border-[#1e4a3a] transition-all text-[13px] font-medium text-[#1e4a3a] placeholder:text-slate-200"
                   />
                 </div>
               </motion.div>
 
               <motion.div variants={itemVariants} className="pt-2 flex justify-start">
-                <button 
-                  disabled={isLoading}
-                  className="group relative flex items-center justify-end h-11 bg-black text-white rounded-full hover:bg-slate-800 transition-all overflow-hidden disabled:opacity-50"
-                >
-                  {isLoading ? (
-                    <div className="w-32 h-full flex items-center justify-center">
-                      <Loader2 className="animate-spin" size={18} />
-                    </div>
-                  ) : (
-                    <motion.div 
-                      initial={{ width: 44 }}
-                      animate={{ width: "auto" }}
-                      transition={{ delay: 0.8, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                      className="flex items-center"
-                    >
-                      <motion.span 
-                        initial={{ opacity: 0, x: 20, filter: "blur(4px)" }}
-                        animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-                        transition={{ delay: 1.1, duration: 0.5 }}
-                        className="text-[12px] font-bold tracking-[0.15em] leading-none whitespace-nowrap ml-6 mr-3 uppercase text-white"
-                      >
-                        Sign In Now
-                      </motion.span>
-                      
-                      <motion.div 
-                        initial={{ scale: 0, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ delay: 0.4, type: "spring", stiffness: 200, damping: 15 }}
-                        className="w-9 h-9 border border-white/30 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all duration-300 shrink-0 mr-1"
-                      >
-                        <ArrowRight size={16} strokeWidth={2.5} />
-                      </motion.div>
-                    </motion.div>
-                  )}
-                </button>
+                <CurateButton type="submit" label="Sign In Now" isLoading={isLoading} />
               </motion.div>
             </form>
 
             <motion.div variants={itemVariants} className="mt-10 pt-6 border-t border-slate-100 text-center">
               <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">
                 Don't have an account?{' '}
-                <Link href="/signup" className="text-black hover:underline ml-1">
+                <Link href="/signup" className="text-[#1e4a3a] hover:underline ml-1">
                   Sign Up
                 </Link>
               </p>

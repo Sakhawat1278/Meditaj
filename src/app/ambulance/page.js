@@ -5,8 +5,6 @@ import {
   Ambulance, Navigation, MapPin, Clock, ShieldCheck, 
   Phone, AlertTriangle, ChevronRight, FileText, Check, Calendar, ArrowRight, Info
 } from 'lucide-react';
-import LandingNavbar from '@/components/Home/LandingNavbar';
-import { useLanguage } from '@/context/LanguageContext';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
@@ -18,7 +16,6 @@ import { db } from '@/lib/firebase';
 import { collection, addDoc } from 'firebase/firestore';
 
 export default function AmbulancePage() {
-  const { t, locale } = useLanguage();
   const { user } = useAuth();
   const { addToCart } = useCart();
   const router = useRouter();
@@ -89,10 +86,9 @@ export default function AmbulancePage() {
 
   return (
     <>
-      <main className="min-h-screen bg-white font-sans text-slate-900 antialiased selection:bg-emerald-100">
-        <LandingNavbar />
+      <main className="min-h-screen bg-white font-sans text-[#1e4a3a] antialiased selection:bg-emerald-100">
 
-        <div className="pt-40 lg:pt-56 pb-16 container mx-auto px-6">
+        <div className="pt-28 lg:pt-36 pb-16 w-full max-w-[1825px] mx-auto px-6 lg:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
             
             {/* LEFT CONTENT: Booking Information Form (50%) */}
@@ -103,7 +99,7 @@ export default function AmbulancePage() {
                   <FileText size={18} strokeWidth={2.5} />
                 </div>
                 <div>
-                  <h1 className="text-lg font-black tracking-tight text-slate-900">{t('bookingInformation')}</h1>
+                  <h1 className="text-lg font-black tracking-tight text-[#1e4a3a]">Booking Information</h1>
                   <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">Please fill out the details below</p>
                 </div>
               </div>
@@ -112,7 +108,7 @@ export default function AmbulancePage() {
               <div className="space-y-6">
                 <div className="grid grid-cols-1 gap-4">
                   <CustomDropdown
-                    label={t('ambulanceCategory') + " *"}
+                    label="Select Ambulance Category *"
                     options={ambulanceCategories}
                     value={bookingData.category}
                     onChange={(val) => setBookingData({ ...bookingData, category: val })}
@@ -120,7 +116,7 @@ export default function AmbulancePage() {
                     icon={Ambulance}
                   />
                   <DatePicker
-                    label={t('selectDateTime') + " *"}
+                    label="Select Pickup Date & Time *"
                     value={bookingData.dateTime}
                     onChange={(val) => setBookingData({ ...bookingData, dateTime: val })}
                     placeholder="Select date"
@@ -130,7 +126,7 @@ export default function AmbulancePage() {
                 
                 <div className="space-y-1.5">
                   <label className="text-[9px] font-bold uppercase tracking-widest text-slate-500 ml-0.5">
-                    {t('phoneLabel')} *
+                    Contact Phone Number *
                   </label>
                   <div className="relative">
                     <input
@@ -149,7 +145,7 @@ export default function AmbulancePage() {
                 <div className="grid grid-cols-1 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-[9px] font-bold uppercase tracking-widest text-slate-500 ml-0.5">
-                      {t('pickupAddress')} *
+                      Pickup Address *
                     </label>
                     <textarea
                       value={bookingData.pickupAddress}
@@ -161,7 +157,7 @@ export default function AmbulancePage() {
                   </div>
                   <div className="space-y-1.5">
                     <label className="text-[9px] font-bold uppercase tracking-widest text-slate-500 ml-0.5">
-                      {t('dropoffAddress')} *
+                      Destination Address *
                     </label>
                     <textarea
                       value={bookingData.dropoffAddress}
@@ -179,10 +175,9 @@ export default function AmbulancePage() {
             <aside className="lg:col-span-6 space-y-6 lg:sticky lg:top-32 order-2">
               <div className="space-y-5">
                 <div className="space-y-1.5">
-                  <h2 className="text-[12px] font-black text-slate-900 uppercase tracking-[0.2em]">{t('whatToExpect')}</h2>
+                  <h2 className="text-[12px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Service Protocol</h2>
                 </div>
 
-                {/* White Hotline Information at Top */}
                 <div className="p-4 bg-white border border-slate-300 rounded-xl flex items-center gap-4 group hover:border-emerald-200 transition-colors">
                    <div className="w-10 h-10 rounded bg-emerald-50 flex items-center justify-center text-emerald-600 border border-emerald-100 group-hover:bg-emerald-100 transition-colors">
                       <Phone size={18} />
@@ -190,7 +185,7 @@ export default function AmbulancePage() {
                    <div>
                       <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Direct Hotline</h3>
                       <div className="flex items-baseline gap-2">
-                        <p className="text-xl font-black tracking-tight text-slate-900 leading-none">10657</p>
+                        <p className="text-xl font-black tracking-tight text-[#1e4a3a] leading-none">10657</p>
                         <span className="text-[9px] text-emerald-500 font-bold uppercase tracking-wider leading-none">24/7 Service</span>
                       </div>
                    </div>
@@ -214,14 +209,13 @@ export default function AmbulancePage() {
                   ))}
                 </div>
 
-                {/* Disclaimer & Action Block (Moved Here) */}
                 <div className="pt-6 space-y-6 bg-slate-50 p-6 rounded-2xl border border-slate-300">
                   <div className="flex gap-4 items-start p-3 bg-white border border-slate-300 rounded-lg">
                     <div className="w-7 h-7 rounded bg-rose-50 flex items-center justify-center text-rose-500 shrink-0">
                        <AlertTriangle size={12} />
                     </div>
                     <p className="text-[9px] text-slate-400 font-medium leading-relaxed">
-                      Meditaj will process your ambulance service request through its partners; however, for any grievous emergency, please contact the national <span className="text-slate-900 font-bold">999</span> emergency helpline directly.
+                      Meditaj will process your ambulance service request through its partners; however, for any grievous emergency, please contact the national <span className="text-[#1e4a3a] font-bold">999</span> emergency helpline directly.
                     </p>
                   </div>
                   
@@ -234,12 +228,12 @@ export default function AmbulancePage() {
                           onChange={(e) => setAgreedTerms(e.target.checked)}
                           className="peer sr-only"
                         />
-                        <div className="w-4 h-4 border border-slate-300 rounded peer-checked:bg-slate-900 peer-checked:border-slate-900 transition-all flex items-center justify-center text-white bg-slate-50 group-hover:border-slate-400">
+                        <div className="w-4 h-4 border border-slate-300 rounded peer-checked:bg-[#1e4a3a] peer-checked:border-[#1e4a3a] transition-all flex items-center justify-center text-white bg-slate-50 group-hover:border-slate-400">
                           <Check size={12} strokeWidth={4} />
                         </div>
                       </div>
                       <span className="text-[10px] text-slate-500 font-bold uppercase tracking-tight leading-relaxed max-w-md">
-                        {t('agreeTermsDesc')}
+                        I agree to the Meditaj Terms, Conditions and medical transport protocol.
                       </span>
                     </label>
 
@@ -248,11 +242,11 @@ export default function AmbulancePage() {
                       disabled={!agreedTerms || isSubmitting}
                       className={`w-full h-12 rounded-lg font-black text-[10px] tracking-[0.2em] uppercase transition-all flex items-center justify-center gap-3 border ${
                         agreedTerms && !isSubmitting
-                        ? 'bg-slate-950 text-white hover:bg-emerald-600 border-slate-800 hover:border-emerald-700' 
+                        ? 'bg-[#1e4a3a] text-white hover:bg-emerald-600 border-slate-800 hover:border-emerald-700' 
                         : 'bg-slate-100 text-slate-300 border-slate-300 cursor-not-allowed'
                       }`}
                     >
-                      {isSubmitting ? 'Processing...' : t('requestAmbulance')}
+                      {isSubmitting ? 'Processing...' : 'Confirm Ambulance Request'}
                       <ArrowRight size={14} />
                     </button>
                   </div>
@@ -270,7 +264,7 @@ export default function AmbulancePage() {
               initial={{ opacity: 0 }} 
               animate={{ opacity: 1 }} 
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+              className="absolute inset-0 bg-[#1e4a3a]/40 backdrop-blur-sm"
               onClick={() => setBookingSuccess(false)}
             />
             <motion.div 
@@ -282,13 +276,13 @@ export default function AmbulancePage() {
               <div className="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-500 mx-auto mb-6 border border-emerald-100">
                 <ShieldCheck size={40} />
               </div>
-              <h3 className="text-xl font-black text-slate-900 mb-2 uppercase tracking-tight">Request Received</h3>
+              <h3 className="text-xl font-black text-[#1e4a3a] mb-2 uppercase tracking-tight">Request Received</h3>
               <p className="text-[12px] text-slate-500 leading-relaxed mb-8">
                 Your request for an ambulance has been submitted. Our team will contact you within 15 minutes to confirm assignment.
               </p>
               <button 
                 onClick={() => setBookingSuccess(false)}
-                className="w-full h-12 bg-slate-950 text-white rounded-xl font-black text-[10px] tracking-[0.2em] uppercase hover:bg-emerald-600 transition-all border border-slate-800"
+                className="w-full h-12 bg-[#1e4a3a] text-white rounded-xl font-black text-[10px] tracking-[0.2em] uppercase hover:bg-emerald-600 transition-all border border-slate-800"
               >
                 Back to Form
               </button>

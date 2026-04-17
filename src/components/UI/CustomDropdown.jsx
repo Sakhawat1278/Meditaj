@@ -52,13 +52,13 @@ export default function CustomDropdown({
           type="button"
           onClick={() => setIsOpen(!isOpen)}
           className={`w-full h-11 px-5 flex items-center justify-between gap-3 bg-white border transition-all rounded-full select-none outline-none
-          ${isOpen ? 'border-black bg-white ring-4 ring-black/5' : 'border-slate-200 text-slate-400 hover:border-black'}
+          ${isOpen ? 'border-[#1e4a3a] bg-white ring-4 ring-[#1e4a3a]/5' : 'border-slate-200 text-slate-400 hover:border-[#1e4a3a]'}
           ${error ? 'border-rose-400 bg-rose-50/30' : ''}
           `}
         >
           <div className="flex items-center gap-3 overflow-hidden">
-            {Icon && <Icon size={16} className={`${isOpen ? 'text-black' : 'text-slate-300'} transition-colors shrink-0`} />}
-            <span className={`text-[13px] font-medium truncate ${selectedOption ? 'text-black' : 'text-slate-400'}`}>
+            {Icon && <Icon size={16} className={`${isOpen ? 'text-[#1e4a3a]' : 'text-slate-300'} transition-colors shrink-0`} />}
+            <span className={`text-[13px] font-medium truncate ${selectedOption ? 'text-[#1e4a3a]' : 'text-slate-400'}`}>
               {selectedOption ? selectedOption.label : placeholder}
             </span>
           </div>
@@ -107,11 +107,11 @@ export default function CustomDropdown({
  setSearchTerm("");
  }}
  className={`group px-3 py-2.5 rounded-lg flex items-center justify-between cursor-pointer transition-all
- ${value === option.value ? 'bg-med-primary/5 text-med-primary' : 'hover:bg-slate-50 text-slate-600 hover:text-med-text'}
+ ${value === option.value ? 'bg-[#1e4a3a]/5 text-[#1e4a3a]' : 'hover:bg-[#1e4a3a]/5 text-slate-600 hover:text-[#1e4a3a]'}
  `}
  >
  <div className="flex items-center gap-3 overflow-hidden">
- {option.icon && <option.icon size={14} className={value === option.value ? 'text-med-primary' : 'text-slate-400 group-hover:text-med-primary transition-colors'} />}
+ {option.icon && <option.icon size={14} className={value === option.value ? 'text-[#1e4a3a]' : 'text-slate-400 group-hover:text-[#1e4a3a] transition-colors'} />}
  <span className="text-[13px] font-medium truncate">{option.label}</span>
  </div>
  {value === option.value && (

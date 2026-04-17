@@ -16,12 +16,12 @@ export default function LabTestCard({ test, onAddToCart, isInCart }) {
               {test.category || 'Diagnostic'}
             </span>
           </div>
-          <h3 className="text-[14px] font-bold text-slate-900 leading-tight group-hover:text-emerald-700 transition-colors">
+          <h3 className="text-[14px] font-bold text-[#1e4a3a] leading-tight group-hover:text-emerald-700 transition-colors">
             {test.name}
           </h3>
         </div>
         <div className="text-right whitespace-nowrap">
-          <span className="text-[15px] font-black text-slate-900">৳{test.price}</span>
+          <span className="text-[15px] font-black text-[#1e4a3a]">৳{test.price}</span>
         </div>
       </div>
 
@@ -49,7 +49,7 @@ export default function LabTestCard({ test, onAddToCart, isInCart }) {
           className={`h-9 px-4 rounded-lg text-[11px] font-black uppercase tracking-widest transition-all flex items-center gap-2
             ${isInCart 
               ? 'bg-emerald-50 text-emerald-600 border border-emerald-100 cursor-default' 
-              : 'bg-white border border-slate-300 text-slate-600 hover:bg-slate-900 hover:text-white hover:border-slate-900 active:scale-95'
+              : 'bg-white border border-slate-300 text-slate-600 hover:bg-[#1e4a3a] hover:text-white hover:border-[#1e4a3a] active:scale-95'
             }
           `}
         >

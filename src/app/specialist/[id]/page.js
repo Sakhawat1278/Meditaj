@@ -16,7 +16,6 @@ import {
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
-import LandingNavbar from '@/components/Home/LandingNavbar';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 
@@ -221,9 +220,8 @@ export default function DoctorBookingPage() {
 
   return (
     <main className="min-h-screen bg-[#FDFDFD] font-sans text-slate-900 pb-24 selection:bg-emerald-50">
-      <LandingNavbar />
 
-      <div className="pt-52 container mx-auto px-4 lg:px-6">
+      <div className="pt-24 lg:pt-32 w-full max-w-[1825px] mx-auto px-4 lg:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
           {/* --- LEFT SIDEBAR (Doctor Info) --- */}

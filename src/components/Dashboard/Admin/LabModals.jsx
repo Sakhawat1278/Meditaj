@@ -59,34 +59,34 @@ export default function LabModals({
     <AnimatePresence>
       {showAddLabProvider && (
         <div key="add-lab-provider-modal" className="fixed inset-0 z-[130] flex items-center justify-center p-4">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => setShowAddLabProvider(false)} />
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowAddLabProvider(false)} />
           <motion.div initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} className="relative w-full max-w-lg bg-white rounded-2xl overflow-hidden border border-slate-300 shadow-2xl">
             <form onSubmit={handleSaveLabProvider} className="p-8 space-y-8 max-h-[90vh] overflow-y-auto custom-scrollbar">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-[18px] font-black text-slate-900 tracking-tight uppercase leading-none mb-2">{editingLabProvider ? 'Update Clinical Branch' : 'Register Diagnostic Provider'}</h3>
+                  <h3 className="text-[18px] font-black text-[#1e4a3a] tracking-tight uppercase leading-none mb-2">{editingLabProvider ? 'Update Clinical Branch' : 'Register Diagnostic Provider'}</h3>
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Configure Clinical Branch Details</p>
                 </div>
-                <button type="button" onClick={() => setShowAddLabProvider(false)} className="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 hover:text-slate-900 hover:bg-slate-100 flex items-center justify-center transition-all"><X size={20} /></button>
+                <button type="button" onClick={() => setShowAddLabProvider(false)} className="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 hover:text-[#1e4a3a] hover:bg-slate-100 flex items-center justify-center transition-all"><X size={20} /></button>
               </div>
 
               <div className="space-y-6">
                 {/* 01. Identification */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-lg bg-slate-900 text-white flex items-center justify-center text-[10px] font-black">01</div>
-                    <h4 className="text-[11px] font-black text-slate-950 uppercase tracking-widest">Identity</h4>
+                    <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] text-white flex items-center justify-center text-[10px] font-black">01</div>
+                    <h4 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest">Identity</h4>
                   </div>
                   <div className="space-y-1.5 font-bold">
                     <label className="text-[10px] text-slate-400 uppercase tracking-widest ml-1">Provider / Center Name</label>
                     <div className="relative group">
-                      <Globe size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-slate-900 transition-colors" />
+                      <Globe size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#1e4a3a] transition-colors" />
                       <input 
                         required type="text" 
                         value={labProviderForm.name} 
                         onChange={e => setLabProviderForm({...labProviderForm, name: e.target.value})} 
                         placeholder="e.g. Popular Diagnostic Center..." 
-                        className="w-full h-12 bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-4 text-[13px] font-bold text-slate-950 outline-none focus:border-slate-900 focus:bg-white transition-all" 
+                        className="w-full h-12 bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-4 text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all" 
                       />
                     </div>
                   </div>
@@ -95,8 +95,8 @@ export default function LabModals({
                 {/* 02. Location Hierarchy */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-lg bg-slate-900 text-white flex items-center justify-center text-[10px] font-black">02</div>
-                    <h4 className="text-[11px] font-black text-slate-950 uppercase tracking-widest">Global Location Hierarchy</h4>
+                    <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] text-white flex items-center justify-center text-[10px] font-black">02</div>
+                    <h4 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest">Global Location Hierarchy</h4>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4">
@@ -111,7 +111,7 @@ export default function LabModals({
                               required type="text" 
                               value={labProviderForm.division} 
                               onChange={e => setLabProviderForm({...labProviderForm, division: e.target.value})} 
-                              className="w-full h-11 bg-white border-2 border-slate-900 rounded-xl px-4 text-[13px] font-bold outline-none" 
+                              className="w-full h-11 bg-white border-2 border-[#1e4a3a] rounded-xl px-4 text-[13px] font-bold outline-none" 
                             />
                             <button onClick={() => { setIsCustomDivision(false); setLabProviderForm({...labProviderForm, division: ''}); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-black uppercase text-rose-500 hover:scale-105 transition-transform">Reset</button>
                           </div>
@@ -147,7 +147,7 @@ export default function LabModals({
                               required type="text" 
                               value={labProviderForm.district} 
                               onChange={e => setLabProviderForm({...labProviderForm, district: e.target.value})} 
-                              className="w-full h-11 bg-white border-2 border-slate-900 rounded-xl px-4 text-[13px] font-bold outline-none" 
+                              className="w-full h-11 bg-white border-2 border-[#1e4a3a] rounded-xl px-4 text-[13px] font-bold outline-none" 
                             />
                             <button onClick={() => { setIsCustomDistrict(false); setLabProviderForm({...labProviderForm, district: ''}); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-black uppercase text-rose-500 hover:scale-105 transition-transform">Reset</button>
                           </div>
@@ -220,7 +220,7 @@ export default function LabModals({
                       <Activity size={20} className={labProviderForm.status === 'active' ? 'text-emerald-500' : ''} />
                     </div>
                     <div>
-                      <h5 className="text-[11px] font-black text-slate-900 uppercase tracking-widest">Provider Status</h5>
+                      <h5 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest">Provider Status</h5>
                       <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Currently visible to patients</p>
                     </div>
                   </div>
@@ -251,7 +251,7 @@ export default function LabModals({
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }} 
-            className="absolute inset-0 bg-slate-900/40" 
+            className="absolute inset-0 bg-[#1e4a3a]/40" 
             onClick={() => {
               setShowAddLabTest(false);
               setFilterDiv('');
@@ -263,7 +263,7 @@ export default function LabModals({
             <form onSubmit={handleSaveLabTest} className="p-8 space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-[18px] font-black text-slate-900 tracking-tight uppercase leading-none mb-2">{editingLabTest ? 'Modify Diagnostic Test' : 'Add Test to Catalog'}</h3>
+                  <h3 className="text-[18px] font-black text-[#1e4a3a] tracking-tight uppercase leading-none mb-2">{editingLabTest ? 'Modify Diagnostic Test' : 'Add Test to Catalog'}</h3>
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Update Clinical Test Parameters</p>
                 </div>
                 <button 
@@ -274,7 +274,7 @@ export default function LabModals({
                     setFilterDist('');
                     setFilterArea('');
                   }} 
-                  className="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 hover:text-slate-900 hover:bg-slate-100 flex items-center justify-center transition-all"
+                  className="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 hover:text-[#1e4a3a] hover:bg-slate-100 flex items-center justify-center transition-all"
                 >
                   <X size={20} />
                 </button>
@@ -284,21 +284,21 @@ export default function LabModals({
                 {/* 1. Basic Info */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-lg bg-slate-900 text-white flex items-center justify-center text-[10px] font-black">01</div>
-                    <h4 className="text-[11px] font-black text-slate-950 uppercase tracking-widest">Test Information</h4>
+                    <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] text-white flex items-center justify-center text-[10px] font-black">01</div>
+                    <h4 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest">Test Information</h4>
                   </div>
                   <div className="space-y-1.5 font-bold">
                     <label className="text-[10px] text-slate-400 uppercase tracking-widest ml-1">Diagnostic Test Name</label>
-                    <input required type="text" value={labTestForm.name} onChange={e => setLabTestForm({...labTestForm, name: e.target.value})} placeholder="e.g. Blood Sugar (Fasting)" className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-[13px] font-bold outline-none focus:border-slate-900 focus:bg-white transition-all" />
+                    <input required type="text" value={labTestForm.name} onChange={e => setLabTestForm({...labTestForm, name: e.target.value})} placeholder="e.g. Blood Sugar (Fasting)" className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-[13px] font-bold outline-none focus:border-[#1e4a3a] focus:bg-white transition-all" />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-1.5 font-bold">
                       <label className="text-[10px] text-slate-400 uppercase tracking-widest ml-1">Category</label>
-                      <input required type="text" value={labTestForm.category} onChange={e => setLabTestForm({...labTestForm, category: e.target.value})} placeholder="Biochemistry" className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-[13px] font-bold outline-none focus:border-slate-900 focus:bg-white transition-all" />
+                      <input required type="text" value={labTestForm.category} onChange={e => setLabTestForm({...labTestForm, category: e.target.value})} placeholder="Biochemistry" className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-[13px] font-bold outline-none focus:border-[#1e4a3a] focus:bg-white transition-all" />
                     </div>
                     <div className="space-y-1.5 font-bold">
                       <label className="text-[10px] text-slate-400 uppercase tracking-widest ml-1">Base Price (৳)</label>
-                      <input required type="number" value={labTestForm.price} onChange={e => setLabTestForm({...labTestForm, price: e.target.value})} placeholder="500" className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-[13px] font-bold outline-none focus:border-slate-900 focus:bg-white transition-all" />
+                      <input required type="number" value={labTestForm.price} onChange={e => setLabTestForm({...labTestForm, price: e.target.value})} placeholder="500" className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-[13px] font-bold outline-none focus:border-[#1e4a3a] focus:bg-white transition-all" />
                     </div>
                   </div>
                 </div>
@@ -307,7 +307,7 @@ export default function LabModals({
                 <div className="space-y-4 pt-4 border-t border-slate-100">
                   <div className="flex items-center gap-3">
                     <div className="w-6 h-6 rounded-lg bg-emerald-500 text-white flex items-center justify-center text-[10px] font-black">02</div>
-                    <h4 className="text-[11px] font-black text-slate-950 uppercase tracking-widest">Identify Provider Location</h4>
+                    <h4 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest">Identify Provider Location</h4>
                   </div>
 
                   <div className="grid grid-cols-3 gap-3">
@@ -359,12 +359,12 @@ export default function LabModals({
                 {/* 3. Logistics */}
                 <div className="space-y-4 pt-4 border-t border-slate-100">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-lg bg-slate-900 text-white flex items-center justify-center text-[10px] font-black">03</div>
-                    <h4 className="text-[11px] font-black text-slate-950 uppercase tracking-widest">Clinical Logistics</h4>
+                    <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] text-white flex items-center justify-center text-[10px] font-black">03</div>
+                    <h4 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest">Clinical Logistics</h4>
                   </div>
                   <div className="space-y-1.5 font-bold">
                     <label className="text-[10px] text-slate-400 uppercase tracking-widest ml-1">Preparation & Description</label>
-                    <textarea value={labTestForm.preparation} onChange={e => setLabTestForm({...labTestForm, preparation: e.target.value})} placeholder="e.g. 8-10 hours fasting required. Morning sample preferred." className="w-full h-24 bg-slate-50 border border-slate-200 rounded-xl p-4 text-[12px] font-medium resize-none outline-none focus:border-slate-900 focus:bg-white transition-all" />
+                    <textarea value={labTestForm.preparation} onChange={e => setLabTestForm({...labTestForm, preparation: e.target.value})} placeholder="e.g. 8-10 hours fasting required. Morning sample preferred." className="w-full h-24 bg-slate-50 border border-slate-200 rounded-xl p-4 text-[12px] font-medium resize-none outline-none focus:border-[#1e4a3a] focus:bg-white transition-all" />
                   </div>
                 </div>
               </div>
@@ -382,7 +382,7 @@ export default function LabModals({
                 >
                   Cancel
                 </button>
-                <button type="submit" disabled={!labTestForm.providerId} className="flex-[1.5] h-12 bg-slate-900 text-white rounded-xl text-[12px] font-black uppercase tracking-widest hover:bg-black transition-all disabled:opacity-50 active:scale-[0.98]">
+                <button type="submit" disabled={!labTestForm.providerId} className="flex-[1.5] h-12 bg-[#1e4a3a] text-white rounded-xl text-[12px] font-black uppercase tracking-widest hover:bg-black transition-all disabled:opacity-50 active:scale-[0.98]">
                   {editingLabTest ? 'Apply Updates' : 'Confirm & Add to Index'}
                 </button>
               </div>

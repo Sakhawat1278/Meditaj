@@ -103,14 +103,14 @@ export default function DatePicker({ value, onChange, placeholder = "Select a da
       <div 
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full h-11 flex items-center justify-between text-[13px] font-medium px-5 bg-white border rounded-full cursor-pointer transition-all 
-        ${error ? 'border-rose-300 text-rose-500 bg-rose-50/50' : 'border-slate-200 text-slate-800 hover:border-black focus:border-black'}
-        ${isOpen ? 'border-black ring-4 ring-black/5 bg-white' : ''}
+        ${error ? 'border-rose-300 text-rose-500 bg-rose-50/50' : 'border-slate-200 text-slate-800 hover:border-[#1e4a3a] focus:border-[#1e4a3a]'}
+        ${isOpen ? 'border-[#1e4a3a] ring-4 ring-[#1e4a3a]/5 bg-white' : ''}
         `}
       >
         <div className="flex items-center gap-3">
- <Icon size={16} className={`transition-colors ${error ? 'text-rose-400' : (isOpen ? 'text-black' : 'text-slate-300')}`} />
+ <Icon size={16} className={`transition-colors ${error ? 'text-rose-400' : (isOpen ? 'text-[#1e4a3a]' : 'text-slate-300')}`} />
  {value ? (
- <span className="text-slate-900">{displayDate}</span>
+ <span className="text-[#1e4a3a]">{displayDate}</span>
  ) : (
  <span className="text-slate-300">{placeholder}</span>
  )}
@@ -133,7 +133,7 @@ export default function DatePicker({ value, onChange, placeholder = "Select a da
  animate={{ opacity: 1, y: 0, scale: 1 }}
  exit={{ opacity: 0, y: 10, scale: 0.95 }}
  transition={{ duration: 0.2 }}
- className="absolute z-50 top-full left-0 mt-2 p-4 bg-white rounded-2xl border border-slate-900/10 w-[280px]"
+ className="absolute z-50 top-full left-0 mt-2 p-4 bg-white rounded-2xl border border-[#1e4a3a]/10 w-[280px]"
  >
  <div className="flex items-center justify-between mb-4">
  <button 
@@ -146,13 +146,13 @@ export default function DatePicker({ value, onChange, placeholder = "Select a da
  </button>
  
  <div className="flex items-center gap-1.5">
- <span className="text-[13px] font-extrabold text-slate-900 tracking-tight uppercase">
+ <span className="text-[13px] font-extrabold text-[#1e4a3a] tracking-tight uppercase">
  {MONTHS[currentMonth]}
  </span>
  <button 
  type="button"
  onClick={() => setShowYearPicker(!showYearPicker)}
- className={`px-2 py-0.5 rounded-md text-[13px] font-extrabold tracking-tight transition-all ${showYearPicker ? 'bg-slate-900 text-white' : 'text-slate-900 hover:bg-slate-100'}`}
+ className={`px-2 py-0.5 rounded-md text-[13px] font-extrabold tracking-tight transition-all ${showYearPicker ? 'bg-[#1e4a3a] text-white' : 'text-[#1e4a3a] hover:bg-slate-100'}`}
  >
  {currentYear}
  </button>
@@ -184,7 +184,7 @@ export default function DatePicker({ value, onChange, placeholder = "Select a da
  onClick={() => handleYearSelect(year)}
  className={`h-9 flex items-center justify-center rounded-xl text-[12px] font-bold transition-all
  ${currentYear === year 
- ? 'bg-slate-900 text-white' 
+ ? 'bg-[#1e4a3a] text-white' 
  : 'text-slate-600 hover:bg-slate-100'
  }
  `}
@@ -221,7 +221,7 @@ export default function DatePicker({ value, onChange, placeholder = "Select a da
  onClick={() => handleSelectDate(day)}
  className={`w-8 h-8 flex items-center justify-center rounded-lg text-[12px] font-bold transition-all mx-auto
  ${isSelected 
- ? 'bg-slate-900 text-white' 
+ ? 'bg-[#1e4a3a] text-white' 
  : 'text-slate-700 hover:bg-slate-100'
  }
  `}

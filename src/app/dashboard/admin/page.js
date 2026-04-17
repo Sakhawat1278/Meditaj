@@ -1280,7 +1280,7 @@ function AdminDashboardContent() {
  </div>
  <div className="mt-4 flex flex-col items-center">
  <span className="text-[10px] font-extrabold text-slate-400 tracking-[0.2em] uppercase">Initializing</span>
- <span className="text-[11px] font-bold text-slate-900 tracking-tight mt-1">Establishing secure connection...</span>
+ <span className="text-[11px] font-bold text-[#1e4a3a] tracking-tight mt-1">Establishing secure connection...</span>
  </div>
  </motion.div>
  )}
@@ -1332,7 +1332,7 @@ function AdminDashboardContent() {
  >
  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-300 ">
  <div>
- <h2 className="text-[16px] font-extrabold text-slate-900 tracking-tight">Clinical Schedule</h2>
+ <h2 className="text-[16px] font-extrabold text-[#1e4a3a] tracking-tight">Clinical Schedule</h2>
  <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">
  Live monitoring of all patient consultations and bookings
  </p>
@@ -1345,7 +1345,7 @@ function AdminDashboardContent() {
  placeholder="Search ID, Patient or Physician..." 
  value={apptSearch}
  onChange={(e) => setApptSearch(e.target.value)}
- className="w-[280px] h-10 pl-10 pr-4 bg-transparent text-[11px] font-bold text-slate-900 outline-none placeholder:text-slate-400 placeholder:font-medium" 
+ className="w-[280px] h-10 pl-10 pr-4 bg-transparent text-[11px] font-bold text-[#1e4a3a] outline-none placeholder:text-slate-400 placeholder:font-medium" 
  />
  </div>
  <div className="flex items-center gap-1 p-1.5 bg-slate-50 border border-slate-300 rounded-xl">
@@ -1359,7 +1359,7 @@ function AdminDashboardContent() {
  <button
  key={tab.id}
  onClick={() => setApptFilter(tab.id)}
- className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${apptFilter === tab.id ? 'bg-slate-950 text-white ' : 'text-slate-400 hover:text-slate-900'}`}
+ className={`px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${apptFilter === tab.id ? 'bg-[#1e4a3a] text-white ' : 'text-slate-400 hover:text-[#1e4a3a]'}`}
  >
  {tab.label}
  </button>
@@ -1373,13 +1373,13 @@ function AdminDashboardContent() {
  <table className="w-full text-left border-collapse">
  <thead>
  <tr className="bg-slate-50/50 border-b border-slate-300">
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest leading-none">Booking ID</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest leading-none">Patient Identity</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest leading-none">Assigned Physician</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest leading-none">Consultation Type</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest leading-none">Schedule</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest leading-none">Status</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest leading-none text-right">Action</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Booking ID</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Patient Identity</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Assigned Physician</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Consultation Type</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Schedule</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Status</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-right">Action</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-slate-200">
@@ -1399,7 +1399,7 @@ function AdminDashboardContent() {
  <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-[11px] font-bold text-slate-400 border border-slate-200">
  {appt.patientName?.[0] || 'P'}
  </div>
- <span className="text-[12px] font-bold text-slate-950 truncate max-w-[120px]">{appt.patientName || 'Anonymous'}</span>
+ <span className="text-[12px] font-bold text-[#1e4a3a] truncate max-w-[120px]">{appt.patientName || 'Anonymous'}</span>
  </div>
  </td>
  <td className="px-6 py-4">
@@ -1415,7 +1415,7 @@ function AdminDashboardContent() {
  </td>
  <td className="px-6 py-4">
  <div className="flex flex-col">
- <span className="text-[11px] font-bold text-slate-950 tracking-tight">
+ <span className="text-[11px] font-bold text-[#1e4a3a] tracking-tight">
  {appt.date ? (appt.date.toDate ? appt.date.toDate().toLocaleDateString('en-GB') : new Date(appt.date).toLocaleDateString('en-GB')) : '--'}
  </span>
  <span className="text-[9px] text-slate-400 font-bold uppercase tracking-tight">{appt.time || '--'}</span>
@@ -1436,7 +1436,7 @@ function AdminDashboardContent() {
  setSelectedAppointment(appt);
  setShowApptModal(true);
  }}
- className="w-8 h-8 rounded-lg border border-slate-300 flex items-center justify-center text-slate-400 hover:bg-slate-950 hover:text-white hover:border-slate-950 transition-all "
+ className="w-8 h-8 rounded-lg border border-slate-300 flex items-center justify-center text-slate-400 hover:bg-[#1e4a3a] hover:text-white hover:border-[#1e4a3a] transition-all "
  >
  <Info size={14} />
  </button>
@@ -1459,7 +1459,7 @@ function AdminDashboardContent() {
  <div className="w-16 h-16 bg-slate-50 rounded-2xl border border-slate-300 flex items-center justify-center text-slate-200 mb-4">
  <Calendar size={28} />
  </div>
- <h3 className="text-[14px] font-bold text-slate-950 tracking-tight">Secure Registry Empty</h3>
+ <h3 className="text-[14px] font-bold text-[#1e4a3a] tracking-tight">Secure Registry Empty</h3>
  <p className="text-[11px] text-slate-500 font-medium tracking-tight max-w-[240px] mt-2">No clinical records found matching your current filter parameters.</p>
  </div>
  )}
@@ -1478,7 +1478,7 @@ function AdminDashboardContent() {
  >
  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-300">
  <div>
- <h2 className="text-[16px] font-extrabold text-slate-900 tracking-tight">Doctor Directory</h2>
+ <h2 className="text-[16px] font-extrabold text-[#1e4a3a] tracking-tight">Doctor Directory</h2>
  <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">
  Manage and audit approved medical professionals
  </p>
@@ -1496,7 +1496,7 @@ function AdminDashboardContent() {
  </div>
  <button 
  onClick={() => { setEditingDoctor(null); setShowRegisterDoctor(true); }}
- className="h-10 px-6 bg-slate-900 hover:bg-black text-white text-[11px] font-bold rounded-xl transition-all flex items-center gap-2"
+ className="h-10 px-6 bg-[#1e4a3a] hover:bg-black text-white text-[11px] font-bold rounded-xl transition-all flex items-center gap-2"
  >
  <Plus size={14} />
  Register Doctor
@@ -1509,11 +1509,11 @@ function AdminDashboardContent() {
  <table className="w-full text-left border-collapse">
  <thead>
  <tr className="bg-slate-50/50 border-b border-slate-300">
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none border-b border-slate-300">Doctor</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none border-b border-slate-300">Specialty</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none border-b border-slate-300">Status</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none border-b border-slate-300">Credentials</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none border-b border-slate-300 text-right">Actions</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none border-b border-slate-300">Doctor</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none border-b border-slate-300">Specialty</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none border-b border-slate-300">Status</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none border-b border-slate-300">Credentials</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none border-b border-slate-300 text-right">Actions</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-slate-200">
@@ -1526,7 +1526,7 @@ function AdminDashboardContent() {
  >
  <td className="px-6 py-5">
  <div className="flex items-center gap-4">
- <div className="w-11 h-11 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 border border-slate-300 overflow-hidden relative group-hover:border-slate-900 transition-colors">
+ <div className="w-11 h-11 bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 border border-slate-300 overflow-hidden relative group-hover:border-[#1e4a3a] transition-colors">
                       {doc.photoURL ? (
                         <img src={doc.photoURL} alt="" className="w-full h-full object-cover" />
                       ) : (
@@ -1534,7 +1534,7 @@ function AdminDashboardContent() {
                       )}
                     </div>
                     <div className="flex flex-col">
-                      <span className="text-[13px] font-bold text-slate-900 tracking-tight leading-none mb-1.5">{doc.fullName}</span>
+                      <span className="text-[13px] font-bold text-[#1e4a3a] tracking-tight leading-none mb-1.5">{doc.fullName}</span>
                       <span className="text-[10px] font-bold text-slate-400 font-mono tracking-tighter leading-none">{doc.email}</span>
                     </div>
                   </div>
@@ -1561,13 +1561,13 @@ function AdminDashboardContent() {
                 <td className="px-6 py-5">
                   <div className="flex flex-col">
                     <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">BMDC CODE</span>
-                    <span className="text-[11px] font-bold text-slate-900 tracking-widest font-mono">{doc.bmdcCode || 'NOT_LINKED'}</span>
+                    <span className="text-[11px] font-bold text-[#1e4a3a] tracking-widest font-mono">{doc.bmdcCode || 'NOT_LINKED'}</span>
                   </div>
                 </td>
                 <td className="px-6 py-5 text-right relative">
                   <button 
                     onClick={() => setActiveMenuId(activeMenuId === doc.id ? null : doc.id)}
-                    className="p-2 hover:bg-slate-100 rounded-xl transition-all text-slate-400 hover:text-slate-900 border border-transparent hover:border-slate-200"
+                    className="p-2 hover:bg-slate-100 rounded-xl transition-all text-slate-400 hover:text-[#1e4a3a] border border-transparent hover:border-slate-200"
                   >
                     <MoreVertical size={16} />
                   </button>
@@ -1580,7 +1580,7 @@ function AdminDashboardContent() {
                           initial={{ opacity: 0, scale: 0.95, y: 10 }}
                           animate={{ opacity: 1, scale: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.95, y: 10 }}
-                          className="absolute right-6 top-16 w-56 bg-white rounded-2xl border-2 border-slate-900 z-[70] overflow-hidden"
+                          className="absolute right-6 top-16 w-56 bg-white rounded-2xl border-2 border-[#1e4a3a] z-[70] overflow-hidden"
                         >
                           <div className="p-2 border-b border-slate-100 bg-slate-50/50">
                             <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest px-2 font-mono">Operations</p>
@@ -1656,7 +1656,7 @@ function AdminDashboardContent() {
         <div className="w-16 h-16 bg-slate-50 rounded-2xl border border-slate-300 flex items-center justify-center text-slate-200 mb-4">
           <UserCircle size={28} />
         </div>
-        <h3 className="text-[14px] font-bold text-slate-950 tracking-tight">No Doctors Found</h3>
+        <h3 className="text-[14px] font-bold text-[#1e4a3a] tracking-tight">No Doctors Found</h3>
         <p className="text-[11px] text-slate-500 font-medium tracking-tight max-w-[240px] mt-2">Adjust your search or register a new medical professional to get started.</p>
       </div>
     )}
@@ -1674,9 +1674,9 @@ function AdminDashboardContent() {
  exit="exit"
  className="space-y-6"
  >
- <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-900/20">
+ <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#1e4a3a]/20">
  <div>
- <h2 className="text-[16px] font-extrabold text-slate-900 tracking-tight">Patient Database</h2>
+ <h2 className="text-[16px] font-extrabold text-[#1e4a3a] tracking-tight">Patient Database</h2>
  <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">
  Secure repository for all registered patient profiles and clinical history
  </p>
@@ -1695,7 +1695,7 @@ function AdminDashboardContent() {
  <div className="relative">
  <button 
  onClick={() => setShowFilterDropdown(!showFilterDropdown)}
- className={`h-10 px-5 rounded-xl text-[11px] font-bold flex items-center gap-2 transition-all ${filterStatus !== 'all' ? 'bg-med-primary text-white -primary/20' : 'bg-slate-900 text-white hover:bg-black -100'}`}
+ className={`h-10 px-5 rounded-xl text-[11px] font-bold flex items-center gap-2 transition-all ${filterStatus !== 'all' ? 'bg-med-primary text-white -primary/20' : 'bg-[#1e4a3a] text-white hover:bg-black -100'}`}
  >
  <Filter size={14} />
  {filterStatus === 'all' ? 'Filter' : filterStatus.charAt(0).toUpperCase() + filterStatus.slice(1)}
@@ -1719,7 +1719,7 @@ function AdminDashboardContent() {
  <button
  key={opt.id}
  onClick={() => { setFilterStatus(opt.id); setShowFilterDropdown(false); }}
- className={`w-full flex items-center gap-3 p-2.5 rounded-xl transition-all ${filterStatus === opt.id ? 'bg-slate-50 text-slate-900' : 'text-slate-500 hover:bg-slate-50'}`}
+ className={`w-full flex items-center gap-3 p-2.5 rounded-xl transition-all ${filterStatus === opt.id ? 'bg-slate-50 text-[#1e4a3a]' : 'text-slate-500 hover:bg-slate-50'}`}
  >
  <opt.icon size={14} className={filterStatus === opt.id ? 'text-med-primary' : 'text-slate-300'} />
  <span className="text-[12px] font-bold">{opt.label}</span>
@@ -1733,18 +1733,18 @@ function AdminDashboardContent() {
  </div>
  </div>
 
- <div className="bg-white rounded-2xl border border-slate-900/20">
+ <div className="bg-white rounded-2xl border border-[#1e4a3a]/20">
  <table className="w-full text-left border-collapse">
  <thead>
- <tr className="bg-slate-50/50 border-b border-slate-900/10">
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none rounded-tl-2xl">ID No.</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none">Patient Name</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none">Status</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none">Due</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none">Phone</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none">Age</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none">Next Appointment</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none text-right rounded-tr-2xl">Action</th>
+ <tr className="bg-slate-50/50 border-b border-[#1e4a3a]/10">
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none rounded-tl-2xl">ID No.</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Patient Name</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Status</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Due</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Phone</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Age</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Next Appointment</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-right rounded-tr-2xl">Action</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-slate-200">
@@ -1780,7 +1780,7 @@ function AdminDashboardContent() {
  <span className="text-[11px] font-bold text-slate-400">{patient.fullName?.charAt(0) || 'P'}</span>
  )}
  </div>
- <span className="text-[13px] font-bold text-slate-900 tracking-tight">{patient.fullName || 'Anonymous'}</span>
+ <span className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">{patient.fullName || 'Anonymous'}</span>
  </div>
  </td>
  <td className="px-6 py-4">
@@ -1806,7 +1806,7 @@ function AdminDashboardContent() {
  <div className="flex justify-end">
  <button 
  onClick={() => setActiveMenuId(activeMenuId === patient.id ? null : patient.id)}
- className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${activeMenuId === patient.id ? 'bg-slate-900 text-white' : 'text-slate-400 hover:bg-slate-100'}`}
+ className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${activeMenuId === patient.id ? 'bg-[#1e4a3a] text-white' : 'text-slate-400 hover:bg-slate-100'}`}
  >
  <MoreHorizontal size={16} />
  </button>
@@ -1832,7 +1832,7 @@ function AdminDashboardContent() {
  <div className="w-7 h-7 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center"><FolderOpen size={14} /></div>
  Clinical Files
  </button>
- <div className="h-px bg-slate-900/5 my-1" />
+ <div className="h-px bg-[#1e4a3a]/5 my-1" />
  {patient.status === 'deactivated' ? (
  <button 
  onClick={() => { 
@@ -1889,7 +1889,7 @@ function AdminDashboardContent() {
  <div className="w-20 h-20 bg-slate-50 rounded-3xl border border-slate-200 flex items-center justify-center text-slate-200 mb-6">
  <UserCircle size={32} />
  </div>
- <h3 className="text-[16px] font-bold text-slate-900 tracking-tight">No Patient Records Found</h3>
+ <h3 className="text-[16px] font-bold text-[#1e4a3a] tracking-tight">No Patient Records Found</h3>
  <p className="text-[13px] text-slate-500 font-medium max-w-xs mt-2">
  Your database is currently empty. Patients will appear here automatically upon registration.
  </p>
@@ -1913,9 +1913,9 @@ function AdminDashboardContent() {
  exit="exit"
  className="space-y-6"
  >
- <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-900/20">
+ <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#1e4a3a]/20">
  <div>
- <h2 className="text-[16px] font-extrabold text-slate-900 tracking-tight">Staff Directory</h2>
+ <h2 className="text-[16px] font-extrabold text-[#1e4a3a] tracking-tight">Staff Directory</h2>
  <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">
  Control platform access for receptionists and staff members
  </p>
@@ -1933,7 +1933,7 @@ function AdminDashboardContent() {
  </div>
  <button 
  onClick={() => setShowAddStaff(true)}
- className="h-10 px-6 bg-slate-900 hover:bg-black text-white text-[11px] font-bold rounded-xl transition-all flex items-center gap-2 -100"
+ className="h-10 px-6 bg-[#1e4a3a] hover:bg-black text-white text-[11px] font-bold rounded-xl transition-all flex items-center gap-2 -100"
  >
  <Plus size={14} />
  Register Staff
@@ -1941,15 +1941,15 @@ function AdminDashboardContent() {
  </div>
  </div>
 
- <div className="bg-white rounded-2xl border border-slate-900/20">
+ <div className="bg-white rounded-2xl border border-[#1e4a3a]/20">
  <table className="w-full text-left border-collapse">
  <thead>
- <tr className="bg-slate-50/50 border-b border-slate-900/10">
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none rounded-tl-2xl">Identity</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none">Contact Info</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none">Joined Date</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none">Status</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none text-right rounded-tr-2xl">Action</th>
+ <tr className="bg-slate-50/50 border-b border-[#1e4a3a]/10">
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none rounded-tl-2xl">Identity</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Contact Info</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Joined Date</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Status</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-right rounded-tr-2xl">Action</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-slate-200">
@@ -1973,7 +1973,7 @@ function AdminDashboardContent() {
  {initials}
  </div>
  <div className="flex flex-col">
- <span className="text-[13px] font-bold text-slate-900 tracking-tight">{name}</span>
+ <span className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">{name}</span>
  <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">ID: #{member.id.slice(0, 5).toUpperCase()}</span>
  </div>
  </div>
@@ -2000,7 +2000,7 @@ function AdminDashboardContent() {
  <div className="flex justify-end">
  <button 
  onClick={() => setActiveMenuId(activeMenuId === member.id ? null : member.id)}
- className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${activeMenuId === member.id ? 'bg-slate-900 text-white' : 'text-slate-400 hover:bg-slate-100'}`}
+ className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${activeMenuId === member.id ? 'bg-[#1e4a3a] text-white' : 'text-slate-400 hover:bg-slate-100'}`}
  >
  <MoreHorizontal size={16} />
  </button>
@@ -2022,7 +2022,7 @@ function AdminDashboardContent() {
  <div className="w-7 h-7 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center"><Edit3 size={14} /></div>
  Update Access
  </button>
- <div className="h-px bg-slate-900/5 my-1" />
+ <div className="h-px bg-[#1e4a3a]/5 my-1" />
  {isActive ? (
  <button 
  onClick={() => { 
@@ -2075,7 +2075,7 @@ function AdminDashboardContent() {
  <div className="w-20 h-20 bg-slate-50 rounded-3xl border border-slate-200 flex items-center justify-center text-slate-200 mb-6">
  <Users size={32} />
  </div>
- <h3 className="text-[16px] font-bold text-slate-900 tracking-tight">No Staff Members Found</h3>
+ <h3 className="text-[16px] font-bold text-[#1e4a3a] tracking-tight">No Staff Members Found</h3>
  <p className="text-[13px] text-slate-500 font-medium max-w-xs mt-2">
  {staffSearch ? "No staff matches your search query." : "There are currently no registered staff members in your department."}
  </p>
@@ -2094,9 +2094,9 @@ function AdminDashboardContent() {
  exit="exit"
  className="space-y-6"
  >
- <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-900/20">
+ <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#1e4a3a]/20">
  <div>
- <h2 className="text-[16px] font-extrabold text-slate-900 tracking-tight">Professional Credential Audit</h2>
+ <h2 className="text-[16px] font-extrabold text-[#1e4a3a] tracking-tight">Professional Credential Audit</h2>
  <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">Review pending provider applications for clinical network access</p>
  </div>
  <div className="flex items-center gap-2 px-4 py-1.5 bg-amber-50 text-amber-600 rounded-xl border border-amber-100">
@@ -2105,23 +2105,23 @@ function AdminDashboardContent() {
  </div>
  </div>
 
- <div className="bg-white rounded-2xl border border-slate-900/20">
+ <div className="bg-white rounded-2xl border border-[#1e4a3a]/20">
  {pendingProviders.length === 0 ? (
  <div className="py-24 flex flex-col items-center justify-center text-center">
  <div className="w-20 h-20 rounded-3xl bg-slate-50 flex items-center justify-center text-slate-200 mb-6 border border-slate-200">
  <ShieldCheck size={32} />
  </div>
- <h3 className="text-[16px] font-bold text-slate-900 tracking-tight">Network Fully Synchronized</h3>
+ <h3 className="text-[16px] font-bold text-[#1e4a3a] tracking-tight">Network Fully Synchronized</h3>
  <p className="text-[13px] text-slate-500 font-medium max-w-xs mt-2">No pending provider applications require your attention at this time.</p>
  </div>
  ) : (
  <table className="w-full text-left border-collapse">
  <thead>
- <tr className="bg-slate-50/50 border-b border-slate-900/10">
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none rounded-tl-2xl">Provider & Role</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none">Contact Details</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none">Submission Date</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-900 uppercase tracking-widest leading-none text-right rounded-tr-2xl">Action</th>
+ <tr className="bg-slate-50/50 border-b border-[#1e4a3a]/10">
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none rounded-tl-2xl">Provider & Role</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Contact Details</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Submission Date</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-right rounded-tr-2xl">Action</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-slate-200">
@@ -2139,8 +2139,8 @@ function AdminDashboardContent() {
  {provider.fullName ? provider.fullName[0].toUpperCase() : 'P'}
  </div>
  <div className="flex flex-col">
- <span className="text-[13px] font-bold text-slate-900 tracking-tight">{provider.fullName}</span>
- <span className="text-[9px] text-white bg-slate-900 px-2 py-0.5 rounded-md uppercase tracking-widest font-bold self-start mt-1 ">{provider.role}</span>
+ <span className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">{provider.fullName}</span>
+ <span className="text-[9px] text-white bg-[#1e4a3a] px-2 py-0.5 rounded-md uppercase tracking-widest font-bold self-start mt-1 ">{provider.role}</span>
  </div>
  </div>
  </td>
@@ -2193,7 +2193,7 @@ function AdminDashboardContent() {
  className="space-y-8"
  >
  {/* Internal Sub-navigation */}
- <div className="flex items-center gap-2 p-1.5 bg-slate-50 border border-slate-900/20 rounded-2xl w-fit sticky top-0 z-30 ">
+ <div className="flex items-center gap-2 p-1.5 bg-slate-50 border border-[#1e4a3a]/20 rounded-2xl w-fit sticky top-0 z-30 ">
  {[
  { id: 'overview', label: 'Overview', icon: LayoutGrid },
  { id: 'manual', label: 'Payment Approvals', icon: ShieldAlert },
@@ -2207,8 +2207,8 @@ function AdminDashboardContent() {
  onClick={() => setFinanceTab(tab.id)}
  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-bold uppercase tracking-widest transition-all ${
  financeTab === tab.id 
- ? 'bg-slate-900 text-white ' 
- : 'text-slate-500 hover:bg-slate-200/50 hover:text-slate-900'
+ ? 'bg-[#1e4a3a] text-white ' 
+ : 'text-slate-500 hover:bg-slate-200/50 hover:text-[#1e4a3a]'
  }`}
  >
  <tab.icon size={14} />
@@ -2222,14 +2222,14 @@ function AdminDashboardContent() {
  {/* Stats Row */}
  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
  {[
- { label: 'Total Earnings', value: `৳${(financials.totalEarnings / 1000).toFixed(1)}k`, growth: '+12.5%', icon: TrendingUp, color: 'text-slate-950', bg: 'bg-white' },
+ { label: 'Total Earnings', value: `৳${(financials.totalEarnings / 1000).toFixed(1)}k`, growth: '+12.5%', icon: TrendingUp, color: 'text-[#1e4a3a]', bg: 'bg-white' },
  { label: 'Service Fees', value: `৳${(financials.serviceFees / 1000).toFixed(1)}k`, growth: '+10.2%', icon: Activity, color: 'text-emerald-700', bg: 'bg-white' },
  { label: 'Pending Payouts', value: `৳${(financials.pendingPayouts / 1000).toFixed(1)}k`, growth: '-4.1%', icon: Clock, color: 'text-amber-700', bg: 'bg-white' },
  { label: 'Active Coupons', value: financials.activeCoupons.toString().padStart(2, '0'), growth: '0%', icon: Zap, color: 'text-indigo-700', bg: 'bg-white' },
  ].map((stat, i) => (
- <div key={i} className={`p-6 rounded-2xl border border-slate-900/20 ${stat.bg} group hover:border-slate-400 transition-all`}>
+ <div key={i} className={`p-6 rounded-2xl border border-[#1e4a3a]/20 ${stat.bg} group hover:border-slate-400 transition-all`}>
  <div className="flex items-center justify-between mb-4">
- <div className={`w-12 h-12 rounded-xl border border-slate-900/10 flex items-center justify-center bg-slate-50 ${stat.color}`}>
+ <div className={`w-12 h-12 rounded-xl border border-[#1e4a3a]/10 flex items-center justify-center bg-slate-50 ${stat.color}`}>
  <stat.icon size={24} />
  </div>
  <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${stat.growth.startsWith('+') ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}`}>
@@ -2237,21 +2237,21 @@ function AdminDashboardContent() {
  </span>
  </div>
  <h4 className="text-[11px] font-bold text-slate-700 uppercase tracking-widest leading-none mb-2">{stat.label}</h4>
- <p className="text-2xl font-black text-slate-950 tracking-tight">{stat.value}</p>
+ <p className="text-2xl font-black text-[#1e4a3a] tracking-tight">{stat.value}</p>
  </div>
  ))}
  </div>
 
  {/* Revenue Forecast (Visual Placeholder) */}
- <div className="bg-white rounded-2xl border border-slate-900/20 p-8">
+ <div className="bg-white rounded-2xl border border-[#1e4a3a]/20 p-8">
  <div className="flex items-center justify-between mb-8">
  <div>
- <h3 className="text-[14px] font-bold text-slate-950 uppercase tracking-widest">Revenue Forecast</h3>
+ <h3 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-widest">Revenue Forecast</h3>
  <p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-1">Monthly transaction volume</p>
  </div>
  <div className="flex items-center gap-2">
  <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-50 border border-slate-200 rounded-lg">
- <div className="w-2 h-2 rounded-full bg-slate-950" />
+ <div className="w-2 h-2 rounded-full bg-[#1e4a3a]" />
  <span className="text-[9px] font-bold text-slate-700 uppercase">Revenue</span>
  </div>
  <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-50 border border-slate-200 rounded-lg">
@@ -2276,7 +2276,7 @@ function AdminDashboardContent() {
  >
  <div style={{ height: `${commH}%` }} className="w-full bg-emerald-500/20 border-t border-emerald-600/30" />
  </motion.div>
- <div className="mt-4 text-[9px] font-bold text-slate-400 uppercase text-center group-hover:text-slate-900">
+ <div className="mt-4 text-[9px] font-bold text-slate-400 uppercase text-center group-hover:text-[#1e4a3a]">
  {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][i]}
  </div>
  </div>
@@ -2289,10 +2289,10 @@ function AdminDashboardContent() {
 
  {/* PAYMENT APPROVALS TAB */}
  {financeTab === 'manual' && (
- <div className="bg-white rounded-2xl border border-slate-900/20 overflow-hidden ">
+ <div className="bg-white rounded-2xl border border-[#1e4a3a]/20 overflow-hidden ">
  <div className="p-8 border-b border-slate-100 flex items-center justify-between bg-white text-left">
  <div>
- <h3 className="text-[14px] font-bold text-slate-950 uppercase tracking-widest">Payment Approvals</h3>
+ <h3 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-widest">Payment Approvals</h3>
  <p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-1">Review manual transactions via bKash/Nagad/Rocket</p>
  </div>
  </div>
@@ -2300,12 +2300,12 @@ function AdminDashboardContent() {
  <div className="overflow-x-auto">
  <table className="w-full text-left border-collapse">
  <thead>
- <tr className="bg-slate-50/50 border-b border-slate-900/10">
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest leading-none">Transaction ID</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest leading-none">Appointment</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest leading-none">Method</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest leading-none">Amount</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest leading-none text-right">Action</th>
+ <tr className="bg-slate-50/50 border-b border-[#1e4a3a]/10">
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Transaction ID</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Appointment</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Method</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Amount</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-right">Action</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-slate-200">
@@ -2317,12 +2317,12 @@ function AdminDashboardContent() {
  transition={{ delay: idx * 0.05 }}
  className="group hover:bg-slate-50/50 transition-all"
  >
- <td className="px-6 py-4 text-[12px] font-bold text-slate-950 uppercase tracking-tight">{payment.transactionId}</td>
+ <td className="px-6 py-4 text-[12px] font-bold text-[#1e4a3a] uppercase tracking-tight">{payment.transactionId}</td>
  <td className="px-6 py-4 text-[12px] font-bold text-slate-600">#{payment.appointmentId.slice(-6)}</td>
  <td className="px-6 py-4">
- <span className="text-[9px] text-slate-950 uppercase tracking-widest px-2 py-0.5 bg-slate-100 border border-slate-200 rounded-md font-bold">{payment.method}</span>
+ <span className="text-[9px] text-[#1e4a3a] uppercase tracking-widest px-2 py-0.5 bg-slate-100 border border-slate-200 rounded-md font-bold">{payment.method}</span>
  </td>
- <td className="px-6 py-4 text-[12px] font-black text-slate-950">৳{payment.amount}</td>
+ <td className="px-6 py-4 text-[12px] font-black text-[#1e4a3a]">৳{payment.amount}</td>
  <td className="px-6 py-4">
  <div className="flex justify-end gap-2">
  <button 
@@ -2362,7 +2362,7 @@ function AdminDashboardContent() {
  <div className="space-y-6">
  <div className="flex items-center justify-between">
  <div>
- <h3 className="text-[14px] font-bold text-slate-950 uppercase tracking-widest">Payment Accounts</h3>
+ <h3 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-widest">Payment Accounts</h3>
  <p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-1">Manage active clinical deposit methods</p>
  </div>
  <button 
@@ -2383,17 +2383,17 @@ function AdminDashboardContent() {
 
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
  {paymentMethods.map((method) => (
- <div key={method.id} className="group bg-white p-4 rounded-2xl border border-slate-900/20 transition-all relative overflow-hidden hover:border-slate-400">
+ <div key={method.id} className="group bg-white p-4 rounded-2xl border border-[#1e4a3a]/20 transition-all relative overflow-hidden hover:border-slate-400">
  <div className="flex items-start justify-between mb-6">
  <div className="flex items-center gap-3">
- <div className="w-10 h-10 rounded-xl border border-slate-900/10 flex items-center justify-center p-1.5 bg-slate-50 overflow-hidden shrink-0">
+ <div className="w-10 h-10 rounded-xl border border-[#1e4a3a]/10 flex items-center justify-center p-1.5 bg-slate-50 overflow-hidden shrink-0">
  {method.provider === 'bkash' && <img src="/bkash.png" className="w-full h-full object-contain" />}
  {method.provider === 'nagad' && <img src="/nagad.png" className="w-full h-full object-contain" />}
  {method.provider === 'rocket' && <img src="/rocket.png" className="w-full h-full object-contain" />}
  {method.provider === 'bank' && <Building2 size={24} className="text-blue-600" />}
  </div>
  <div>
- <h4 className="text-[14px] font-black text-slate-950 uppercase tracking-tight">{method.provider}</h4>
+ <h4 className="text-[14px] font-black text-[#1e4a3a] uppercase tracking-tight">{method.provider}</h4>
  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-widest ${
  method.type === 'merchant' ? 'bg-emerald-50 text-emerald-700' : 
  method.type === 'agent' ? 'bg-amber-50 text-amber-700' :
@@ -2407,7 +2407,7 @@ function AdminDashboardContent() {
  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
  <button 
  onClick={() => { setEditingPayment(method.id); setPaymentForm({...method}); setShowPaymentModal(true); }}
- className="w-8 h-8 rounded-lg border border-slate-900/10 flex items-center justify-center text-slate-500 hover:text-slate-950 hover:bg-slate-50 transition-all"
+ className="w-8 h-8 rounded-lg border border-[#1e4a3a]/10 flex items-center justify-center text-slate-500 hover:text-[#1e4a3a] hover:bg-slate-50 transition-all"
  >
  <Edit3 size={14} />
  </button>
@@ -2425,7 +2425,7 @@ function AdminDashboardContent() {
  }
  });
  }}
- className="w-8 h-8 rounded-lg border border-slate-900/10 flex items-center justify-center text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all"
+ className="w-8 h-8 rounded-lg border border-[#1e4a3a]/10 flex items-center justify-center text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all"
  >
  <Trash2 size={14} />
  </button>
@@ -2437,11 +2437,11 @@ function AdminDashboardContent() {
  <div className="space-y-2">
  <div className="space-y-0.5">
  <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none">Account Holder</p>
- <p className="text-[12px] font-bold text-slate-950 truncate">{method.accountName}</p>
+ <p className="text-[12px] font-bold text-[#1e4a3a] truncate">{method.accountName}</p>
  </div>
  <div className="space-y-0.5">
  <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none">Account Number</p>
- <p className="text-[13px] font-black text-slate-950 tracking-tighter">{method.accountNumber}</p>
+ <p className="text-[13px] font-black text-[#1e4a3a] tracking-tighter">{method.accountNumber}</p>
  <p className="text-[10px] font-bold text-slate-600 truncate uppercase mt-0.5">{method.bankName}</p>
  </div>
  </div>
@@ -2449,7 +2449,7 @@ function AdminDashboardContent() {
  <div className="space-y-2">
  <div className="space-y-0.5">
  <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none">Account Number</p>
- <p className="text-[16px] font-black text-slate-950 tracking-tight">{method.accountNumber}</p>
+ <p className="text-[16px] font-black text-[#1e4a3a] tracking-tight">{method.accountNumber}</p>
  </div>
  </div>
  )}
@@ -2465,7 +2465,7 @@ function AdminDashboardContent() {
  <div className="space-y-6">
  <div className="flex items-center justify-between">
  <div>
- <h3 className="text-[14px] font-bold text-slate-950 uppercase tracking-widest">Coupon Management</h3>
+ <h3 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-widest">Coupon Management</h3>
  <p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-1">Active discount codes and credit rules</p>
  </div>
  <button 
@@ -2474,7 +2474,7 @@ function AdminDashboardContent() {
  setCouponForm({ code: '', type: 'percentage', value: '', status: 'active' }); 
  setShowCouponModal(true); 
  }}
- className="h-9 px-5 bg-slate-950 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-all flex items-center gap-2"
+ className="h-9 px-5 bg-[#1e4a3a] text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-all flex items-center gap-2"
  >
  <Plus size={14} /> Create Coupon
  </button>
@@ -2482,14 +2482,14 @@ function AdminDashboardContent() {
 
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
  {coupons.map((coupon) => (
- <div key={coupon.id} className="group bg-white rounded-2xl border border-slate-900/20 p-5 transition-all hover:border-slate-400 relative flex flex-col justify-between min-h-[160px]">
+ <div key={coupon.id} className="group bg-white rounded-2xl border border-[#1e4a3a]/20 p-5 transition-all hover:border-slate-400 relative flex flex-col justify-between min-h-[160px]">
  <div className="flex items-start justify-between">
  <div className="space-y-4">
  <div className="flex items-center gap-3">
- <div className="w-10 h-10 rounded-xl bg-slate-950 text-white flex items-center justify-center shrink-0 -200">
+ <div className="w-10 h-10 rounded-xl bg-[#1e4a3a] text-white flex items-center justify-center shrink-0 -200">
  <Zap size={20} />
  </div>
- <h4 className="text-[20px] font-black text-slate-950 tracking-wider">#{coupon.code}</h4>
+ <h4 className="text-[20px] font-black text-[#1e4a3a] tracking-wider">#{coupon.code}</h4>
  </div>
  <div className="flex items-center gap-2">
  <span className={`px-3 py-1 rounded-lg text-[9px] font-bold uppercase tracking-widest border transition-all ${coupon.status === 'active' ? 'bg-emerald-50 border-emerald-100 text-emerald-700' : 'bg-slate-50 border-slate-200 text-slate-500'}`}>
@@ -2504,7 +2504,7 @@ function AdminDashboardContent() {
  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
  <button 
  onClick={() => { setEditingCoupon(coupon.id); setCouponForm({...coupon}); setShowCouponModal(true); }}
- className="w-8 h-8 rounded-lg border border-slate-900/10 flex items-center justify-center text-slate-500 hover:text-slate-950 hover:bg-slate-50 transition-all"
+ className="w-8 h-8 rounded-lg border border-[#1e4a3a]/10 flex items-center justify-center text-slate-500 hover:text-[#1e4a3a] hover:bg-slate-50 transition-all"
  >
  <Edit3 size={14} />
  </button>
@@ -2522,7 +2522,7 @@ function AdminDashboardContent() {
  }
  });
  }}
- className="w-8 h-8 rounded-lg border border-slate-900/10 flex items-center justify-center text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all"
+ className="w-8 h-8 rounded-lg border border-[#1e4a3a]/10 flex items-center justify-center text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all"
  >
  <Trash2 size={14} />
  </button>
@@ -2543,14 +2543,14 @@ function AdminDashboardContent() {
  {financeTab === 'economics' && (
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
  {/* Fee Config */}
- <div className="bg-white rounded-2xl border border-slate-900/10 overflow-hidden -200/50">
+ <div className="bg-white rounded-2xl border border-[#1e4a3a]/10 overflow-hidden -200/50">
  <div className="p-6 border-b border-slate-50 bg-slate-50/30">
  <div className="flex items-center gap-3">
- <div className="w-10 h-10 rounded-xl border border-slate-900/10 flex items-center justify-center text-slate-950 bg-white">
+ <div className="w-10 h-10 rounded-xl border border-[#1e4a3a]/10 flex items-center justify-center text-[#1e4a3a] bg-white">
  <Landmark size={20} />
  </div>
  <div>
- <h3 className="text-[13px] font-bold text-slate-950 uppercase tracking-widest">Finance Settings</h3>
+ <h3 className="text-[13px] font-bold text-[#1e4a3a] uppercase tracking-widest">Finance Settings</h3>
  <p className="text-[9px] text-slate-600 font-bold uppercase tracking-widest mt-0.5">Manage platform fees & commissions</p>
  </div>
  </div>
@@ -2559,14 +2559,14 @@ function AdminDashboardContent() {
  <div className="p-8 space-y-10">
  <div className="space-y-8">
  <div className="group">
- <label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest mb-3 block group-focus-within:text-slate-950 transition-colors">Instant Booking Fee</label>
- <div className="flex items-end gap-3 pb-2 border-b-2 border-slate-100 focus-within:border-slate-950 transition-all">
+ <label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest mb-3 block group-focus-within:text-[#1e4a3a] transition-colors">Instant Booking Fee</label>
+ <div className="flex items-end gap-3 pb-2 border-b-2 border-slate-100 focus-within:border-[#1e4a3a] transition-all">
  <span className="text-slate-400 text-lg font-bold">৳</span>
  <input 
  type="number" 
  value={globalSettings.instantDoctorFee}
  onChange={(e) => setGlobalSettings({...globalSettings, instantDoctorFee: e.target.value})}
- className="w-full bg-transparent text-3xl font-bold text-slate-950 outline-none placeholder:text-slate-200 tracking-tighter"
+ className="w-full bg-transparent text-3xl font-bold text-[#1e4a3a] outline-none placeholder:text-slate-200 tracking-tighter"
  />
  </div>
  <p className="text-[9px] text-slate-600 mt-3 font-bold uppercase tracking-widest flex items-center gap-2">
@@ -2583,7 +2583,7 @@ function AdminDashboardContent() {
  type="number" 
  value={globalSettings.platformCommission}
  onChange={(e) => setGlobalSettings({...globalSettings, platformCommission: e.target.value})}
- className="w-full bg-transparent text-3xl font-bold text-slate-950 outline-none placeholder:text-slate-200 tracking-tighter"
+ className="w-full bg-transparent text-3xl font-bold text-[#1e4a3a] outline-none placeholder:text-slate-200 tracking-tighter"
  />
  </div>
  <p className="text-[9px] text-emerald-700 mt-3 font-bold uppercase tracking-widest flex items-center gap-2">
@@ -2603,7 +2603,7 @@ function AdminDashboardContent() {
  setIsUpdatingSettings(false);
  }}
  disabled={isUpdatingSettings}
- className="w-full h-12 bg-slate-950 text-white rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-black transition-all active:scale-[0.98] disabled:opacity-50 -200"
+ className="w-full h-12 bg-[#1e4a3a] text-white rounded-xl text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-black transition-all active:scale-[0.98] disabled:opacity-50 -200"
  >
  {isUpdatingSettings ? 'Saving...' : 'Save Settings'}
  </button>
@@ -2612,13 +2612,13 @@ function AdminDashboardContent() {
 
  {/* Informational Card */}
  <div className="space-y-6">
- <div className="p-8 bg-slate-50 border border-slate-900/10 rounded-2xl">
+ <div className="p-8 bg-slate-50 border border-[#1e4a3a]/10 rounded-2xl">
  <div className="flex items-start gap-4">
- <div className="w-10 h-10 rounded-xl bg-slate-950 text-white flex items-center justify-center shrink-0">
+ <div className="w-10 h-10 rounded-xl bg-[#1e4a3a] text-white flex items-center justify-center shrink-0">
  <ShieldCheck size={20} />
  </div>
  <div>
- <h4 className="text-[13px] font-bold text-slate-950 uppercase tracking-widest mb-1">Financial Security</h4>
+ <h4 className="text-[13px] font-bold text-[#1e4a3a] uppercase tracking-widest mb-1">Financial Security</h4>
  <p className="text-[11px] text-slate-700 leading-relaxed font-bold uppercase tracking-tight">
  Policy updates are immediately pushed to all clinical departments. Financial adjustments are logged with immutable audit trails.
  </p>
@@ -2626,19 +2626,19 @@ function AdminDashboardContent() {
  </div>
  </div>
 
- <div className="p-8 bg-white border border-slate-900/20 rounded-2xl">
+ <div className="p-8 bg-white border border-[#1e4a3a]/20 rounded-2xl">
  <div className="flex items-center justify-between mb-8">
- <h4 className="text-[11px] font-bold text-slate-950 uppercase tracking-widest">Revenue Projection</h4>
+ <h4 className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-widest">Revenue Projection</h4>
  <Activity size={16} className="text-slate-400" />
  </div>
  <div className="space-y-5">
  <div className="flex justify-between items-center group">
  <span className="text-[10px] font-bold text-slate-600 uppercase tracking-widest">Monthly Transaction Flow</span>
- <span className="text-[14px] font-bold text-slate-950 tracking-tight">৳{financials.monthlyData[new Date().getMonth()].revenue.toLocaleString()}</span>
+ <span className="text-[14px] font-bold text-[#1e4a3a] tracking-tight">৳{financials.monthlyData[new Date().getMonth()].revenue.toLocaleString()}</span>
  </div>
  <div className="h-1 bg-slate-100 rounded-full overflow-hidden">
  <div 
- className="h-full bg-slate-950 transition-all duration-700" 
+ className="h-full bg-[#1e4a3a] transition-all duration-700" 
  style={{ width: `${Math.min((financials.monthlyData[new Date().getMonth()].revenue / 50000) * 100, 100)}%` }} 
  />
  </div>
@@ -2654,10 +2654,10 @@ function AdminDashboardContent() {
 
  {/* DOCTOR PAYMENTS TAB */}
  {financeTab === 'payouts' && (
- <div className="bg-white rounded-2xl border border-slate-900/20 overflow-hidden ">
+ <div className="bg-white rounded-2xl border border-[#1e4a3a]/20 overflow-hidden ">
  <div className="p-8 border-b border-slate-100 flex items-center justify-between bg-white text-left">
  <div>
- <h3 className="text-[14px] font-bold text-slate-950 uppercase tracking-widest">Doctor Payments</h3>
+ <h3 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-widest">Doctor Payments</h3>
  <p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-1">Manage doctor earnings and payment releases</p>
  </div>
  </div>
@@ -2665,11 +2665,11 @@ function AdminDashboardContent() {
  <div className="overflow-x-auto">
  <table className="w-full text-left border-collapse">
  <thead>
- <tr className="bg-slate-50/50 border-b border-slate-900/10">
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest leading-none">Doctor Profile</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest leading-none">Balance Status</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest leading-none">Commission Cut</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest leading-none text-right">Action</th>
+ <tr className="bg-slate-50/50 border-b border-[#1e4a3a]/10">
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Doctor Profile</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Balance Status</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Commission Cut</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-right">Action</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-slate-200">
@@ -2694,14 +2694,14 @@ function AdminDashboardContent() {
  {doc.photoURL ? <img src={doc.photoURL} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold uppercase">{doc.fullName?.[0] || 'D'}</div>}
  </div>
  <div className="flex flex-col">
- <span className="text-[13px] font-bold text-slate-950 tracking-tight">{doc.fullName}</span>
+ <span className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">{doc.fullName}</span>
  <span className="text-[10px] text-slate-600 font-bold uppercase tracking-widest border border-slate-300 px-2 py-0.5 rounded-md">{doc.specialties?.[0] || 'Gen. Doctor'}</span>
  </div>
  </div>
  </td>
  <td className="px-6 py-4">
  <div className="flex flex-col">
- <span className="text-[16px] font-black text-slate-950">৳{balance.toLocaleString()}</span>
+ <span className="text-[16px] font-black text-[#1e4a3a]">৳{balance.toLocaleString()}</span>
  <span className={`text-[9px] font-black uppercase tracking-widest ${balance > 0 ? 'text-emerald-700' : 'text-slate-300'}`}>
  {balance > 0 ? 'Available to Release' : 'No Pending Balance'}
  </span>
@@ -2727,7 +2727,7 @@ function AdminDashboardContent() {
  setIsProcessingPayment(false);
  }}
  disabled={balance <= 0 || isProcessingPayment}
- className="h-8 px-4 bg-slate-950 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-all disabled:opacity-30 disabled:hover:bg-slate-950"
+ className="h-8 px-4 bg-[#1e4a3a] text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-all disabled:opacity-30 disabled:hover:bg-[#1e4a3a]"
  >
  Release Funds
  </button>
@@ -2755,12 +2755,12 @@ function AdminDashboardContent() {
  <div className="space-y-4">
  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-lg border border-slate-300">
  <div>
- <h2 className="text-[15px] font-bold text-slate-900 tracking-tight">Medical Setup</h2>
+ <h2 className="text-[15px] font-bold text-[#1e4a3a] tracking-tight">Medical Setup</h2>
  <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">Manage medical specialties and services</p>
  </div>
  <button 
  onClick={() => setShowAddSpecialty(true)}
- className="h-9 px-5 bg-slate-900 hover:bg-black text-white text-[12px] font-bold rounded-lg transition-all flex items-center gap-2"
+ className="h-9 px-5 bg-[#1e4a3a] hover:bg-black text-white text-[12px] font-bold rounded-lg transition-all flex items-center gap-2"
  >
  <Plus size={14} />
  Add Specialty
@@ -2781,7 +2781,7 @@ function AdminDashboardContent() {
           <IconComponent name={spec.icon} size={20} />
         </div>
         <div>
-          <h3 className="text-[14px] font-bold text-slate-900 tracking-tight">{spec.name}</h3>
+          <h3 className="text-[14px] font-bold text-[#1e4a3a] tracking-tight">{spec.name}</h3>
           <p className="text-[11px] text-slate-500 font-medium tracking-tight mt-0.5">{spec.services?.length || 0} services</p>
         </div>
       </div>
@@ -2805,14 +2805,14 @@ function AdminDashboardContent() {
          >
            <div className="p-5">
               <div className="flex items-center justify-between mb-4">
-                <h4 className="text-[13px] font-bold text-slate-900">Services under {spec.name}</h4>
+                <h4 className="text-[13px] font-bold text-[#1e4a3a]">Services under {spec.name}</h4>
                 <button
                   onClick={() => {
                    setEditingService(null);
                    setServiceForm({ name: '', price: '', telemed: false, telemedPrice: '' });
                    setShowAddService(true);
                   }}
-                  className="h-8 px-4 bg-slate-900 text-white rounded-lg text-[11px] font-bold tracking-tight hover:bg-black transition-all flex items-center gap-2"
+                  className="h-8 px-4 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold tracking-tight hover:bg-black transition-all flex items-center gap-2"
                 >
                   <Plus size={14} /> Add Service
                 </button>
@@ -2825,7 +2825,7 @@ function AdminDashboardContent() {
                     >
                       <div className="flex items-start justify-between mb-3">
                          <div className="space-y-1">
-                            <h4 className="text-[13px] font-bold text-slate-900 tracking-tight">{service.name}</h4>
+                            <h4 className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">{service.name}</h4>
                             {service.telemed && (
                               <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-[10px] font-bold border border-blue-100">
                                 <Activity size={10} /> Telemedicine
@@ -2840,7 +2840,7 @@ function AdminDashboardContent() {
                                 setServiceForm({ ...service });
                                 setShowAddService(true);
                               }}
-                              className="w-7 h-7 rounded-md border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-all"
+                              className="w-7 h-7 rounded-md border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#1e4a3a] hover:bg-slate-50 transition-all"
                             >
                               <Edit3 size={12} />
                             </button>
@@ -2859,7 +2859,7 @@ function AdminDashboardContent() {
                       <div className="flex items-end justify-between pt-3 border-t border-slate-100">
                          <div className="space-y-0.5">
                             <p className="text-[10px] text-slate-500 font-medium">In-Clinic Price</p>
-                            <p className="text-[14px] font-bold text-slate-900">৳{service.price}</p>
+                            <p className="text-[14px] font-bold text-[#1e4a3a]">৳{service.price}</p>
                          </div>
                          {service.telemed && (
                            <div className="text-right space-y-0.5">
@@ -2908,8 +2908,8 @@ function AdminDashboardContent() {
  onClick={() => setSettingsTab(tab.id)}
  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-bold uppercase tracking-widest transition-all ${
  settingsTab === tab.id 
- ? 'bg-slate-900 text-white ' 
- : 'text-slate-500 hover:bg-slate-200/50 hover:text-slate-900'
+ ? 'bg-[#1e4a3a] text-white ' 
+ : 'text-slate-500 hover:bg-slate-200/50 hover:text-[#1e4a3a]'
  }`}
  >
  <tab.icon size={14} />
@@ -2934,7 +2934,7 @@ function AdminDashboardContent() {
  <button 
  onClick={() => document.getElementById('admin-photo-upload').click()}
  disabled={isUpdatingProfile}
- className="absolute -bottom-2 -right-2 w-10 h-10 bg-slate-950 text-white rounded-xl flex items-center justify-center hover:scale-110 transition-all disabled:opacity-50"
+ className="absolute -bottom-2 -right-2 w-10 h-10 bg-[#1e4a3a] text-white rounded-xl flex items-center justify-center hover:scale-110 transition-all disabled:opacity-50"
  >
  <Camera size={18} />
  </button>
@@ -2946,7 +2946,7 @@ function AdminDashboardContent() {
  className="hidden"
  />
  </div>
- <h3 className="text-[16px] font-black text-slate-950 uppercase tracking-widest">{adminProfile.fullName || 'Admin User'}</h3>
+ <h3 className="text-[16px] font-black text-[#1e4a3a] uppercase tracking-widest">{adminProfile.fullName || 'Admin User'}</h3>
  <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Hospital Administrator</p>
  
  <div className="w-full h-px bg-slate-100 my-8" />
@@ -2958,7 +2958,7 @@ function AdminDashboardContent() {
  </div>
  <div className="flex items-center justify-between">
  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Access Level</span>
- <span className="text-[11px] font-bold text-slate-950 uppercase tracking-tight">Root Admin</span>
+ <span className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-tight">Root Admin</span>
  </div>
  </div>
  </div>
@@ -2967,20 +2967,20 @@ function AdminDashboardContent() {
  {/* Form Area */}
  <div className="lg:col-span-2 space-y-8">
  <div className="bg-white rounded-2xl border border-slate-300 p-10">
- <h4 className="text-[13px] font-black text-slate-950 uppercase tracking-widest mb-10 flex items-center gap-2">
+ <h4 className="text-[13px] font-black text-[#1e4a3a] uppercase tracking-widest mb-10 flex items-center gap-2">
  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
  Identity Information
  </h4>
  
  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
  <div className="group">
- <label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest mb-3 block group-focus-within:text-slate-950 transition-colors">Full Name</label>
+ <label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest mb-3 block group-focus-within:text-[#1e4a3a] transition-colors">Full Name</label>
  <input 
  type="text" 
  value={adminProfile.fullName}
  onChange={(e) => setAdminProfile({...adminProfile, fullName: e.target.value})}
  placeholder="Enter administrator name"
- className="w-full bg-transparent text-[15px] font-bold text-slate-950 outline-none placeholder:text-slate-200 pb-2 border-b-2 border-slate-300 focus:border-slate-950 transition-all"
+ className="w-full bg-transparent text-[15px] font-bold text-[#1e4a3a] outline-none placeholder:text-slate-200 pb-2 border-b-2 border-slate-300 focus:border-[#1e4a3a] transition-all"
  />
  </div>
  <div className="group opacity-60">
@@ -2990,17 +2990,17 @@ function AdminDashboardContent() {
  </div>
  </div>
  <div className="group">
- <label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest mb-3 block group-focus-within:text-slate-950 transition-colors">Contact Phone</label>
+ <label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest mb-3 block group-focus-within:text-[#1e4a3a] transition-colors">Contact Phone</label>
  <input 
  type="tel" 
  value={adminProfile.phone}
  onChange={(e) => setAdminProfile({...adminProfile, phone: e.target.value})}
  placeholder="+880 1XXX-XXXXXX"
- className="w-full bg-transparent text-[15px] font-bold text-slate-950 outline-none placeholder:text-slate-200 pb-2 border-b-2 border-slate-300 focus:border-slate-950 transition-all"
+ className="w-full bg-transparent text-[15px] font-bold text-[#1e4a3a] outline-none placeholder:text-slate-200 pb-2 border-b-2 border-slate-300 focus:border-[#1e4a3a] transition-all"
  />
  </div>
  <div className="group">
- <label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest mb-3 block group-focus-within:text-slate-950 transition-colors">Department</label>
+ <label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest mb-3 block group-focus-within:text-[#1e4a3a] transition-colors">Department</label>
  <input 
  type="text" 
  defaultValue="General Administration"
@@ -3014,7 +3014,7 @@ function AdminDashboardContent() {
  <button 
  onClick={handleUpdateAdminProfile}
  disabled={isUpdatingProfile}
- className="h-12 px-10 bg-slate-950 text-white rounded-xl text-[11px] font-bold uppercase tracking-widest hover:bg-black transition-all active:scale-[0.98] disabled:opacity-50"
+ className="h-12 px-10 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-bold uppercase tracking-widest hover:bg-black transition-all active:scale-[0.98] disabled:opacity-50"
  >
  {isUpdatingProfile ? 'Saving Changes...' : 'Update Profile'}
  </button>
@@ -3029,13 +3029,13 @@ function AdminDashboardContent() {
  <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-center mx-auto mb-6">
  <Landmark size={32} className="text-slate-300" />
  </div>
- <h3 className="text-[16px] font-black text-slate-900 uppercase tracking-widest">Finance Shortcuts</h3>
+ <h3 className="text-[16px] font-black text-[#1e4a3a] uppercase tracking-widest">Finance Shortcuts</h3>
  <p className="text-[12px] text-slate-400 font-medium uppercase tracking-widest mt-2 leading-relaxed">
  Advanced financial settings, payment accounts, and coupon management have been moved for better organization.
  </p>
  <button 
  onClick={() => router.push('/dashboard/admin?view=finance')}
- className="mt-8 px-8 h-12 bg-slate-900 text-white rounded-xl text-[11px] font-black uppercase tracking-widest hover:bg-black transition-all"
+ className="mt-8 px-8 h-12 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-black uppercase tracking-widest hover:bg-black transition-all"
  >
  Go to Finance Panel
  </button>
@@ -3047,7 +3047,7 @@ function AdminDashboardContent() {
  <div className="w-20 h-20 bg-slate-50 rounded-3xl border border-slate-300 flex items-center justify-center text-slate-200 mx-auto mb-6">
  <Lock size={32} />
  </div>
- <h3 className="text-[16px] font-bold text-slate-950 tracking-tight">Security Credentials</h3>
+ <h3 className="text-[16px] font-bold text-[#1e4a3a] tracking-tight">Security Credentials</h3>
  <p className="text-[13px] text-slate-500 font-medium max-w-xs mx-auto mt-2">
  Multi-factor authentication and password policy management is coming soon to the administration panel.
  </p>
@@ -3067,7 +3067,7 @@ function AdminDashboardContent() {
   >
     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-300 ">
       <div>
-        <h2 className="text-[16px] font-extrabold text-slate-900 tracking-tight">Nursing & Care Control</h2>
+        <h2 className="text-[16px] font-extrabold text-[#1e4a3a] tracking-tight">Nursing & Care Control</h2>
         <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">Manage home care specialists and track site-wide nursing requests</p>
       </div>
       <div className="flex flex-wrap items-center gap-4">
@@ -3081,7 +3081,7 @@ function AdminDashboardContent() {
               photoURL: '', selectedPackage: ''
             }); 
             setShowAddCaregiver(true); 
-          }} className="h-10 px-6 bg-slate-900 text-white rounded-xl text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-all">
+          }} className="h-10 px-6 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-all">
             <Plus size={16} /> Add Caregiver
           </button>
         )}
@@ -3095,7 +3095,7 @@ function AdminDashboardContent() {
             <button
               key={tab.id}
               onClick={() => setNursingTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${nursingTab === tab.id ? 'bg-slate-950 text-white ' : 'text-slate-500 hover:text-slate-900 hover:bg-white'}`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${nursingTab === tab.id ? 'bg-[#1e4a3a] text-white ' : 'text-slate-500 hover:text-[#1e4a3a] hover:bg-white'}`}
             >
               <tab.icon size={13} />
               {tab.label}
@@ -3111,13 +3111,13 @@ function AdminDashboardContent() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50/50 border-b border-slate-300">
-                <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest">Request ID</th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest">Patient Details</th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest">Care Specialist</th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest">Package Plan</th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest">Period</th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest">Status</th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest text-right">Action</th>
+                <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Request ID</th>
+                <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Patient Details</th>
+                <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Care Specialist</th>
+                <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Package Plan</th>
+                <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Period</th>
+                <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Status</th>
+                <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-300 text-[12px] font-bold text-slate-700">
@@ -3126,7 +3126,7 @@ function AdminDashboardContent() {
                   <td className="px-6 py-4 font-mono text-slate-400 text-[10px]">#{bk.id?.slice(-8).toUpperCase()}</td>
                   <td className="px-6 py-4">
                     <div className="flex flex-col">
-                      <span className="text-slate-950">{bk.patientName || 'Anonymous'}</span>
+                      <span className="text-[#1e4a3a]">{bk.patientName || 'Anonymous'}</span>
                       <span className="text-[10px] text-slate-400">{bk.patientPhone}</span>
                     </div>
                   </td>
@@ -3179,7 +3179,7 @@ function AdminDashboardContent() {
                         await updateDoc(doc(db, 'nursing_bookings', bk.id), { status: 'confirmed' });
                         toast.success('Service Confirmed');
                       }
-                    }} className="w-8 h-8 rounded-lg border border-slate-300 flex items-center justify-center text-slate-400 hover:bg-slate-950 hover:text-white transition-all">
+                    }} className="w-8 h-8 rounded-lg border border-slate-300 flex items-center justify-center text-slate-400 hover:bg-[#1e4a3a] hover:text-white transition-all">
                       <Check size={14} />
                     </button>
                   </td>
@@ -3207,7 +3207,7 @@ function AdminDashboardContent() {
                 )}
               </div>
               <div className="flex gap-2">
-                <button onClick={() => { setEditingCaregiver(nc.id); setCaregiverForm({...nc}); setShowAddCaregiver(true); }} className="w-8 h-8 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-900 hover:border-slate-400 transition-all shadow-sm"><Edit3 size={12} /></button>
+                <button onClick={() => { setEditingCaregiver(nc.id); setCaregiverForm({...nc}); setShowAddCaregiver(true); }} className="w-8 h-8 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#1e4a3a] hover:border-slate-400 transition-all shadow-sm"><Edit3 size={12} /></button>
                 <button onClick={() => {
                   setConfirmModal({
                     show: true,
@@ -3223,7 +3223,7 @@ function AdminDashboardContent() {
                 }} className="w-8 h-8 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-200 transition-all shadow-sm"><Trash2 size={12} /></button>
               </div>
             </div>
-            <h4 className="text-[14px] font-black text-slate-950 uppercase tracking-tight">{nc.name}</h4>
+            <h4 className="text-[14px] font-black text-[#1e4a3a] uppercase tracking-tight">{nc.name}</h4>
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">{nc.specialty}</p>
             <div className="mt-4">
               {/* Package pills */}
@@ -3241,7 +3241,7 @@ function AdminDashboardContent() {
                   })}
                 </div>
               ) : nc.price ? (
-                <p className="text-[11px] font-black text-slate-900 tracking-tighter mb-3">৳{nc.price}/day</p>
+                <p className="text-[11px] font-black text-[#1e4a3a] tracking-tighter mb-3">৳{nc.price}/day</p>
               ) : null}
               <div className="flex items-center justify-between">
                 <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{nc.packages?.length || 0} Package{(nc.packages?.length || 0) !== 1 ? 's' : ''}</span>
@@ -3262,14 +3262,14 @@ function AdminDashboardContent() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-white rounded-2xl border border-slate-300 overflow-hidden">
           <div className="p-5 bg-slate-50/50 border-b border-slate-300 flex items-center justify-between">
-            <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-widest">Pricing Packages</h3>
-            <button onClick={() => setShowAddNursingPackage(true)} className="h-8 px-4 bg-slate-950 text-white rounded-lg text-[9px] font-bold uppercase tracking-widest">Add Package</button>
+            <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest">Pricing Packages</h3>
+            <button onClick={() => setShowAddNursingPackage(true)} className="h-8 px-4 bg-[#1e4a3a] text-white rounded-lg text-[9px] font-bold uppercase tracking-widest">Add Package</button>
           </div>
           <div className="p-4 space-y-3">
              {nursingPackages.map(pkg => (
                <div key={pkg.id} className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl hover:border-slate-400 transition-all">
                   <div>
-                    <p className="text-[13px] font-bold text-slate-900">{pkg.label} <span className="text-slate-400 font-medium">{pkg.duration}</span></p>
+                    <p className="text-[13px] font-bold text-[#1e4a3a]">{pkg.label} <span className="text-slate-400 font-medium">{pkg.duration}</span></p>
                     <p className="text-[12px] font-black text-emerald-600 mt-1">৳{pkg.price}</p>
                   </div>
                   <button onClick={() => deleteDoc(doc(db, 'nursing_packages', pkg.id))} className="text-slate-300 hover:text-rose-500 transition-colors"><Trash2 size={16} /></button>
@@ -3281,8 +3281,8 @@ function AdminDashboardContent() {
 
         <div className="bg-white rounded-2xl border border-slate-300 overflow-hidden">
           <div className="p-5 bg-slate-50/50 border-b border-slate-300 flex items-center justify-between">
-            <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-widest">Specialist Types</h3>
-            <button onClick={() => setShowAddNursingType(true)} className="h-8 px-4 bg-slate-950 text-white rounded-lg text-[9px] font-bold uppercase tracking-widest">Add Type</button>
+            <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest">Specialist Types</h3>
+            <button onClick={() => setShowAddNursingType(true)} className="h-8 px-4 bg-[#1e4a3a] text-white rounded-lg text-[9px] font-bold uppercase tracking-widest">Add Type</button>
           </div>
           <div className="p-4 space-y-3">
              {nursingTypes.map(type => (
@@ -3291,7 +3291,7 @@ function AdminDashboardContent() {
                     <div className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-lg flex items-center justify-center overflow-hidden">
                       {type.image ? <img src={type.image} className="w-full h-full object-cover" /> : <Stethoscope className="text-slate-300" size={16} />}
                     </div>
-                    <p className="text-[13px] font-bold text-slate-900 uppercase tracking-tight">{type.label}</p>
+                    <p className="text-[13px] font-bold text-[#1e4a3a] uppercase tracking-tight">{type.label}</p>
                   </div>
                   <button onClick={() => deleteDoc(doc(db, 'nursing_types', type.id))} className="text-slate-300 hover:text-rose-500 transition-colors"><Trash2 size={16} /></button>
                </div>
@@ -3349,7 +3349,7 @@ function AdminDashboardContent() {
  >
  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-300 ">
  <div>
- <h2 className="text-[16px] font-extrabold text-slate-900 tracking-tight">
+ <h2 className="text-[16px] font-extrabold text-[#1e4a3a] tracking-tight">
  Diagnostics Control Center
  </h2>
  <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">
@@ -3358,12 +3358,12 @@ function AdminDashboardContent() {
  </div>
  <div className="flex flex-wrap items-center gap-4">
  {labTab === 'providers' && (
- <button onClick={() => { setEditingLabProvider(null); setLabProviderForm({ name: '', division: '', district: '', area: '', status: 'active' }); setShowAddLabProvider(true); }} className="h-10 px-6 bg-slate-900 text-white rounded-xl text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-all">
+ <button onClick={() => { setEditingLabProvider(null); setLabProviderForm({ name: '', division: '', district: '', area: '', status: 'active' }); setShowAddLabProvider(true); }} className="h-10 px-6 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-all">
  <Plus size={16} /> Add Provider
  </button>
  )}
  {labTab === 'catalog' && (
- <button onClick={() => { setEditingLabTest(null); setLabTestForm({ name: '', category: '', price: '', providerId: '', preparation: '', description: '', status: 'active' }); setShowAddLabTest(true); }} className="h-10 px-6 bg-slate-900 text-white rounded-xl text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-all">
+ <button onClick={() => { setEditingLabTest(null); setLabTestForm({ name: '', category: '', price: '', providerId: '', preparation: '', description: '', status: 'active' }); setShowAddLabTest(true); }} className="h-10 px-6 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-all">
  <Plus size={16} /> Add Test
  </button>
  )}
@@ -3378,7 +3378,7 @@ function AdminDashboardContent() {
  <button
  key={tab.id}
  onClick={() => setLabTab(tab.id)}
- className={`flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${labTab === tab.id ? 'bg-slate-950 text-white ' : 'text-slate-500 hover:text-slate-900 hover:bg-white'}`}
+ className={`flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${labTab === tab.id ? 'bg-[#1e4a3a] text-white ' : 'text-slate-500 hover:text-[#1e4a3a] hover:bg-white'}`}
  >
  <tab.icon size={13} />
  {tab.label}
@@ -3394,13 +3394,13 @@ function AdminDashboardContent() {
  <table className="w-full text-left border-collapse">
  <thead>
  <tr className="bg-slate-50/50 border-b border-slate-300">
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest">ID</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest">Patient & Contact</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest">Location (Collection)</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest">Tests</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest text-center">Schedule</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest">Status</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest text-right">Action</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">ID</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Patient & Contact</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Location (Collection)</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Tests</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest text-center">Schedule</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Status</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest text-right">Action</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-slate-300 text-[12px] font-bold text-slate-700">
@@ -3409,7 +3409,7 @@ function AdminDashboardContent() {
  <td className="px-6 py-4 font-mono text-slate-400 text-[10px]">#{bk.id?.slice(-8).toUpperCase()}</td>
  <td className="px-6 py-4">
  <div className="flex flex-col">
- <span className="text-slate-950">{bk.patientName || 'Anonymous'}</span>
+ <span className="text-[#1e4a3a]">{bk.patientName || 'Anonymous'}</span>
  <span className="text-[10px] text-slate-400">{bk.patientPhone}</span>
  </div>
  </td>
@@ -3443,7 +3443,7 @@ function AdminDashboardContent() {
  await updateDoc(doc(db, 'lab_bookings', bk.id), { status: 'confirmed' });
  toast.success('Booking Confirmed');
  }
- }} className="w-8 h-8 rounded-lg border border-slate-300 flex items-center justify-center text-slate-400 hover:bg-slate-950 hover:text-white transition-all">
+ }} className="w-8 h-8 rounded-lg border border-slate-300 flex items-center justify-center text-slate-400 hover:bg-[#1e4a3a] hover:text-white transition-all">
  <Check size={14} />
  </button>
  </td>
@@ -3467,7 +3467,7 @@ function AdminDashboardContent() {
  <Building2 size={24} />
  </div>
   <div className="flex gap-2">
- <button onClick={() => { setEditingLabProvider(lp.id); setLabProviderForm({...lp}); setShowAddLabProvider(true); }} className="w-8 h-8 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-900 hover:border-slate-400 transition-all shadow-sm"><Edit3 size={12} /></button>
+ <button onClick={() => { setEditingLabProvider(lp.id); setLabProviderForm({...lp}); setShowAddLabProvider(true); }} className="w-8 h-8 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#1e4a3a] hover:border-slate-400 transition-all shadow-sm"><Edit3 size={12} /></button>
  <button onClick={() => {
  setConfirmModal({
  show: true,
@@ -3483,7 +3483,7 @@ function AdminDashboardContent() {
  }} className="w-8 h-8 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-200 transition-all shadow-sm"><Trash2 size={12} /></button>
  </div>
  </div>
- <h4 className="text-[14px] font-black text-slate-950 uppercase tracking-tight">{lp.name}</h4>
+ <h4 className="text-[14px] font-black text-[#1e4a3a] uppercase tracking-tight">{lp.name}</h4>
  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">{lp.area}, {lp.district}, {lp.division}</p>
  <div className="mt-6 flex items-center justify-between">
  <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{labTests.filter(t => t.providerId === lp.id).length} Tests Listed</span>
@@ -3517,21 +3517,21 @@ function AdminDashboardContent() {
  <table className="w-full text-left border-collapse">
  <thead>
  <tr className="bg-slate-50/50 border-b border-slate-300">
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest">Test Name</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest">Provider</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest text-right">Price</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-slate-950 uppercase tracking-widest text-right">Action</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Test Name</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Provider</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest text-right">Price</th>
+ <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest text-right">Action</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-slate-300 text-[12px] font-bold text-slate-700">
  {labTests.filter(t => t.name.toLowerCase().includes(labSearch.toLowerCase())).map(test => (
  <tr key={test.id} className="hover:bg-slate-50/50 transition-all">
- <td className="px-6 py-4 text-slate-950">{test.name}</td>
+ <td className="px-6 py-4 text-[#1e4a3a]">{test.name}</td>
  <td className="px-6 py-4 text-slate-500">{labProviders.find(p => p.id === test.providerId)?.name || 'Unknown'}</td>
- <td className="px-6 py-4 text-right text-slate-950">৳{test.price}</td>
+ <td className="px-6 py-4 text-right text-[#1e4a3a]">৳{test.price}</td>
  <td className="px-6 py-4 text-right">
   <div className="flex justify-end gap-2">
- <button onClick={() => { setEditingLabTest(test.id); setLabTestForm({...test}); setShowAddLabTest(true); }} className="w-8 h-8 bg-slate-50 border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-950 hover:bg-white transition-all"><Edit3 size={12} /></button>
+ <button onClick={() => { setEditingLabTest(test.id); setLabTestForm({...test}); setShowAddLabTest(true); }} className="w-8 h-8 bg-slate-50 border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#1e4a3a] hover:bg-white transition-all"><Edit3 size={12} /></button>
  <button onClick={() => {
  setConfirmModal({
  show: true,
@@ -3560,7 +3560,7 @@ function AdminDashboardContent() {
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
  <div className="bg-white rounded-2xl border border-slate-300 overflow-hidden flex flex-col h-[650px]">
  <div className="p-5 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
- <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-widest">01. Divisions</h3>
+ <h3 className="text-[10px] font-black text-[#1e4a3a] uppercase tracking-widest">01. Divisions</h3>
  <MapPin size={14} className="text-slate-300" />
  </div>
  <div className="p-4 border-b border-slate-100 flex gap-2">
@@ -3576,7 +3576,7 @@ function AdminDashboardContent() {
  toast.success('Division Registered');
  setLocForm({...locForm, division: ''});
  } catch (e) { toast.error('Check access'); }
- }} className="w-9 h-9 bg-slate-950 text-white rounded-lg flex items-center justify-center hover:bg-black transition-all">
+ }} className="w-9 h-9 bg-[#1e4a3a] text-white rounded-lg flex items-center justify-center hover:bg-black transition-all">
  <Plus size={16} />
  </button>
  </div>
@@ -3584,7 +3584,7 @@ function AdminDashboardContent() {
  {getDivisions().map(div => (
  <div 
  key={div} 
- className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all cursor-pointer ${selectedLocDiv === div ? 'bg-slate-900 text-white font-black' : 'hover:bg-slate-50 text-[12px] font-bold text-slate-600'}`}
+ className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all cursor-pointer ${selectedLocDiv === div ? 'bg-[#1e4a3a] text-white font-black' : 'hover:bg-slate-50 text-[12px] font-bold text-slate-600'}`}
  onClick={() => { setSelectedLocDiv(div); setSelectedLocDist(''); }}
  >
  {div}
@@ -3611,7 +3611,7 @@ function AdminDashboardContent() {
 
  <div className="bg-white rounded-2xl border border-slate-300 overflow-hidden flex flex-col h-[650px]">
  <div className="p-5 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
- <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-widest">02. Districts {selectedLocDiv && `in ${selectedLocDiv}`}</h3>
+ <h3 className="text-[10px] font-black text-[#1e4a3a] uppercase tracking-widest">02. Districts {selectedLocDiv && `in ${selectedLocDiv}`}</h3>
  <Navigation size={14} className="text-slate-300" />
  </div>
  {selectedLocDiv ? (
@@ -3629,7 +3629,7 @@ function AdminDashboardContent() {
  toast.success('District Indexed');
  setLocForm({...locForm, district: ''});
  } catch (e) { toast.error('Update failed'); }
- }} className="w-9 h-9 bg-slate-950 text-white rounded-lg flex items-center justify-center hover:bg-black transition-all">
+ }} className="w-9 h-9 bg-[#1e4a3a] text-white rounded-lg flex items-center justify-center hover:bg-black transition-all">
  <Plus size={16} />
  </button>
  </div>
@@ -3637,7 +3637,7 @@ function AdminDashboardContent() {
  {getDistricts(selectedLocDiv).map(dist => (
  <div 
  key={dist} 
- className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all cursor-pointer ${selectedLocDist === dist ? 'bg-slate-900 text-white font-black' : 'hover:bg-slate-50 text-[12px] font-bold text-slate-600'}`}
+ className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all cursor-pointer ${selectedLocDist === dist ? 'bg-[#1e4a3a] text-white font-black' : 'hover:bg-slate-50 text-[12px] font-bold text-slate-600'}`}
  onClick={() => setSelectedLocDist(dist)}
  >
  {dist}
@@ -3675,7 +3675,7 @@ function AdminDashboardContent() {
 
  <div className="bg-white rounded-2xl border border-slate-300 overflow-hidden flex flex-col h-[650px]">
  <div className="p-5 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
- <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-widest">03. Areas {selectedLocDist && `in ${selectedLocDist}`}</h3>
+ <h3 className="text-[10px] font-black text-[#1e4a3a] uppercase tracking-widest">03. Areas {selectedLocDist && `in ${selectedLocDist}`}</h3>
  <Plus size={14} className="text-slate-300" />
  </div>
  {selectedLocDist ? (
@@ -3699,14 +3699,14 @@ function AdminDashboardContent() {
  setLocForm({...locForm, area: ''});
  }
  } catch (e) { toast.error('Sync failed'); }
- }} className="w-9 h-9 bg-slate-950 text-white rounded-lg flex items-center justify-center hover:bg-black transition-all">
+ }} className="w-9 h-9 bg-[#1e4a3a] text-white rounded-lg flex items-center justify-center hover:bg-black transition-all">
  <Plus size={16} />
  </button>
  </div>
  <div className="flex gap-1">
  <textarea 
  placeholder="Bulk Add (comma separated)..." 
- className="flex-1 h-14 p-3 bg-slate-50 border border-slate-200 rounded-xl text-[10px] font-bold resize-none outline-none focus:border-slate-950 transition-all font-black"
+ className="flex-1 h-14 p-3 bg-slate-50 border border-slate-200 rounded-xl text-[10px] font-bold resize-none outline-none focus:border-[#1e4a3a] transition-all font-black"
  onKeyDown={async (e) => {
  if (e.key === 'Enter' && !e.shiftKey && e.target.value.trim()) {
  e.preventDefault();
@@ -3762,7 +3762,7 @@ function AdminDashboardContent() {
  <AnimatePresence>
  {showAddSpecialty && (
  <div key="add-specialty-modal" className="fixed inset-0 z-[100] flex items-center justify-center p-4">
- <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => setShowAddSpecialty(false)} />
+ <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowAddSpecialty(false)} />
  <motion.div initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} className="relative w-full max-w-lg bg-white rounded-xl overflow-hidden">
  <form onSubmit={handleSaveSpecialty} className="p-6 space-y-6">
  <div className="flex items-center justify-between">
@@ -3782,7 +3782,7 @@ function AdminDashboardContent() {
  {Object.keys(ICON_MAP).map((iconName) => (
  <button 
  key={iconName} type="button" onClick={() => setSpecForm({...specForm, icon: iconName})}
- className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all ${specForm.icon === iconName ? 'bg-slate-900 text-white scale-105' : 'bg-white border border-slate-200 text-slate-400 hover:border-slate-300'}`}
+ className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all ${specForm.icon === iconName ? 'bg-[#1e4a3a] text-white scale-105' : 'bg-white border border-slate-200 text-slate-400 hover:border-slate-300'}`}
  >
  <IconComponent name={iconName} size={18} />
  </button>
@@ -3829,7 +3829,7 @@ function AdminDashboardContent() {
  <div className={`w-6 h-6 rounded-lg ${c.bg} flex items-center justify-center`}>
  <div className={`w-2 h-2 rounded-full ${c.color.replace('text', 'bg')}`} />
  </div>
- <span className={`text-[12px] font-bold ${specForm.color === c.color ? 'text-slate-900' : 'text-slate-500'}`}>{c.name}</span>
+ <span className={`text-[12px] font-bold ${specForm.color === c.color ? 'text-[#1e4a3a]' : 'text-slate-500'}`}>{c.name}</span>
  {specForm.color === c.color && <Check size={14} className="ml-auto text-emerald-500" />}
  </button>
  ))}
@@ -3846,7 +3846,7 @@ function AdminDashboardContent() {
 
  <div className="pt-2 flex justify-end gap-3">
  <button type="button" onClick={() => setShowAddSpecialty(false)} className="h-11 px-6 text-[12px] font-bold text-slate-400 hover:text-slate-600">Cancel</button>
- <button type="submit" disabled={isSaving} className="h-11 px-8 bg-slate-900 text-white rounded-xl text-[12px] font-bold hover:bg-black transition-all disabled:opacity-50">
+ <button type="submit" disabled={isSaving} className="h-11 px-8 bg-[#1e4a3a] text-white rounded-xl text-[12px] font-bold hover:bg-black transition-all disabled:opacity-50">
  {isSaving ? 'Initializing...' : 'Register Specialty'}
  </button>
  </div>
@@ -3857,7 +3857,7 @@ function AdminDashboardContent() {
 
  {showAddService && (
  <div key="add-service-modal" className="fixed inset-0 z-[100] flex items-center justify-center p-4">
- <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => setShowAddService(false)} />
+ <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowAddService(false)} />
  <motion.div initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} className="relative w-full max-w-md bg-white rounded-xl overflow-hidden">
  <form onSubmit={handleSaveService} className="p-6 space-y-6">
  <div className="flex items-center justify-between">
@@ -3894,7 +3894,7 @@ function AdminDashboardContent() {
 
  <div className="pt-2 flex justify-end gap-3">
  <button type="button" onClick={() => setShowAddService(false)} className="h-10 px-6 text-[11px] font-bold text-slate-400">Discard</button>
- <button type="submit" disabled={isSaving} className="h-10 px-8 bg-slate-900 text-white rounded-lg text-[11px] font-bold hover:bg-black transition-all disabled:opacity-50">
+ <button type="submit" disabled={isSaving} className="h-10 px-8 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold hover:bg-black transition-all disabled:opacity-50">
  {isSaving ? 'Processing...' : (editingService !== null ? 'Update Service' : 'Confirm Service')}
  </button>
  </div>
@@ -3907,12 +3907,12 @@ function AdminDashboardContent() {
  <AnimatePresence>
  {showAddLabProvider && (
  <div key="add-lab-provider-modal" className="fixed inset-0 z-[100] flex items-center justify-center p-4">
- <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => setShowAddLabProvider(false)} />
+ <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowAddLabProvider(false)} />
  <motion.div initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} className="relative w-full max-w-lg bg-white rounded-xl overflow-hidden shadow-2xl">
  <form onSubmit={handleSaveLabProvider} className="p-8 space-y-8">
  <div className="flex items-center justify-between">
  <div>
- <h3 className="text-[16px] font-bold text-slate-900 tracking-tight uppercase">{editingLabProvider ? 'Edit Provider Identity' : 'Register Diagnostic Provider'}</h3>
+ <h3 className="text-[16px] font-bold text-[#1e4a3a] tracking-tight uppercase">{editingLabProvider ? 'Edit Provider Identity' : 'Register Diagnostic Provider'}</h3>
  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Configure clinical branch details</p>
  </div>
  <button type="button" onClick={() => setShowAddLabProvider(false)} className="text-slate-400 hover:text-slate-600 transition-all"><X size={20} /></button>
@@ -3935,9 +3935,9 @@ function AdminDashboardContent() {
   <button
   type="button"
   onClick={() => setLpDropOpen(s => ({...s, division: !s.division, district: false, area: false}))}
-  className="w-full h-11 flex items-center justify-between px-4 bg-slate-50 border border-slate-300 rounded-xl text-[12px] font-bold text-left transition-all hover:border-slate-400 focus:outline-none focus:border-slate-900"
+  className="w-full h-11 flex items-center justify-between px-4 bg-slate-50 border border-slate-300 rounded-xl text-[12px] font-bold text-left transition-all hover:border-slate-400 focus:outline-none focus:border-[#1e4a3a]"
   >
-  <span className={labProviderForm.division ? 'text-slate-900' : 'text-slate-400'}>{labProviderForm.division || 'Select Division...'}</span>
+  <span className={labProviderForm.division ? 'text-[#1e4a3a]' : 'text-slate-400'}>{labProviderForm.division || 'Select Division...'}</span>
   <ChevronDown size={14} className={`text-slate-400 transition-transform ${lpDropOpen.division ? 'rotate-180' : ''}`} />
   </button>
   {lpDropOpen.division && (
@@ -3949,7 +3949,7 @@ function AdminDashboardContent() {
   key={div}
   type="button"
   onClick={() => { setLabProviderForm(f => ({...f, division: div, district: '', area: ''})); setLpDropOpen({division: false, district: false, area: false}); }}
-  className={`w-full text-left px-4 py-2.5 text-[12px] font-bold transition-all hover:bg-slate-50 ${labProviderForm.division === div ? 'text-slate-900 bg-slate-50' : 'text-slate-600'}`}
+  className={`w-full text-left px-4 py-2.5 text-[12px] font-bold transition-all hover:bg-slate-50 ${labProviderForm.division === div ? 'text-[#1e4a3a] bg-slate-50' : 'text-slate-600'}`}
   >
   {div}
   </button>
@@ -3969,11 +3969,11 @@ function AdminDashboardContent() {
   onClick={() => setLpDropOpen(s => ({...s, district: !s.district, division: false, area: false}))}
   className={`w-full h-11 flex items-center justify-between px-4 border rounded-xl text-[12px] font-bold text-left transition-all focus:outline-none ${
   labProviderForm.division
-  ? 'bg-slate-50 border-slate-300 hover:border-slate-400 focus:border-slate-900'
+  ? 'bg-slate-50 border-slate-300 hover:border-slate-400 focus:border-[#1e4a3a]'
   : 'bg-slate-50/50 border-slate-200 opacity-50 cursor-not-allowed'
   }`}
   >
-  <span className={labProviderForm.district ? 'text-slate-900' : 'text-slate-400'}>{labProviderForm.district || (labProviderForm.division ? 'Select District...' : 'Choose division first')}</span>
+  <span className={labProviderForm.district ? 'text-[#1e4a3a]' : 'text-slate-400'}>{labProviderForm.district || (labProviderForm.division ? 'Select District...' : 'Choose division first')}</span>
   <ChevronDown size={14} className={`text-slate-400 transition-transform ${lpDropOpen.district ? 'rotate-180' : ''}`} />
   </button>
   {lpDropOpen.district && labProviderForm.division && (
@@ -3985,7 +3985,7 @@ function AdminDashboardContent() {
   key={dist}
   type="button"
   onClick={() => { setLabProviderForm(f => ({...f, district: dist, area: ''})); setLpDropOpen({division: false, district: false, area: false}); }}
-  className={`w-full text-left px-4 py-2.5 text-[12px] font-bold transition-all hover:bg-slate-50 ${labProviderForm.district === dist ? 'text-slate-900 bg-slate-50' : 'text-slate-600'}`}
+  className={`w-full text-left px-4 py-2.5 text-[12px] font-bold transition-all hover:bg-slate-50 ${labProviderForm.district === dist ? 'text-[#1e4a3a] bg-slate-50' : 'text-slate-600'}`}
   >
   {dist}
   </button>
@@ -4006,11 +4006,11 @@ function AdminDashboardContent() {
   onClick={() => setLpDropOpen(s => ({...s, area: !s.area, division: false, district: false}))}
   className={`w-full h-11 flex items-center justify-between px-4 border rounded-xl text-[12px] font-bold text-left transition-all focus:outline-none ${
   labProviderForm.district
-  ? 'bg-slate-50 border-slate-300 hover:border-slate-400 focus:border-slate-900'
+  ? 'bg-slate-50 border-slate-300 hover:border-slate-400 focus:border-[#1e4a3a]'
   : 'bg-slate-50/50 border-slate-200 opacity-50 cursor-not-allowed'
   }`}
   >
-  <span className={labProviderForm.area ? 'text-slate-900' : 'text-slate-400'}>{labProviderForm.area || (labProviderForm.district ? 'Select Area...' : 'Choose district first')}</span>
+  <span className={labProviderForm.area ? 'text-[#1e4a3a]' : 'text-slate-400'}>{labProviderForm.area || (labProviderForm.district ? 'Select Area...' : 'Choose district first')}</span>
   <ChevronDown size={14} className={`text-slate-400 transition-transform ${lpDropOpen.area ? 'rotate-180' : ''}`} />
   </button>
   {lpDropOpen.area && labProviderForm.district && (
@@ -4022,7 +4022,7 @@ function AdminDashboardContent() {
   key={area}
   type="button"
   onClick={() => { setLabProviderForm(f => ({...f, area})); setLpDropOpen({division: false, district: false, area: false}); }}
-  className={`w-full text-left px-4 py-2.5 text-[12px] font-bold transition-all hover:bg-slate-50 ${labProviderForm.area === area ? 'text-slate-900 bg-slate-50' : 'text-slate-600'}`}
+  className={`w-full text-left px-4 py-2.5 text-[12px] font-bold transition-all hover:bg-slate-50 ${labProviderForm.area === area ? 'text-[#1e4a3a] bg-slate-50' : 'text-slate-600'}`}
   >
   {area}
   </button>
@@ -4034,7 +4034,7 @@ function AdminDashboardContent() {
  
  <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-300">
  <div className="flex-1">
- <p className="text-[11px] font-bold text-slate-900 uppercase tracking-tight">Provider Status</p>
+ <p className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-tight">Provider Status</p>
  <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">{labProviderForm.status === 'active' ? 'Currently visible to patients' : 'Temporarily suspended'}</p>
  </div>
  <button 
@@ -4049,7 +4049,7 @@ function AdminDashboardContent() {
  
  <div className="pt-4 flex justify-end gap-3">
  <button type="button" onClick={() => setShowAddLabProvider(false)} className="h-11 px-6 text-[12px] font-bold text-slate-400 hover:text-slate-600 transition-all uppercase tracking-widest">Discard</button>
- <button type="submit" disabled={isSaving} className="h-11 px-10 bg-slate-900 text-white rounded-xl text-[12px] font-bold hover:bg-black transition-all disabled:opacity-50 uppercase tracking-widest">
+ <button type="submit" disabled={isSaving} className="h-11 px-10 bg-[#1e4a3a] text-white rounded-xl text-[12px] font-bold hover:bg-black transition-all disabled:opacity-50 uppercase tracking-widest">
  {isSaving ? 'Processing...' : (editingLabProvider ? 'Push Updates' : 'Confirm Registration')}
  </button>
  </div>
@@ -4062,12 +4062,12 @@ function AdminDashboardContent() {
  <AnimatePresence>
  {showAddLabTest && (
  <div key="add-lab-test-modal" className="fixed inset-0 z-[100] flex items-center justify-center p-4">
- <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => setShowAddLabTest(false)} />
+ <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowAddLabTest(false)} />
  <motion.div initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} className="relative w-full max-w-2xl bg-white rounded-xl overflow-hidden border border-slate-300">
  <form onSubmit={handleSaveLabTest} className="p-8 space-y-8">
  <div className="flex items-center justify-between">
  <div>
- <h3 className="text-[16px] font-bold text-slate-900 tracking-tight uppercase">{editingLabTest ? 'Modify Diagnostic Test' : 'Add New Clinical Test'}</h3>
+ <h3 className="text-[16px] font-bold text-[#1e4a3a] tracking-tight uppercase">{editingLabTest ? 'Modify Diagnostic Test' : 'Add New Clinical Test'}</h3>
  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Configure global catalog entry</p>
  </div>
  <button type="button" onClick={() => setShowAddLabTest(false)} className="text-slate-400 hover:text-slate-600 transition-all"><X size={20} /></button>
@@ -4092,7 +4092,7 @@ function AdminDashboardContent() {
   >
   <div className="flex items-center gap-2 overflow-hidden">
   <Building2 size={13} className="text-slate-400 shrink-0" />
-  <span className={`truncate ${labTestForm.providerId ? 'text-slate-900' : 'text-slate-400'}`}>
+  <span className={`truncate ${labTestForm.providerId ? 'text-[#1e4a3a]' : 'text-slate-400'}`}>
   {labTestForm.providerId
   ? ((labProviders.find(p => p.id === labTestForm.providerId)?.name || '') + ' \u2014 ' + (labProviders.find(p => p.id === labTestForm.providerId)?.area || ''))
   : 'Select Agent...'}
@@ -4136,7 +4136,7 @@ function AdminDashboardContent() {
  
  <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-300">
  <div className="flex-1">
- <p className="text-[11px] font-bold text-slate-900 uppercase tracking-tight">Availability</p>
+ <p className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-tight">Availability</p>
  <button 
  type="button"
  onClick={() => setLabTestForm({...labTestForm, status: labTestForm.status === 'active' ? 'inactive' : 'active'})}
@@ -4150,7 +4150,7 @@ function AdminDashboardContent() {
  
  <div className="pt-4 flex justify-end gap-3 border-t border-slate-300">
  <button type="button" onClick={() => setShowAddLabTest(false)} className="h-11 px-6 text-[12px] font-bold text-slate-400 hover:text-slate-600 transition-all uppercase tracking-widest">Cancel</button>
- <button type="submit" disabled={isSaving} className="h-11 px-10 bg-slate-900 text-white rounded-xl text-[12px] font-bold hover:bg-black transition-all disabled:opacity-50 uppercase tracking-widest">
+ <button type="submit" disabled={isSaving} className="h-11 px-10 bg-[#1e4a3a] text-white rounded-xl text-[12px] font-bold hover:bg-black transition-all disabled:opacity-50 uppercase tracking-widest">
  {isSaving ? 'Publishing...' : (editingLabTest ? 'Update Catalog' : 'Publish Test')}
  </button>
  </div>
@@ -4163,7 +4163,7 @@ function AdminDashboardContent() {
  <AnimatePresence>
  {selectedDoctor && (
  <div key="doctor-detail-modal" className="fixed inset-0 z-[110] flex items-center justify-center p-4">
- <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => setSelectedDoctor(null)} />
+ <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setSelectedDoctor(null)} />
  <motion.div 
  initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }}
  className="relative w-full max-w-lg bg-white rounded-xl overflow-hidden border border-slate-300 flex flex-col max-h-[85vh]"
@@ -4180,7 +4180,7 @@ function AdminDashboardContent() {
  </div>
  <div>
  <div className="flex items-center gap-2">
- <h3 className="text-[15px] font-bold text-slate-900 tracking-tight leading-none">{selectedDoctor.fullName}</h3>
+ <h3 className="text-[15px] font-bold text-[#1e4a3a] tracking-tight leading-none">{selectedDoctor.fullName}</h3>
  <div className="px-1.5 py-0.5 rounded-md bg-emerald-500 text-white text-[8px] font-bold uppercase tracking-widest leading-none">Verified</div>
  </div>
  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1.5">{selectedDoctor.specialties?.join(' • ') || 'Medical Doctor'}</p>
@@ -4311,7 +4311,7 @@ function AdminDashboardContent() {
  });
  setShowRegisterDoctor(true);
  }}
- className="flex-1 h-10 bg-slate-900 text-white rounded-xl text-[11px] font-bold hover:bg-black transition-all uppercase tracking-widest flex items-center justify-center gap-2"
+ className="flex-1 h-10 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-bold hover:bg-black transition-all uppercase tracking-widest flex items-center justify-center gap-2"
  >
  <Edit3 size={14} className="text-slate-400" />
  Edit Profile
@@ -4327,7 +4327,7 @@ function AdminDashboardContent() {
  <div key="register-doctor-modal" className="fixed inset-0 z-[100] flex items-center justify-center p-4">
  <motion.div 
  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
- className="absolute inset-0 bg-slate-900/40"
+ className="absolute inset-0 bg-[#1e4a3a]/40"
  onClick={() => setShowRegisterDoctor(false)}
  />
  <motion.div 
@@ -4352,8 +4352,8 @@ function AdminDashboardContent() {
  <div className="p-5 space-y-8">
  <section className="space-y-4">
  <div className="flex items-center gap-3">
- <div className="w-6 h-6 rounded-lg bg-slate-900 flex items-center justify-center text-white text-[10px] font-bold">01</div>
- <h2 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.15em]">Basic Info</h2>
+ <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] flex items-center justify-center text-white text-[10px] font-bold">01</div>
+ <h2 className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-[0.15em]">Basic Info</h2>
  </div>
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-4">
  {/* Profile Image - Span 1 */}
@@ -4480,8 +4480,8 @@ function AdminDashboardContent() {
 
  <section className="space-y-4 pt-8 border-t border-slate-200">
  <div className="flex items-center gap-3">
- <div className="w-6 h-6 rounded-lg bg-slate-900 flex items-center justify-center text-white text-[10px] font-bold">02</div>
- <h2 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.15em]">Qualifications</h2>
+ <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] flex items-center justify-center text-white text-[10px] font-bold">02</div>
+ <h2 className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-[0.15em]">Qualifications</h2>
  </div>
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-4">
  <div className="space-y-1.5">
@@ -4539,8 +4539,8 @@ function AdminDashboardContent() {
 
  <section className="space-y-4 pt-8 border-t border-slate-200">
  <div className="flex items-center gap-3">
- <div className="w-6 h-6 rounded-lg bg-slate-900 flex items-center justify-center text-white text-[10px] font-bold">03</div>
- <h2 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.15em]">Specialty & Fee</h2>
+ <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] flex items-center justify-center text-white text-[10px] font-bold">03</div>
+ <h2 className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-[0.15em]">Specialty & Fee</h2>
  </div>
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-6 gap-y-4">
  <div className="space-y-1.5">
@@ -4605,8 +4605,8 @@ function AdminDashboardContent() {
 
  <section className="space-y-4 pt-8 border-t border-slate-200">
  <div className="flex items-center gap-3">
- <div className="w-6 h-6 rounded-lg bg-slate-900 flex items-center justify-center text-white text-[10px] font-bold">04</div>
- <h2 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.15em]">Payout Architecture</h2>
+ <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] flex items-center justify-center text-white text-[10px] font-bold">04</div>
+ <h2 className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-[0.15em]">Payout Architecture</h2>
  </div>
  <div className="space-y-6">
  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -4667,7 +4667,7 @@ function AdminDashboardContent() {
  <div key="add-staff-modal" className="fixed inset-0 z-[100] flex items-center justify-center p-4">
  <motion.div 
  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
- className="absolute inset-0 bg-slate-900/40"
+ className="absolute inset-0 bg-[#1e4a3a]/40"
  onClick={() => setShowAddStaff(false)}
  />
  <motion.div 
@@ -4710,7 +4710,7 @@ function AdminDashboardContent() {
 
  <div className="pt-2 flex justify-end gap-2 text-[11px] font-bold">
  <button type="button" onClick={() => setShowAddStaff(false)} className="h-9 px-4 border border-transparent rounded-lg text-slate-500 hover:bg-slate-50 transition-all">Cancel</button>
- <button type="submit" disabled={isCreatingStaff} className="h-9 px-5 bg-slate-900 border border-slate-700 text-white rounded-lg flex items-center justify-center gap-2 hover:bg-black transition-all disabled:opacity-50">
+ <button type="submit" disabled={isCreatingStaff} className="h-9 px-5 bg-[#1e4a3a] border border-slate-700 text-white rounded-lg flex items-center justify-center gap-2 hover:bg-black transition-all disabled:opacity-50">
  {isCreatingStaff ? <span className="animate-spin text-lg leading-none">↻</span> : <Check size={14} />}
  {isCreatingStaff ? 'Processing...' : 'Complete Registration'}
  </button>
@@ -4724,7 +4724,7 @@ function AdminDashboardContent() {
  <AnimatePresence>
  {selectedPatient && (
  <div key="patient-detail-modal" className="fixed inset-0 z-[100] flex items-center justify-center p-4">
- <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => { setSelectedPatient(null); setIsEditingPatient(false); }} />
+ <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => { setSelectedPatient(null); setIsEditingPatient(false); }} />
  <motion.div 
  initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }}
  className="relative w-full max-w-lg bg-white rounded-xl overflow-hidden border border-slate-300"
@@ -4737,7 +4737,7 @@ function AdminDashboardContent() {
  </div>
  <div>
  <div className="flex items-center gap-2">
- <h3 className="text-[14px] font-bold text-slate-900 tracking-tight leading-none">{selectedPatient.fullName || 'Anonymous Patient'}</h3>
+ <h3 className="text-[14px] font-bold text-[#1e4a3a] tracking-tight leading-none">{selectedPatient.fullName || 'Anonymous Patient'}</h3>
  {selectedPatient.isVerified && <ShieldCheck size={14} className="text-blue-500" />}
  </div>
  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Patient ID: {selectedPatient.id.slice(0, 8).toUpperCase()}</p>
@@ -4759,13 +4759,13 @@ function AdminDashboardContent() {
  {/* Tabs */}
  {!isEditingPatient && (
  <div className="px-6 flex items-center gap-6 border-b border-slate-200 bg-slate-50/30">
- <button onClick={() => setProfileTab('history')} className={`py-3 text-[11px] font-bold uppercase tracking-widest relative ${profileTab === 'history' ? 'text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}>
+ <button onClick={() => setProfileTab('history')} className={`py-3 text-[11px] font-bold uppercase tracking-widest relative ${profileTab === 'history' ? 'text-[#1e4a3a]' : 'text-slate-400 hover:text-slate-600'}`}>
  Appointment History
- {profileTab === 'history' && <motion.div layoutId="tab-p" className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-900" />}
+ {profileTab === 'history' && <motion.div layoutId="tab-p" className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1e4a3a]" />}
  </button>
- <button onClick={() => setProfileTab('files')} className={`py-3 text-[11px] font-bold uppercase tracking-widest relative ${profileTab === 'files' ? 'text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}>
+ <button onClick={() => setProfileTab('files')} className={`py-3 text-[11px] font-bold uppercase tracking-widest relative ${profileTab === 'files' ? 'text-[#1e4a3a]' : 'text-slate-400 hover:text-slate-600'}`}>
  Medical Files
- {profileTab === 'files' && <motion.div layoutId="tab-p" className="absolute bottom-0 left-0 right-0 h-0.5 bg-slate-900" />}
+ {profileTab === 'files' && <motion.div layoutId="tab-p" className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1e4a3a]" />}
  </button>
  </div>
  )}
@@ -4876,7 +4876,7 @@ function AdminDashboardContent() {
  </div>
  <div className="pt-2 flex gap-3">
  <button type="button" onClick={() => setIsEditingPatient(false)} className="flex-1 h-10 border border-slate-300 rounded-lg text-[11px] font-bold text-slate-500 hover:bg-slate-50 uppercase tracking-widest">Cancel</button>
- <button type="submit" disabled={isSaving} className="flex-1 h-10 bg-slate-900 text-white rounded-lg text-[11px] font-bold hover:bg-black transition-all -100 uppercase tracking-widest">
+ <button type="submit" disabled={isSaving} className="flex-1 h-10 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold hover:bg-black transition-all -100 uppercase tracking-widest">
  {isSaving ? 'Updating...' : 'Save Changes'}
  </button>
  </div>
@@ -4942,7 +4942,7 @@ function AdminDashboardContent() {
  <div className="space-y-4">
  <div className="flex items-center justify-between">
  <h4 className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Medical Documents</h4>
- <label className="h-8 px-3 bg-slate-900 text-white rounded-lg text-[10px] font-bold flex items-center gap-2 hover:bg-black transition-all cursor-pointer">
+ <label className="h-8 px-3 bg-[#1e4a3a] text-white rounded-lg text-[10px] font-bold flex items-center gap-2 hover:bg-black transition-all cursor-pointer">
  {isUploading ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}
  {isUploading ? 'Archiving...' : 'Add New File'}
  <input type="file" className="hidden" disabled={isUploading} onChange={handleUploadFile} />
@@ -5004,17 +5004,17 @@ function AdminDashboardContent() {
  message: `You are about to open a private communication channel with ${selectedPatient.fullName}. Messages are encrypted and stored in patient logs.`,
  icon: 'ShieldCheck',
  confirmText: 'Establish Connection',
- confirmColor: 'bg-slate-900'
+ confirmColor: 'bg-[#1e4a3a]'
  });
  }}
- className="flex-1 h-10 bg-slate-100 text-slate-900 border border-slate-300 rounded-lg text-[11px] font-bold hover:bg-slate-200 transition-all uppercase tracking-widest flex items-center justify-center gap-2"
+ className="flex-1 h-10 bg-slate-100 text-[#1e4a3a] border border-slate-300 rounded-lg text-[11px] font-bold hover:bg-slate-200 transition-all uppercase tracking-widest flex items-center justify-center gap-2"
  >
  <MessageSquare size={14} className="text-slate-400" />
  Secure Message
  </button>
  <button 
  onClick={() => setProfileTab('files')}
- className="flex-1 h-10 bg-slate-900 text-white rounded-lg text-[11px] font-bold hover:bg-black transition-all -100 uppercase tracking-widest flex items-center justify-center gap-2"
+ className="flex-1 h-10 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold hover:bg-black transition-all -100 uppercase tracking-widest flex items-center justify-center gap-2"
  >
  <FolderOpen size={14} className="text-slate-400" />
  Audit Files
@@ -5029,13 +5029,13 @@ function AdminDashboardContent() {
  <AnimatePresence>
  {showPaymentModal && (
  <div key="payment-modal" className="fixed inset-0 z-[100] flex items-center justify-center p-4">
- <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => setShowPaymentModal(false)} />
+ <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowPaymentModal(false)} />
  <motion.div 
  initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }}
  className="relative w-full max-w-lg bg-white rounded-xl overflow-hidden"
  >
  <div className="p-6 border-b border-slate-200 flex items-center justify-between">
- <h3 className="text-[16px] font-bold text-slate-900 tracking-tight uppercase">{editingPayment ? 'Edit Payment' : 'Add Payment'}</h3>
+ <h3 className="text-[16px] font-bold text-[#1e4a3a] tracking-tight uppercase">{editingPayment ? 'Edit Payment' : 'Add Payment'}</h3>
  <button onClick={() => setShowPaymentModal(false)} className="text-slate-400 hover:text-slate-600 transition-all"><X size={20} /></button>
  </div>
 
@@ -5043,8 +5043,8 @@ function AdminDashboardContent() {
  {/* 01. Agent Selection */}
  <div className="space-y-4">
  <div className="flex items-center gap-3">
- <div className="w-6 h-6 rounded-lg bg-slate-900 flex items-center justify-center text-white text-[10px] font-bold">01</div>
- <h4 className="text-[11px] font-bold text-slate-900 uppercase tracking-widest">Choose Agent</h4>
+ <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] flex items-center justify-center text-white text-[10px] font-bold">01</div>
+ <h4 className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-widest">Choose Agent</h4>
  </div>
 
  <div className="grid grid-cols-4 gap-3">
@@ -5071,7 +5071,7 @@ function AdminDashboardContent() {
  <button 
  key={t} type="button" 
  onClick={() => setPaymentForm({...paymentForm, type: t})}
- className={`flex-1 py-1.5 rounded-md transition-all text-[9px] font-bold uppercase tracking-widest text-center ${paymentForm.type === t ? 'bg-white text-slate-900 border border-slate-300' : 'text-slate-400 hover:text-slate-600'}`}
+ className={`flex-1 py-1.5 rounded-md transition-all text-[9px] font-bold uppercase tracking-widest text-center ${paymentForm.type === t ? 'bg-white text-[#1e4a3a] border border-slate-300' : 'text-slate-400 hover:text-slate-600'}`}
  >
  {t}
  </button>
@@ -5083,8 +5083,8 @@ function AdminDashboardContent() {
  {/* 02. Configuration Details */}
  <div className="space-y-4">
  <div className="flex items-center gap-3">
- <div className="w-6 h-6 rounded-lg bg-slate-900 flex items-center justify-center text-white text-[10px] font-bold">02</div>
- <h4 className="text-[11px] font-bold text-slate-900 uppercase tracking-widest">Account Details</h4>
+ <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] flex items-center justify-center text-white text-[10px] font-bold">02</div>
+ <h4 className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-widest">Account Details</h4>
  </div>
 
  <div className="space-y-4">
@@ -5102,7 +5102,7 @@ function AdminDashboardContent() {
  </div>
  <div className="space-y-1.5 font-bold">
  <label className="text-[9px] text-slate-400 uppercase tracking-widest ml-1">Account Number</label>
- <input type="text" value={paymentForm.accountNumber} onChange={e => setPaymentForm({...paymentForm, accountNumber: e.target.value})} placeholder="0000 0000 0000" className="w-full h-10 bg-slate-50 border border-slate-300 rounded-lg px-4 text-[14px] font-mono font-bold text-slate-900 outline-none focus:border-black transition-all" />
+ <input type="text" value={paymentForm.accountNumber} onChange={e => setPaymentForm({...paymentForm, accountNumber: e.target.value})} placeholder="0000 0000 0000" className="w-full h-10 bg-slate-50 border border-slate-300 rounded-lg px-4 text-[14px] font-mono font-bold text-[#1e4a3a] outline-none focus:border-black transition-all" />
  </div>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  <div className="space-y-1.5 font-bold">
@@ -5170,7 +5170,7 @@ function AdminDashboardContent() {
  <div className="flex items-center gap-4 p-4 bg-emerald-50/50 rounded-lg border border-emerald-100/50">
  <Activity size={16} className="text-emerald-500 shrink-0" />
  <div className="flex-1">
- <p className="text-[11px] font-bold text-slate-900 uppercase tracking-tight">Live Status</p>
+ <p className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-tight">Live Status</p>
  <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Enable for payments</p>
  </div>
  <div 
@@ -5201,7 +5201,7 @@ function AdminDashboardContent() {
  setIsUpdatingSettings(false);
  }}
  disabled={isUpdatingSettings}
- className="flex-[1.5] h-11 bg-slate-950 text-white rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-black transition-all -200 disabled:opacity-50"
+ className="flex-[1.5] h-11 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-black transition-all -200 disabled:opacity-50"
  >
  {isUpdatingSettings ? 'Saving...' : (editingPayment ? 'Push Updates' : 'Add Gateway')}
  </button>
@@ -5215,7 +5215,7 @@ function AdminDashboardContent() {
  {/* Confirmation Modal */}
  {confirmModal.show && (
  <div key="confirm-modal" className="fixed inset-0 z-[200] flex items-center justify-center p-4">
- <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => setConfirmModal({ ...confirmModal, show: false })} />
+ <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setConfirmModal({ ...confirmModal, show: false })} />
  <motion.div 
  initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }}
  className="relative w-full max-w-sm bg-white rounded-xl overflow-hidden p-6 border border-slate-300"
@@ -5225,7 +5225,7 @@ function AdminDashboardContent() {
  {confirmModal.type === 'danger' ? <LogOut size={16} /> : <AlertCircle size={16} />}
  </div>
  <div className="pt-0.5">
- <h3 className="text-[14px] font-bold text-slate-900 tracking-tight">{confirmModal.title}</h3>
+ <h3 className="text-[14px] font-bold text-[#1e4a3a] tracking-tight">{confirmModal.title}</h3>
  <p className="text-[12px] text-slate-500 leading-relaxed mt-1">{confirmModal.message}</p>
  </div>
  </div>
@@ -5242,7 +5242,7 @@ function AdminDashboardContent() {
  confirmModal.onConfirm();
  setConfirmModal({ ...confirmModal, show: false });
  }}
- className={`h-8 px-5 rounded-lg text-[11px] font-bold transition-all border uppercase tracking-wider ${confirmModal.type === 'danger' ? 'bg-rose-500 text-white border-rose-600 hover:bg-rose-600 -100' : 'bg-slate-900 text-white border-slate-950 hover:bg-black -100'}`}
+ className={`h-8 px-5 rounded-lg text-[11px] font-bold transition-all border uppercase tracking-wider ${confirmModal.type === 'danger' ? 'bg-rose-500 text-white border-rose-600 hover:bg-rose-600 -100' : 'bg-[#1e4a3a] text-white border-[#1e4a3a] hover:bg-black -100'}`}
  >
  Confirm Action
  </button>
@@ -5296,13 +5296,13 @@ function AdminDashboardContent() {
  <AnimatePresence>
  {showCouponModal && (
  <div key="coupon-modal" className="fixed inset-0 z-[120] flex items-center justify-center p-4">
- <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => setShowCouponModal(false)} />
+ <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowCouponModal(false)} />
  <motion.div 
  initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }}
  className="relative w-full max-w-md bg-white rounded-xl overflow-hidden border border-slate-300"
  >
  <div className="p-6 border-b border-slate-200 flex items-center justify-between">
- <h3 className="text-[16px] font-bold text-slate-900 tracking-tight uppercase">{editingCoupon ? 'Edit Coupon' : 'Create New Coupon'}</h3>
+ <h3 className="text-[16px] font-bold text-[#1e4a3a] tracking-tight uppercase">{editingCoupon ? 'Edit Coupon' : 'Create New Coupon'}</h3>
  <button onClick={() => setShowCouponModal(false)} className="text-slate-400 hover:text-slate-600 transition-all"><X size={20} /></button>
  </div>
 
@@ -5324,7 +5324,7 @@ function AdminDashboardContent() {
  }} className="p-6 space-y-6">
  <div className="space-y-1.5 font-bold">
  <label className="text-[9px] text-slate-400 uppercase tracking-widest ml-1">Coupon Code</label>
- <input required type="text" value={couponForm.code} onChange={e => setCouponForm({...couponForm, code: e.target.value.toUpperCase()})} placeholder="SAVE20" className="w-full h-11 bg-slate-50 border border-slate-300 rounded-xl px-4 text-[14px] font-black tracking-widest text-slate-900 outline-none focus:border-black transition-all" />
+ <input required type="text" value={couponForm.code} onChange={e => setCouponForm({...couponForm, code: e.target.value.toUpperCase()})} placeholder="SAVE20" className="w-full h-11 bg-slate-50 border border-slate-300 rounded-xl px-4 text-[14px] font-black tracking-widest text-[#1e4a3a] outline-none focus:border-black transition-all" />
  </div>
 
  <div className="grid grid-cols-2 gap-4">
@@ -5335,7 +5335,7 @@ function AdminDashboardContent() {
  <button 
  key={t} type="button" 
  onClick={() => setCouponForm({...couponForm, type: t})}
- className={`flex-1 rounded-md text-[9px] font-bold uppercase tracking-widest transition-all ${couponForm.type === t ? 'bg-white text-slate-900 border border-slate-300' : 'text-slate-400'}`}
+ className={`flex-1 rounded-md text-[9px] font-bold uppercase tracking-widest transition-all ${couponForm.type === t ? 'bg-white text-[#1e4a3a] border border-slate-300' : 'text-slate-400'}`}
  >
  {t === 'percentage' ? '%' : 'FIXED'}
  </button>
@@ -5351,7 +5351,7 @@ function AdminDashboardContent() {
  <div className="flex items-center gap-4 p-4 bg-emerald-50/50 rounded-xl border border-emerald-100/50">
  <Activity size={16} className="text-emerald-500 shrink-0" />
  <div className="flex-1">
- <p className="text-[11px] font-bold text-slate-900 uppercase tracking-tight">Active Status</p>
+ <p className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-tight">Active Status</p>
  <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest">Enable this coupon for users</p>
  </div>
  <button 
@@ -5367,7 +5367,7 @@ function AdminDashboardContent() {
  <button type="button" onClick={() => setShowCouponModal(false)} className="flex-1 h-11 text-[11px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-600">Cancel</button>
  <button 
  type="submit" disabled={isSavingCoupon}
- className="flex-1 h-11 bg-slate-900 text-white rounded-xl text-[11px] font-bold uppercase tracking-[0.2em] -200 hover:bg-black transition-all disabled:opacity-50"
+ className="flex-1 h-11 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-bold uppercase tracking-[0.2em] -200 hover:bg-black transition-all disabled:opacity-50"
  >
  {isSavingCoupon ? 'Preparing...' : 'Save Coupon'}
  </button>
@@ -5381,13 +5381,13 @@ function AdminDashboardContent() {
  <AnimatePresence>
   {showAddCaregiver && (
   <div key="add-caregiver-modal" className="fixed inset-0 z-[120] flex items-center justify-center p-4">
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => setShowAddCaregiver(false)} />
+  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowAddCaregiver(false)} />
   <motion.div 
   initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }}
   className="relative w-full max-w-lg bg-white rounded-xl overflow-hidden border border-slate-300"
   >
   <div className="p-6 border-b border-slate-200 flex items-center justify-between">
-  <h3 className="text-[16px] font-bold text-slate-900 tracking-tight uppercase">{editingCaregiver ? 'Update Specialist' : 'Register Specialist'}</h3>
+  <h3 className="text-[16px] font-bold text-[#1e4a3a] tracking-tight uppercase">{editingCaregiver ? 'Update Specialist' : 'Register Specialist'}</h3>
   <button onClick={() => setShowAddCaregiver(false)} className="text-slate-400 hover:text-slate-600 transition-all"><X size={20} /></button>
   </div>
 
@@ -5471,7 +5471,7 @@ function AdminDashboardContent() {
                     }}
                     className={`w-full flex items-center justify-between px-4 py-2.5 rounded-xl border text-left transition-all ${
                       isSelected
-                        ? 'bg-slate-950 border-slate-950 text-white'
+                        ? 'bg-[#1e4a3a] border-[#1e4a3a] text-white'
                         : 'bg-slate-50 border-slate-300 text-slate-700 hover:border-slate-500'
                     }`}
                   >
@@ -5506,7 +5506,7 @@ function AdminDashboardContent() {
       <button type="button" onClick={() => setShowAddCaregiver(false)} className="flex-1 h-11 text-[11px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-600">Cancel</button>
       <button 
         type="submit" disabled={isSaving}
-        className="flex-1 h-11 bg-slate-900 text-white rounded-xl text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-black transition-all disabled:opacity-50"
+        className="flex-1 h-11 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-black transition-all disabled:opacity-50"
       >
         {isSaving ? 'Processing...' : (editingCaregiver ? 'Update Profile' : 'Register Profile')}
       </button>
@@ -5520,9 +5520,9 @@ function AdminDashboardContent() {
   <AnimatePresence>
   {showAddNursingPackage && (
   <div key="add-np-modal" className="fixed inset-0 z-[130] flex items-center justify-center p-4">
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => setShowAddNursingPackage(false)} />
+  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowAddNursingPackage(false)} />
   <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="relative w-full max-w-sm bg-white rounded-xl overflow-hidden p-6 space-y-6 border border-slate-300">
-    <h3 className="text-[12px] font-black uppercase tracking-widest text-slate-900">New Pricing Package</h3>
+    <h3 className="text-[12px] font-black uppercase tracking-widest text-[#1e4a3a]">New Pricing Package</h3>
     <form onSubmit={handleSaveNursingPackage} className="space-y-4">
       <div className="space-y-1.5">
         <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Label</label>
@@ -5538,7 +5538,7 @@ function AdminDashboardContent() {
       </div>
       <div className="pt-4 flex gap-3">
         <button type="button" onClick={() => setShowAddNursingPackage(false)} className="flex-1 h-10 text-[10px] font-bold uppercase tracking-widest text-slate-400">Cancel</button>
-        <button type="submit" className="flex-1 h-10 bg-slate-950 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest">Save Basis</button>
+        <button type="submit" className="flex-1 h-10 bg-[#1e4a3a] text-white rounded-lg text-[10px] font-bold uppercase tracking-widest">Save Basis</button>
       </div>
     </form>
   </motion.div>
@@ -5549,9 +5549,9 @@ function AdminDashboardContent() {
   <AnimatePresence>
   {showAddNursingType && (
   <div key="add-nt-modal" className="fixed inset-0 z-[130] flex items-center justify-center p-4">
-  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => setShowAddNursingType(false)} />
+  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowAddNursingType(false)} />
   <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="relative w-full max-w-sm bg-white rounded-xl overflow-hidden p-6 space-y-6 border border-slate-300">
-    <h3 className="text-[12px] font-black uppercase tracking-widest text-slate-900">New Specialist Type</h3>
+    <h3 className="text-[12px] font-black uppercase tracking-widest text-[#1e4a3a]">New Specialist Type</h3>
     <form onSubmit={handleSaveNursingType} className="space-y-4">
       <div className="space-y-1.5">
         <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Label</label>
@@ -5586,14 +5586,14 @@ function AdminDashboardContent() {
            />
            {isUploading && (
              <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
-                <Loader2 size={24} className="animate-spin text-slate-900" />
+                <Loader2 size={24} className="animate-spin text-[#1e4a3a]" />
              </div>
            )}
         </div>
       </div>
       <div className="pt-4 flex gap-3">
         <button type="button" onClick={() => setShowAddNursingType(false)} className="flex-1 h-10 text-[10px] font-bold uppercase tracking-widest text-slate-400">Cancel</button>
-        <button type="submit" className="flex-1 h-10 bg-slate-950 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest">Add Category</button>
+        <button type="submit" className="flex-1 h-10 bg-[#1e4a3a] text-white rounded-lg text-[10px] font-bold uppercase tracking-widest">Add Category</button>
       </div>
     </form>
   </motion.div>
@@ -5605,14 +5605,14 @@ function AdminDashboardContent() {
    <AnimatePresence>
     {showAddAmbulance && (
       <div key="add-ambulance-modal" className="fixed inset-0 z-[120] flex items-center justify-center p-4">
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => setShowAddAmbulance(false)} />
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowAddAmbulance(false)} />
         <motion.div 
           initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }}
           className="relative w-full max-w-2xl bg-white rounded-xl border border-slate-300 shadow-2xl overflow-y-auto max-h-[90vh] custom-scrollbar"
         >
           <div className="p-6 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white z-10 rounded-t-xl">
             <div>
-              <h3 className="text-[16px] font-black text-slate-900 tracking-tight uppercase">{editingAmbulance ? 'Update Unit Registry' : 'New Ambulance Registry'}</h3>
+              <h3 className="text-[16px] font-black text-[#1e4a3a] tracking-tight uppercase">{editingAmbulance ? 'Update Unit Registry' : 'New Ambulance Registry'}</h3>
               <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Provide full clinical & logistics documentation</p>
             </div>
             <button onClick={() => setShowAddAmbulance(false)} className="text-slate-400 hover:text-slate-600 transition-all"><X size={20} /></button>
@@ -5622,14 +5622,14 @@ function AdminDashboardContent() {
             {/* Section 1: Vehicle Logistics */}
             <div className="space-y-6">
                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-lg bg-slate-900 flex items-center justify-center text-white text-[10px] font-black">01</div>
-                  <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-widest border-b border-slate-900/10 pb-1 flex-grow">Vehicle Logistics</h4>
+                  <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] flex items-center justify-center text-white text-[10px] font-black">01</div>
+                  <h4 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest border-b border-[#1e4a3a]/10 pb-1 flex-grow">Vehicle Logistics</h4>
                </div>
                
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  <div className="space-y-1.5 font-bold">
                    <label className="text-[9px] text-slate-400 uppercase tracking-widest ml-1">Plate Number / Registration</label>
-                   <input required type="text" value={ambulanceForm.plateNumber} onChange={e => setAmbulanceForm({...ambulanceForm, plateNumber: e.target.value})} placeholder="DHK-METRO-KA-11-2222" className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-[14px] font-black tracking-widest text-slate-900 outline-none focus:border-black transition-all" />
+                   <input required type="text" value={ambulanceForm.plateNumber} onChange={e => setAmbulanceForm({...ambulanceForm, plateNumber: e.target.value})} placeholder="DHK-METRO-KA-11-2222" className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-[14px] font-black tracking-widest text-[#1e4a3a] outline-none focus:border-black transition-all" />
                  </div>
                  <div className="space-y-1.5 font-bold">
                    <label className="text-[9px] text-slate-400 uppercase tracking-widest ml-1">Vehicle License No.</label>
@@ -5660,8 +5660,8 @@ function AdminDashboardContent() {
             {/* Section 2: Driver Identity */}
             <div className="space-y-6">
                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-lg bg-slate-900 flex items-center justify-center text-white text-[10px] font-black">02</div>
-                  <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-widest border-b border-slate-900/10 pb-1 flex-grow">Personnel Registry</h4>
+                  <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] flex items-center justify-center text-white text-[10px] font-black">02</div>
+                  <h4 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest border-b border-[#1e4a3a]/10 pb-1 flex-grow">Personnel Registry</h4>
                </div>
                
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -5684,8 +5684,8 @@ function AdminDashboardContent() {
             {/* Section 3: Operating Hub */}
             <div className="space-y-6">
                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 rounded-lg bg-slate-900 flex items-center justify-center text-white text-[10px] font-black">03</div>
-                  <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-widest border-b border-slate-900/10 pb-1 flex-grow">Operating Territory</h4>
+                  <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] flex items-center justify-center text-white text-[10px] font-black">03</div>
+                  <h4 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest border-b border-[#1e4a3a]/10 pb-1 flex-grow">Operating Territory</h4>
                </div>
                
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -5719,7 +5719,7 @@ function AdminDashboardContent() {
               <button type="button" onClick={() => setShowAddAmbulance(false)} className="h-11 px-8 text-[11px] font-bold uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-all">Discard & Close</button>
               <button 
                 type="submit" disabled={isSaving}
-                className="flex-grow h-11 bg-slate-900 text-white rounded-xl text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-black transition-all disabled:opacity-50 shadow-lg shadow-slate-900/10"
+                className="flex-grow h-11 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-black transition-all disabled:opacity-50 shadow-lg shadow-[#1e4a3a]/10"
               >
                 {isSaving ? 'Processing...' : (editingAmbulance ? 'Update Unit Info' : 'Confirm Fleet Entry')}
               </button>
@@ -5734,17 +5734,17 @@ function AdminDashboardContent() {
    <AnimatePresence>
      {showAssignModal && (
        <div key="assign-ambulance-modal" className="fixed inset-0 z-[120] flex items-center justify-center p-4 text-left">
-         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-900/40" onClick={() => setShowAssignModal(false)} />
+         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowAssignModal(false)} />
          <motion.div 
            initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }}
            className="relative w-full max-w-lg bg-white rounded-xl overflow-hidden border border-slate-300"
          >
            <div className="p-6 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
               <div>
-                <h3 className="text-[14px] font-black text-slate-900 tracking-tight uppercase">Dispatch Ambulance</h3>
+                <h3 className="text-[14px] font-black text-[#1e4a3a] tracking-tight uppercase">Dispatch Ambulance</h3>
                 <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Patient: {selectedBookingForAssignment?.patientName}</p>
               </div>
-              <button onClick={() => setShowAssignModal(false)} className="text-slate-400 hover:text-slate-900"><X size={20} /></button>
+              <button onClick={() => setShowAssignModal(false)} className="text-slate-400 hover:text-[#1e4a3a]"><X size={20} /></button>
            </div>
 
            <div className="p-6 space-y-4 max-h-[60vh] overflow-y-auto custom-scrollbar">
@@ -5754,7 +5754,7 @@ function AdminDashboardContent() {
                       <MapPin size={20} />
                     </div>
                     <div>
-                      <p className="text-[12px] font-bold text-slate-900">{selectedBookingForAssignment?.pickupAddress}</p>
+                      <p className="text-[12px] font-bold text-[#1e4a3a]">{selectedBookingForAssignment?.pickupAddress}</p>
                       <p className="text-[11px] text-slate-400 font-medium">Requested: {selectedBookingForAssignment?.category}</p>
                     </div>
                  </div>
@@ -5773,18 +5773,18 @@ function AdminDashboardContent() {
                       <button 
                         key={unit.id}
                         onClick={() => handleCompleteAssignment(unit)}
-                        className="w-full p-4 bg-white border border-slate-200 rounded-xl hover:border-slate-900 transition-all flex items-center justify-between group text-left"
+                        className="w-full p-4 bg-white border border-slate-200 rounded-xl hover:border-[#1e4a3a] transition-all flex items-center justify-between group text-left"
                       >
                         <div className="flex items-center gap-4">
-                           <div className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-lg flex items-center justify-center text-slate-400 group-hover:bg-slate-950 group-hover:text-white transition-all">
+                           <div className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-lg flex items-center justify-center text-slate-400 group-hover:bg-[#1e4a3a] group-hover:text-white transition-all">
                               <Ambulance size={20} />
                            </div>
                            <div>
-                              <p className="text-[13px] font-black text-slate-900 uppercase">{unit.plateNumber}</p>
+                              <p className="text-[13px] font-black text-[#1e4a3a] uppercase">{unit.plateNumber}</p>
                               <p className="text-[10px] text-slate-400 font-bold">{unit.driverName} • {unit.type}</p>
                            </div>
                         </div>
-                        <ChevronRight size={18} className="text-slate-300 group-hover:text-slate-900 group-hover:translate-x-1 transition-all" />
+                        <ChevronRight size={18} className="text-slate-300 group-hover:text-[#1e4a3a] group-hover:translate-x-1 transition-all" />
                       </button>
                     ))
                   )}
@@ -5794,7 +5794,7 @@ function AdminDashboardContent() {
 
            <div className="p-6 border-t border-slate-100 bg-slate-50 flex justify-between items-center text-[11px]">
               <p className="text-slate-400 font-bold uppercase tracking-widest italic">Manual dispatch required</p>
-              <button onClick={() => setShowAssignModal(false)} className="font-black text-slate-900 uppercase tracking-widest hover:opacity-70">Close</button>
+              <button onClick={() => setShowAssignModal(false)} className="font-black text-[#1e4a3a] uppercase tracking-widest hover:opacity-70">Close</button>
            </div>
          </motion.div>
        </div>

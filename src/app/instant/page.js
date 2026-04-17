@@ -2,206 +2,201 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
- Upload, FileText, ChevronRight, Phone, MessageSquare, 
- ShieldCheck, CheckCircle2, Video, Activity, Info, 
- ArrowRight, CreditCard, Sparkles, UserCheck, Users, Lock, Globe, Building2, Shield,
- Check, Zap, Copy, ChevronDown, Stethoscope, X, ShoppingCart, Camera
+  Upload, FileText, ChevronRight, Phone, MessageSquare, 
+  ShieldCheck, CheckCircle2, Video, Activity, Info, 
+  ArrowRight, CreditCard, Sparkles, UserCheck, Users, Lock, Globe, Building2, Shield,
+  Check, Zap, Copy, ChevronDown, Stethoscope, X, ShoppingCart, Camera
 } from 'lucide-react';
-import LandingNavbar from '@/components/Home/LandingNavbar';
-import { useLanguage } from '@/context/LanguageContext';
-import { collection, onSnapshot, query, doc, addDoc, where, getDocs } from 'firebase/firestore';
-import { auth, db, storage } from '@/lib/firebase';
-import { sendPasswordResetEmail } from 'firebase/auth';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { useAuth } from '@/context/AuthContext';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import { toast } from 'react-hot-toast';
+import { db, storage } from '@/lib/firebase';
+import { collection, query, where, getDocs, addDoc, onSnapshot, doc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import Link from 'next/link';
 import CustomDropdown from '@/components/UI/CustomDropdown';
 
 export default function InstantDoctorPage() {
- const router = useRouter();
- const { t } = useLanguage();
- const { user, login, registerPatient } = useAuth();
- const [specialties, setSpecialties] = useState([]);
- const [selectedSpecialty, setSelectedSpecialty] = useState(null);
- const [loading, setLoading] = useState(true);
- const [isSubmitting, setIsSubmitting] = useState(false);
- 
- // Dynamic Config & Payments
- const [globalFee, setGlobalFee] = useState(500);
- const [paymentMethods, setPaymentMethods] = useState([]);
- const [selectedPayment, setSelectedPayment] = useState(null);
- const [showAuthPopup, setShowAuthPopup] = useState(false);
- const [authMode, setAuthMode] = useState('login'); // initial | login | signup
- const [email, setEmail] = useState('');
- const [password, setPassword] = useState('');
- const [signupData, setSignupData] = useState({
- fullName: '', dob: '', phone: '', address: '', city: '', country: '', postalCode: '', gender: '', bloodType: ''
- });
- const [imageFile, setImageFile] = useState(null);
- const [profilePreview, setProfilePreview] = useState(null);
- const [bookingStep, setBookingStep] = useState('form'); // form | payment | success
- const [openFaq, setOpenFaq] = useState(null);
- 
- // Patient Details Form
- const [patientData, setPatientData] = useState({ phone: '', reason: '' });
- const [attachedFiles, setAttachedFiles] = useState([]);
+  const router = useRouter();
+  const { user, login, registerPatient } = useAuth();
+  const [specialties, setSpecialties] = useState([]);
+  const [selectedSpecialty, setSelectedSpecialty] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Dynamic Config & Payments
+  const [globalFee, setGlobalFee] = useState(500);
+  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
+  const [authMode, setAuthMode] = useState('login'); // initial | login | signup
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [signupData, setSignupData] = useState({
+  fullName: '', dob: '', phone: '', address: '', city: '', country: '', postalCode: '', gender: '', bloodType: ''
+  });
+  const [imageFile, setImageFile] = useState(null);
+  const [profilePreview, setProfilePreview] = useState(null);
+  const [bookingStep, setBookingStep] = useState('form'); // form | payment | success
+  const [openFaq, setOpenFaq] = useState(null);
+  
+  // Patient Details Form
+  const [patientData, setPatientData] = useState({ phone: '', reason: '' });
+  const [attachedFiles, setAttachedFiles] = useState([]);
 
- // Coupon State
- const [couponCode, setCouponCode] = useState('');
- const [appliedCoupon, setAppliedCoupon] = useState(null);
- const [isVerifyingCoupon, setIsVerifyingCoupon] = useState(false);
- const [agreedToTerms, setAgreedToTerms] = useState(false);
+  // Coupon State
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [isVerifyingCoupon, setIsVerifyingCoupon] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
- useEffect(() => {
-    if (!db) {
-      setLoading(false);
-      return;
-    }
- // 1. Fetch Specialties
- const q = query(collection(db, 'specialties'));
- const unSpec = onSnapshot(q, (snapshot) => {
- const allSpecs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
- const telemedSpecs = allSpecs.filter(spec => (spec.services || []).some(s => s.telemed));
- setSpecialties(telemedSpecs);
- if (telemedSpecs.length > 0 && !selectedSpecialty) setSelectedSpecialty(telemedSpecs[0]);
- });
+  useEffect(() => {
+     if (!db) {
+       setLoading(false);
+       return;
+     }
+  // 1. Fetch Specialties
+  const q = query(collection(db, 'specialties'));
+  const unSpec = onSnapshot(q, (snapshot) => {
+  const allSpecs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  const telemedSpecs = allSpecs.filter(spec => (spec.services || []).some(s => s.telemed));
+  setSpecialties(telemedSpecs);
+  if (telemedSpecs.length > 0 && !selectedSpecialty) setSelectedSpecialty(telemedSpecs[0]);
+  });
 
- // 2. Fetch Global Pricing
- const unSettings = onSnapshot(doc(db, 'settings', 'global'), (snapshot) => {
- if (snapshot.exists()) setGlobalFee(snapshot.data().instantDoctorFee || 500);
- });
+  // 2. Fetch Global Pricing
+  const unSettings = onSnapshot(doc(db, 'settings', 'global'), (snapshot) => {
+  if (snapshot.exists()) setGlobalFee(snapshot.data().instantDoctorFee || 500);
+  });
 
- // 3. Fetch Payment Methods
- const unPay = onSnapshot(collection(db, 'payment_methods'), (snapshot) => {
- setPaymentMethods(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).filter(m => m.status === 'active'));
- });
+  // 3. Fetch Payment Methods
+  const unPay = onSnapshot(collection(db, 'payment_methods'), (snapshot) => {
+  setPaymentMethods(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })).filter(m => m.status === 'active'));
+  });
 
- setLoading(false);
- return () => { unSpec(); unSettings(); unPay(); };
- }, []);
+  setLoading(false);
+  return () => { unSpec(); unSettings(); unPay(); };
+  }, []);
 
-  const handleLogin = async () => {
-    if (!email || !password) return toast.error("Please fill all fields");
-    setIsSubmitting(true);
-    try {
-      await login(email, password);
-      toast.success("Welcome back!");
-      setShowAuthPopup(false);
-    } catch (e) {
-      toast.error(e.message || "Login failed");
-    } finally {
-      setIsSubmitting(false);
-    }
+   const handleLogin = async () => {
+     if (!email || !password) return toast.error("Please fill all fields");
+     setIsSubmitting(true);
+     try {
+       await login(email, password);
+       toast.success("Welcome back!");
+       setShowAuthPopup(false);
+     } catch (e) {
+       toast.error(e.message || "Login failed");
+     } finally {
+       setIsSubmitting(false);
+     }
+   };
+
+   const handleForgotPassword = async () => {
+     if (!email) return toast.error("Please enter your email address first");
+     setIsSubmitting(true);
+     try {
+       await sendPasswordResetEmail(auth, email);
+       toast.success("Password reset email sent! Check your inbox.");
+     } catch (e) {
+       console.error("Reset error:", e);
+       toast.error(e.message || "Failed to send reset email");
+     } finally {
+       setIsSubmitting(false);
+     }
+   };
+
+   const handleImageChange = (e) => {
+     const file = e.target.files[0];
+     if (file) {
+       setImageFile(file);
+       setProfilePreview(URL.createObjectURL(file));
+     }
+   };
+
+   const handleSignup = async () => {
+     const { fullName, ...rest } = signupData;
+     if (!email || !password || !fullName) return toast.error("Required fields missing");
+     setIsSubmitting(true);
+     try {
+       let photoURL = null;
+       if (imageFile) {
+         const imageRef = ref(storage, `users/${Date.now()}_${imageFile.name}`);
+         const uploadRes = await uploadBytes(imageRef, imageFile);
+         photoURL = await getDownloadURL(uploadRes.ref);
+       }
+       await registerPatient(email, password, { fullName, ...rest, photoURL });
+       toast.success("Account created successfully!");
+       setShowAuthPopup(false);
+     } catch (e) {
+       toast.error(e.message || "Registration failed");
+     } finally {
+       setIsSubmitting(false);
+     }
+   };
+
+  const handleBookingRedirect = () => {
+  if (!user) {
+  setShowAuthPopup(true);
+  return;
+  }
+  
+  if (!patientData.phone) {
+  toast.error('Phone number is required');
+  return;
+  }
+
+  if (!agreedToTerms) {
+  toast.error('Please check terms and conditions');
+  return;
+  }
+
+  const checkoutSession = {
+  type: 'instant',
+  specialtyId: selectedSpecialty?.id,
+  specialtyName: selectedSpecialty?.name || 'General Consult',
+  totalAmount: currentPrice,
+  fees: globalFee,
+  discount: discountAmount,
+  patientPhone: patientData.phone,
+  problemDescription: patientData.reason,
+  date: 'Today (Instant)',
+  time: 'As soon as possible',
+  couponCode: appliedCoupon?.code || null
   };
 
-  const handleForgotPassword = async () => {
-    if (!email) return toast.error("Please enter your email address first");
-    setIsSubmitting(true);
-    try {
-      await sendPasswordResetEmail(auth, email);
-      toast.success("Password reset email sent! Check your inbox.");
-    } catch (e) {
-      console.error("Reset error:", e);
-      toast.error(e.message || "Failed to send reset email");
-    } finally {
-      setIsSubmitting(false);
-    }
+  sessionStorage.setItem('medita_checkout', JSON.stringify(checkoutSession));
+  router.push('/checkout');
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImageFile(file);
-      setProfilePreview(URL.createObjectURL(file));
-    }
+   const handleApplyCoupon = async () => {
+   if (!couponCode || !db) return;
+   setIsVerifyingCoupon(true);
+   try {
+   const q = query(collection(db, 'coupons'), where('code', '==', couponCode.toUpperCase()), where('status', '==', 'active'));
+  const snap = await getDocs(q);
+  if (!snap.empty) {
+  const coupon = snap.docs[0].data();
+  setAppliedCoupon(coupon);
+  toast.success(`Coupon applied!`);
+  } else {
+  toast.error('Invalid or expired coupon');
+  setAppliedCoupon(null);
+  }
+  } catch (e) {
+  toast.error('Failed to verify coupon');
+  } finally {
+  setIsVerifyingCoupon(false);
+  }
   };
 
-  const handleSignup = async () => {
-    const { fullName, ...rest } = signupData;
-    if (!email || !password || !fullName) return toast.error("Required fields missing");
-    setIsSubmitting(true);
-    try {
-      let photoURL = null;
-      if (imageFile) {
-        const imageRef = ref(storage, `users/${Date.now()}_${imageFile.name}`);
-        const uploadRes = await uploadBytes(imageRef, imageFile);
-        photoURL = await getDownloadURL(uploadRes.ref);
-      }
-      await registerPatient(email, password, { fullName, ...rest, photoURL });
-      toast.success("Account created successfully!");
-      setShowAuthPopup(false);
-    } catch (e) {
-      toast.error(e.message || "Registration failed");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
- const handleBookingRedirect = () => {
- if (!user) {
- setShowAuthPopup(true);
- return;
- }
- 
- if (!patientData.phone) {
- toast.error(t('phoneRequired') || 'Phone number is required');
- return;
- }
-
- if (!agreedToTerms) {
- toast.error(t('agreeToTermsError') || 'Please check terms and conditions');
- return;
- }
-
- const checkoutSession = {
- type: 'instant',
- specialtyId: selectedSpecialty?.id,
- specialtyName: selectedSpecialty?.name || 'General Consult',
- totalAmount: currentPrice,
- fees: globalFee,
- discount: discountAmount,
- patientPhone: patientData.phone,
- problemDescription: patientData.reason,
- date: 'Today (Instant)',
- time: 'As soon as possible',
- couponCode: appliedCoupon?.code || null
- };
-
- sessionStorage.setItem('medita_checkout', JSON.stringify(checkoutSession));
- router.push('/checkout');
- };
-
-  const handleApplyCoupon = async () => {
-  if (!couponCode || !db) return;
-  setIsVerifyingCoupon(true);
-  try {
-  const q = query(collection(db, 'coupons'), where('code', '==', couponCode.toUpperCase()), where('status', '==', 'active'));
- const snap = await getDocs(q);
- if (!snap.empty) {
- const coupon = snap.docs[0].data();
- setAppliedCoupon(coupon);
- toast.success(`Coupon applied!`);
- } else {
- toast.error('Invalid or expired coupon');
- setAppliedCoupon(null);
- }
- } catch (e) {
- toast.error('Failed to verify coupon');
- } finally {
- setIsVerifyingCoupon(false);
- }
- };
-
- const discountAmount = appliedCoupon ? (appliedCoupon.type === 'percentage' ? (globalFee * (appliedCoupon.value / 100)) : Number(appliedCoupon.value)) : 0;
- const currentPrice = Math.max(0, globalFee - discountAmount);
+  const discountAmount = appliedCoupon ? (appliedCoupon.type === 'percentage' ? (globalFee * (appliedCoupon.value / 100)) : Number(appliedCoupon.value)) : 0;
+  const currentPrice = Math.max(0, globalFee - discountAmount);
 
   return (
-    <main className="min-h-screen bg-white text-slate-900 font-sans antialiased">
-      <LandingNavbar />
+    <main className="min-h-screen bg-white text-[#1e4a3a] font-sans antialiased">
 
-      <div className="pt-52 pb-24 container mx-auto px-4 lg:px-6">
+      <div className="pt-28 lg:pt-36 pb-24 w-full max-w-[1825px] mx-auto px-4 lg:px-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           
           {/* Left Column: Form Section */}
@@ -212,7 +207,7 @@ export default function InstantDoctorPage() {
 
             <div className="grid grid-cols-1 gap-6">
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.1em]">Contact Number <span className="text-rose-500">*</span></label>
+                <label className="text-[10px] font-bold text-[#1e4a3a] uppercase tracking-[0.1em]">Contact Number <span className="text-rose-500">*</span></label>
                 <input 
                   type="text"
                   value={patientData.phone}
@@ -223,7 +218,7 @@ export default function InstantDoctorPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.1em]">Reason</label>
+                <label className="text-[10px] font-bold text-[#1e4a3a] uppercase tracking-[0.1em]">Reason</label>
                 <input 
                   type="text"
                   value={patientData.reason}
@@ -234,13 +229,13 @@ export default function InstantDoctorPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-900 uppercase tracking-[0.1em]">Documents or Prescriptions</label>
+                <label className="text-[10px] font-bold text-[#1e4a3a] uppercase tracking-[0.1em]">Documents or Prescriptions</label>
                 <div className="border border-slate-300 rounded-lg p-6 flex flex-col items-center justify-center bg-white hover:bg-slate-50 transition-all cursor-pointer group relative">
                   <input 
                     type="file" multiple className="absolute inset-0 opacity-0 cursor-pointer"
                     onChange={(e) => setAttachedFiles(Array.from(e.target.files || []))}
                   />
-                  <div className="flex items-center gap-3 text-slate-900">
+                  <div className="flex items-center gap-3 text-[#1e4a3a]">
                     <div className="w-8 h-8 rounded border border-slate-300 flex items-center justify-center">
                       <Upload size={14} />
                     </div>
@@ -259,16 +254,16 @@ export default function InstantDoctorPage() {
                   <div className="p-4 space-y-3">
                     <div className="flex justify-between items-center text-[11px] font-medium">
                       <span className="text-slate-500 uppercase">Consultancy Fee</span>
-                      <span className="text-slate-950 font-bold">৳ {Number(globalFee).toFixed(2)}</span>
+                      <span className="text-[#1e4a3a] font-bold">৳ {Number(globalFee).toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between items-center text-[11px] font-medium">
                       <span className="text-slate-500 uppercase">Coupon Discount</span>
-                      <span className="text-slate-950 font-bold">− ৳ {Number(discountAmount).toFixed(2)}</span>
+                      <span className="text-[#1e4a3a] font-bold">− ৳ {Number(discountAmount).toFixed(2)}</span>
                     </div>
                     <div className="h-px bg-slate-100" />
                     <div className="flex justify-between items-center text-[13px]">
-                      <span className="text-slate-950 font-bold uppercase tracking-tight">Total Payable</span>
-                      <span className="text-slate-950 font-black text-[16px]">৳ {Number(currentPrice).toFixed(2)}</span>
+                      <span className="text-[#1e4a3a] font-bold uppercase tracking-tight">Total Payable</span>
+                      <span className="text-[#1e4a3a] font-black text-[16px]">৳ {Number(currentPrice).toFixed(2)}</span>
                     </div>
                   </div>
                </div>
@@ -277,14 +272,14 @@ export default function InstantDoctorPage() {
 
           <div className="lg:col-span-12 xl:col-span-5 space-y-8">
             <div className="space-y-4">
-              <h2 className="text-[12px] font-black text-slate-900 uppercase tracking-[0.2em]">Why Consult with Meditaj Doctor?</h2>
+              <h2 className="text-[12px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Why Consult with Meditaj Doctor?</h2>
               <div className="grid grid-cols-3 gap-3">
                 <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col items-center text-center space-y-3">
                   <div className="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-500">
                     <Stethoscope size={20} strokeWidth={2} />
                   </div>
                   <div>
-                    <p className="text-[14px] font-black text-slate-900 leading-tight">100%</p>
+                    <p className="text-[14px] font-black text-[#1e4a3a] leading-tight">100%</p>
                     <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1 whitespace-nowrap">Valid Prescription</p>
                   </div>
                 </div>
@@ -293,7 +288,7 @@ export default function InstantDoctorPage() {
                     <Users size={20} strokeWidth={2} />
                   </div>
                   <div>
-                    <p className="text-[14px] font-black text-slate-900 leading-tight">40+</p>
+                    <p className="text-[14px] font-black text-[#1e4a3a] leading-tight">40+</p>
                     <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1 whitespace-nowrap">Expert Doctors</p>
                   </div>
                 </div>
@@ -302,7 +297,7 @@ export default function InstantDoctorPage() {
                     <ShieldCheck size={20} strokeWidth={2} />
                   </div>
                   <div>
-                    <p className="text-[14px] font-black text-slate-900 leading-tight">100%</p>
+                    <p className="text-[14px] font-black text-[#1e4a3a] leading-tight">100%</p>
                     <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1 whitespace-nowrap">Secure & Private</p>
                   </div>
                 </div>
@@ -311,7 +306,7 @@ export default function InstantDoctorPage() {
 
             <div className="bg-white border border-slate-300 rounded-xl p-6 space-y-6">
               <div className="space-y-4">
-                <h3 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.2em]">Available Specialty</h3>
+                <h3 className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-[0.2em]">Available Specialty</h3>
                 <div className="grid grid-cols-2 gap-2">
                   {specialties.map((spec) => (
                     <button
@@ -319,8 +314,8 @@ export default function InstantDoctorPage() {
                       onClick={() => setSelectedSpecialty(spec)}
                       className={`h-11 px-3 border transition-all text-[10px] font-black uppercase tracking-widest rounded-lg ${
                         selectedSpecialty?.id === spec.id
-                        ? 'bg-slate-900 border-slate-900 text-white' 
-                        : 'bg-white border-slate-300 text-slate-400 hover:border-slate-900 hover:text-slate-900'
+                        ? 'bg-[#1e4a3a] border-[#1e4a3a] text-white' 
+                        : 'bg-white border-slate-300 text-slate-400 hover:border-[#1e4a3a] hover:text-[#1e4a3a]'
                       }`}
                     >
                       {spec.name}
@@ -335,7 +330,7 @@ export default function InstantDoctorPage() {
               </div>
 
               <div className="space-y-4">
-                <h3 className="text-[11px] font-bold text-slate-900 uppercase tracking-[0.2em]">Promo Code</h3>
+                <h3 className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-[0.2em]">Promo Code</h3>
                 <div className="flex gap-2">
                   <input 
                     type="text"
@@ -347,7 +342,7 @@ export default function InstantDoctorPage() {
                   <button 
                     onClick={handleApplyCoupon}
                     disabled={isVerifyingCoupon}
-                    className="h-11 px-6 bg-slate-900 text-white font-bold rounded-lg hover:bg-black transition-all text-[10px] uppercase tracking-widest"
+                    className="h-11 px-6 bg-[#1e4a3a] text-white font-bold rounded-lg hover:bg-black transition-all text-[10px] uppercase tracking-widest"
                   >
                     Apply
                   </button>
@@ -363,12 +358,12 @@ export default function InstantDoctorPage() {
                       onChange={(e) => setAgreedToTerms(e.target.checked)}
                       className="peer sr-only"
                     />
-                    <div className="w-4 h-4 border border-slate-300 rounded-sm peer-checked:bg-slate-900 peer-checked:border-slate-900 transition-all flex items-center justify-center text-white">
+                    <div className="w-4 h-4 border border-slate-300 rounded-sm peer-checked:bg-[#1e4a3a] peer-checked:border-[#1e4a3a] transition-all flex items-center justify-center text-white">
                       {agreedToTerms && <Check size={12} strokeWidth={4} />}
                     </div>
                   </div>
                   <span className="text-[9px] text-slate-500 font-bold uppercase tracking-tight leading-normal">
-                    Agree to <Link href="/terms" className="text-slate-900 underline">Terms</Link> and <Link href="/privacy" className="text-slate-900 underline">Privacy Policy</Link>
+                    Agree to <Link href="/terms" className="text-[#1e4a3a] underline">Terms</Link> and <Link href="/privacy" className="text-[#1e4a3a] underline">Privacy Policy</Link>
                   </span>
                 </label>
 
@@ -377,7 +372,7 @@ export default function InstantDoctorPage() {
                   disabled={!agreedToTerms || isSubmitting}
                   className={`w-full h-11 rounded-lg font-black text-[12px] tracking-[0.3em] uppercase transition-all flex items-center justify-center gap-2 ${
                     agreedToTerms && !isSubmitting
-                    ? 'bg-slate-950 text-white hover:bg-emerald-600' 
+                    ? 'bg-[#1e4a3a] text-white hover:bg-emerald-600' 
                     : 'bg-slate-100 text-slate-300 border border-slate-200 cursor-not-allowed'
                   }`}
                 >
@@ -390,7 +385,7 @@ export default function InstantDoctorPage() {
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-6 flex items-center justify-between">
               <div className="flex flex-col gap-1">
                 <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Secure Connection</span>
-                <span className="text-[11px] font-black text-slate-900 uppercase tracking-tighter flex items-center gap-2">
+                <span className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-tighter flex items-center gap-2">
                   <Lock size={12} className="text-emerald-500" />
                   Verified Doctor App
                 </span>
@@ -406,7 +401,7 @@ export default function InstantDoctorPage() {
         {/* FAQ Section: Accordion */}
         <div className="mt-24 max-w-3xl mx-auto space-y-6">
           <div className="text-center space-y-2 mb-12">
-            <h2 className="text-[16px] font-black text-slate-900 uppercase tracking-[0.2em]">Common Questions</h2>
+            <h2 className="text-[16px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Common Questions</h2>
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Everything you need to know about instant consult</p>
           </div>
           
@@ -426,7 +421,7 @@ export default function InstantDoctorPage() {
                     <div className={`w-8 h-8 rounded-lg ${faq.bg} flex items-center justify-center ${faq.color} border border-transparent group-hover:border-current transition-all backdrop-blur-sm`}>
                        <faq.icon size={16} strokeWidth={2.5} />
                     </div>
-                    <span className="text-[12px] font-black text-slate-900 uppercase tracking-tight">{faq.q}</span>
+                    <span className="text-[12px] font-black text-[#1e4a3a] uppercase tracking-tight">{faq.q}</span>
                   </div>
                   <ChevronDown size={16} className={`text-slate-400 transition-transform duration-300 ${openFaq === idx ? 'rotate-180' : ''}`} />
                 </button>
@@ -456,23 +451,23 @@ export default function InstantDoctorPage() {
       <AnimatePresence>
         {showAuthPopup && (
           <div key="auth-popup" className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-slate-950/40" onClick={() => setShowAuthPopup(false)} />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowAuthPopup(false)} />
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className={`relative w-full ${authMode === 'signup' ? 'max-w-[440px]' : 'max-w-[360px]'} bg-white rounded-xl p-8 shadow-2xl border border-slate-100 transition-all duration-300`}
             >
               <button 
                 onClick={() => setShowAuthPopup(false)}
-                className="absolute top-6 right-6 p-1.5 text-slate-400 hover:text-slate-950 hover:bg-slate-50 rounded-lg transition-all z-10"
+                className="absolute top-6 right-6 p-1.5 text-slate-400 hover:text-[#1e4a3a] hover:bg-slate-50 rounded-lg transition-all z-10"
               >
                 <X size={18} />
               </button>
               <div className="flex items-start gap-4 mb-8">
-                <div className="w-11 h-11 bg-slate-950 rounded-xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-slate-900/10 transition-all">
+                <div className="w-11 h-11 bg-[#1e4a3a] rounded-xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-[#1e4a3a]/10 transition-all">
                   {authMode === 'login' ? <UserCheck size={20} /> : <Sparkles size={20} />}
                 </div>
                 <div>
-                  <h3 className="text-[17px] font-bold text-slate-900 leading-none mb-1.5">{authMode === 'login' ? 'Welcome back' : 'Create account'}</h3>
+                  <h3 className="text-[17px] font-bold text-[#1e4a3a] leading-none mb-1.5">{authMode === 'login' ? 'Welcome back' : 'Create account'}</h3>
                   <p className="text-[11px] text-slate-400 font-medium leading-relaxed">
                     {authMode === 'login' ? 'Sign in to access your profile' : 'Please provide your details below'}
                   </p>
@@ -483,7 +478,6 @@ export default function InstantDoctorPage() {
                 
                 {authMode === 'signup' && (
                   <>
-                    {/* Profile Image Upload */}
                     <div className="flex flex-col items-center gap-3 mb-6">
                       <div className="relative group">
                         <div className="w-20 h-20 rounded-full bg-slate-50 border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-300 group-hover:border-slate-400 transition-all overflow-hidden">
@@ -493,7 +487,7 @@ export default function InstantDoctorPage() {
                             <Camera size={20} />
                           )}
                         </div>
-                        <label className="absolute -bottom-1 -right-1 w-7 h-7 bg-slate-950 text-white rounded-full flex items-center justify-center cursor-pointer hover:bg-emerald-600 transition-all shadow-lg">
+                        <label className="absolute -bottom-1 -right-1 w-7 h-7 bg-[#1e4a3a] text-white rounded-full flex items-center justify-center cursor-pointer hover:bg-emerald-600 transition-all shadow-lg">
                           <Camera size={12} />
                           <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
                         </label>
@@ -506,7 +500,7 @@ export default function InstantDoctorPage() {
                       <input 
                         type="text" value={signupData.fullName} onChange={(e) => setSignupData({...signupData, fullName: e.target.value})}
                         placeholder="e.g. Hasan Rafi"
-                        className="w-full h-11 px-4 border border-slate-200 rounded-lg text-sm font-medium outline-none focus:border-slate-900 transition-all placeholder:text-slate-200 bg-slate-50/50"
+                        className="w-full h-11 px-4 border border-slate-200 rounded-lg text-sm font-medium outline-none focus:border-[#1e4a3a] transition-all placeholder:text-slate-200 bg-slate-50/50"
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-3">
@@ -514,7 +508,7 @@ export default function InstantDoctorPage() {
                         <label className="text-[11px] font-bold text-slate-400 ml-1">DOB</label>
                         <input 
                           type="date" value={signupData.dob} onChange={(e) => setSignupData({...signupData, dob: e.target.value})}
-                          className="w-full h-11 px-4 border border-slate-200 rounded-lg text-sm font-medium outline-none focus:border-slate-900 transition-all bg-slate-50/50"
+                          className="w-full h-11 px-4 border border-slate-200 rounded-lg text-sm font-medium outline-none focus:border-[#1e4a3a] transition-all bg-slate-50/50"
                         />
                       </div>
                       <div className="space-y-1.5">
@@ -522,7 +516,7 @@ export default function InstantDoctorPage() {
                         <input 
                           type="tel" value={signupData.phone} onChange={(e) => setSignupData({...signupData, phone: e.target.value})}
                           placeholder="+880"
-                          className="w-full h-11 px-4 border border-slate-200 rounded-lg text-sm font-medium outline-none focus:border-slate-900 transition-all placeholder:text-slate-200 bg-slate-50/50"
+                          className="w-full h-11 px-4 border border-slate-200 rounded-lg text-sm font-medium outline-none focus:border-[#1e4a3a] transition-all placeholder:text-slate-200 bg-slate-50/50"
                         />
                       </div>
                     </div>
@@ -536,7 +530,7 @@ export default function InstantDoctorPage() {
                   <input 
                     type="email" value={email} onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@example.com"
-                    className="w-full h-11 px-4 border border-slate-200 rounded-lg text-sm font-medium outline-none focus:border-slate-900 transition-all placeholder:text-slate-200 bg-slate-50/50"
+                    className="w-full h-11 px-4 border border-slate-200 rounded-lg text-sm font-medium outline-none focus:border-[#1e4a3a] transition-all placeholder:text-slate-200 bg-slate-50/50"
                   />
                 </div>
 
@@ -547,21 +541,21 @@ export default function InstantDoctorPage() {
                       <input 
                         type="text" value={signupData.address} onChange={(e) => setSignupData({...signupData, address: e.target.value})}
                         placeholder="House/Road/Area"
-                        className="w-full h-11 px-4 border border-slate-200 rounded-lg text-sm font-medium outline-none focus:border-slate-900 transition-all placeholder:text-slate-200 bg-slate-50/50"
+                        className="w-full h-11 px-4 border border-slate-200 rounded-lg text-sm font-medium outline-none focus:border-[#1e4a3a] transition-all placeholder:text-slate-200 bg-slate-50/50"
                       />
                     </div>
                     <div className="grid grid-cols-3 gap-2">
                        <div className="space-y-1.5">
                           <label className="text-[11px] font-bold text-slate-400 ml-1">City</label>
-                          <input type="text" value={signupData.city} onChange={(e) => setSignupData({...signupData, city: e.target.value})} placeholder="City" className="w-full h-11 px-3 border border-slate-200 rounded-lg text-xs font-medium outline-none focus:border-slate-900 transition-all bg-slate-50/50" />
+                          <input type="text" value={signupData.city} onChange={(e) => setSignupData({...signupData, city: e.target.value})} placeholder="City" className="w-full h-11 px-3 border border-slate-200 rounded-lg text-xs font-medium outline-none focus:border-[#1e4a3a] transition-all bg-slate-50/50" />
                        </div>
                        <div className="space-y-1.5">
                           <label className="text-[11px] font-bold text-slate-400 ml-1">Country</label>
-                          <input type="text" value={signupData.country} onChange={(e) => setSignupData({...signupData, country: e.target.value})} placeholder="BD" className="w-full h-11 px-3 border border-slate-200 rounded-lg text-xs font-medium outline-none focus:border-slate-900 transition-all bg-slate-50/50" />
+                          <input type="text" value={signupData.country} onChange={(e) => setSignupData({...signupData, country: e.target.value})} placeholder="BD" className="w-full h-11 px-3 border border-slate-200 rounded-lg text-xs font-medium outline-none focus:border-[#1e4a3a] transition-all bg-slate-50/50" />
                        </div>
                        <div className="space-y-1.5">
                           <label className="text-[11px] font-bold text-slate-400 ml-1">Postal</label>
-                          <input type="text" value={signupData.postalCode} onChange={(e) => setSignupData({...signupData, postalCode: e.target.value})} placeholder="Code" className="w-full h-11 px-3 border border-slate-200 rounded-lg text-xs font-medium outline-none focus:border-slate-900 transition-all bg-slate-50/50" />
+                          <input type="text" value={signupData.postalCode} onChange={(e) => setSignupData({...signupData, postalCode: e.target.value})} placeholder="Code" className="w-full h-11 px-3 border border-slate-200 rounded-lg text-xs font-medium outline-none focus:border-[#1e4a3a] transition-all bg-slate-50/50" />
                        </div>
                     </div>
                     <div className="grid grid-cols-2 gap-3 pb-2">
@@ -603,7 +597,7 @@ export default function InstantDoctorPage() {
                   <input 
                     type="password" value={password} onChange={(e) => setPassword(e.target.value)}
                     placeholder="Min. 8 characters"
-                    className="w-full h-11 px-4 border border-slate-200 rounded-lg text-sm font-medium outline-none focus:border-slate-900 transition-all placeholder:text-slate-200 bg-slate-50/50"
+                    className="w-full h-11 px-4 border border-slate-200 rounded-lg text-sm font-medium outline-none focus:border-[#1e4a3a] transition-all placeholder:text-slate-200 bg-slate-50/50"
                   />
                 </div>
               </div>
@@ -612,7 +606,7 @@ export default function InstantDoctorPage() {
                 <button 
                   onClick={authMode === 'login' ? handleLogin : handleSignup}
                   disabled={isSubmitting}
-                  className="w-full h-11 bg-slate-950 text-white rounded-lg text-[12px] font-bold flex items-center justify-center hover:bg-emerald-600 transition-all disabled:opacity-50 shadow-xl shadow-slate-900/10"
+                  className="w-full h-11 bg-[#1e4a3a] text-white rounded-lg text-[12px] font-bold flex items-center justify-center hover:bg-emerald-600 transition-all disabled:opacity-50 shadow-xl shadow-[#1e4a3a]/10"
                 >
                   {isSubmitting ? 'Please wait...' : authMode === 'login' ? 'Sign in' : 'Create account'}
                 </button>
@@ -622,7 +616,7 @@ export default function InstantDoctorPage() {
                     {authMode === 'login' ? "Don't have an account?" : "Already have an account?"}
                     <button 
                       onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')}
-                      className="ml-1 font-bold text-slate-900 hover:text-emerald-600 transition-colors"
+                      className="ml-1 font-bold text-[#1e4a3a] hover:text-emerald-600 transition-colors"
                     >
                       {authMode === 'login' ? 'Create one' : 'Sign in'}
                     </button>

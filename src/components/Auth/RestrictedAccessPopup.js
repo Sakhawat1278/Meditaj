@@ -11,7 +11,7 @@ export default function RestrictedAccessPopup({ isOpen, onClose, referenceId }) 
  initial={{ opacity: 0 }}
  animate={{ opacity: 1 }}
  exit={{ opacity: 0 }}
- className="absolute inset-0 bg-slate-900/40"
+ className="absolute inset-0 bg-[#1e4a3a]/40"
  />
  
  <motion.div 
@@ -26,7 +26,7 @@ export default function RestrictedAccessPopup({ isOpen, onClose, referenceId }) 
  <Lock size={18} />
  </div>
  <div className="pt-0.5">
- <h2 className="text-[14px] font-bold text-slate-900 tracking-tight uppercase leading-none mb-2">Access Restricted</h2>
+ <h2 className="text-[14px] font-bold text-[#1e4a3a] tracking-tight uppercase leading-none mb-2">Access Restricted</h2>
  <p className="text-[12px] text-slate-500 font-medium leading-relaxed">
  Your medical profile has been <span className="text-rose-600 font-bold">Deactivated</span> by the hospital administration. Please verify your credentials or contact support.
  </p>
@@ -36,7 +36,7 @@ export default function RestrictedAccessPopup({ isOpen, onClose, referenceId }) 
  <div className="space-y-2">
  <a 
  href="tel:+8801700000000" 
- className="w-full h-9 bg-slate-900 text-white rounded-lg text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-black transition-all"
+ className="w-full h-9 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-[#163529] transition-all"
  >
  <Phone size={12} className="text-rose-400" />
  Speak to Support

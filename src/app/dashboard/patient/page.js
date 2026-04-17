@@ -106,7 +106,7 @@ export default function PatientDashboard() {
  </h1>
  <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest mt-1">Your Personal Wellness Hub</p>
  </div>
- <Link href="/doctors" className="h-10 px-6 bg-slate-900 text-white rounded-lg text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-slate-800 transition-all group">
+ <Link href="/doctors" className="h-10 px-6 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-slate-800 transition-all group">
  <Sparkles size={14} className="text-amber-400" />
  Book New Consultation
  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -255,7 +255,7 @@ export default function PatientDashboard() {
  </div>
  </div>
 
- <div className="bg-slate-900 rounded-xl p-6 text-white relative overflow-hidden group">
+ <div className="bg-[#1e4a3a] rounded-xl p-6 text-white relative overflow-hidden group">
  <div className="absolute top-0 left-0 w-32 h-32 bg-med-primary/10 rounded-full blur-2xl -translate-y-1/2 -translate-x-1/2" />
  <h3 className="text-sm font-bold tracking-tight mb-3 italic flex items-center gap-2">
  <TrendingUp size={16} className="text-med-primary" />

@@ -5,19 +5,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ShoppingCart, Trash2, ArrowRight, ChevronRight, 
   ShieldCheck, Lock, Info, Plus, Minus,
-  Activity, Microscope, Heart, Calendar, Clock, MapPin, Hand
+  Activity, Microscope, Heart, Calendar, Clock, MapPin, Hand, Phone
 } from 'lucide-react';
-import LandingNavbar from '@/components/Home/LandingNavbar';
-import { useLanguage } from '@/context/LanguageContext';
-import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
+import { useCart } from '@/context/CartContext';
 import { toast } from 'react-hot-toast';
 import DatePicker from '@/components/UI/DatePicker';
 import CustomDropdown from '@/components/UI/CustomDropdown';
 
 export default function CartPage() {
   const router = useRouter();
-  const { t } = useLanguage();
   const { user, profile } = useAuth();
   const { cartItems, removeFromCart, clearCart, getSubtotal, cartCount } = useCart();
   
@@ -47,17 +44,12 @@ export default function CartPage() {
       return;
     }
     
-    // Validate checkout details if needed
     if (!formData.date || !formData.time || !formData.phone || !formData.location) {
       toast.error('Please complete Scheduling & Contact details');
       return;
     }
 
     const subtotal = getSubtotal();
-    
-    // For Meditaj, we usually group by type or just send the whole cart
-    // If it's pure Lab Tests, it's easy. If it's a mix, we need to handle it in checkout.
-    // For now, let's assume a unified checkout session.
     
     const checkoutSession = {
       type: cartItems[0]?.type || 'general',
@@ -70,7 +62,6 @@ export default function CartPage() {
       discount: 0
     };
 
-    // Special handling for legacy 'type' check in checkout page
     if (cartItems.every(i => i.type === 'lab')) {
       checkoutSession.type = 'lab';
       checkoutSession.tests = cartItems;
@@ -91,19 +82,17 @@ export default function CartPage() {
 
   return (
     <main className="min-h-screen bg-white">
-      <LandingNavbar />
 
-      <div className="pt-52 pb-12 w-full max-w-[1600px] mx-auto px-6 lg:px-12 xl:px-16">
+      <div className="pt-28 lg:pt-36 pb-12 w-full max-w-[1825px] mx-auto px-6 lg:px-12 xl:px-16">
         <div className="flex flex-col gap-8">
           
-          {/* Header */}
           <div className="flex items-center justify-between border-b border-slate-100 pb-6">
             <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-slate-950 rounded-lg flex items-center justify-center text-white border border-black">
+              <div className="w-10 h-10 bg-[#1e4a3a] rounded-lg flex items-center justify-center text-white border border-black">
                 <ShoppingCart size={20} />
               </div>
               <div>
-                <h1 className="text-xl font-black text-slate-900 tracking-tighter uppercase">My Health Cart</h1>
+                <h1 className="text-xl font-black text-[#1e4a3a] tracking-tighter uppercase">My Health Cart</h1>
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                   <span className="text-emerald-500">Active Session</span> • {cartCount} Services Selected
                 </p>
@@ -126,21 +115,21 @@ export default function CartPage() {
               <div className="w-20 h-20 bg-white rounded-xl flex items-center justify-center text-slate-200 mb-6 border border-slate-300 shadow-sm">
                 <ShoppingCart size={40} strokeWidth={1} />
               </div>
-              <h2 className="text-xl font-bold text-slate-900 mb-2 uppercase tracking-tight">Your cart is empty</h2>
+              <h2 className="text-xl font-bold text-[#1e4a3a] mb-2 uppercase tracking-tight">Your cart is empty</h2>
               <p className="text-slate-400 font-bold uppercase tracking-widest text-[11px] mb-8">Start adding medical services to see them here.</p>
               <div className="flex flex-col sm:flex-row items-center gap-4">
                 <button 
                   onClick={() => router.push('/labs')}
-                  className="h-12 px-8 bg-slate-950 text-white rounded-xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-black transition-all flex items-center gap-3 group border border-slate-900 shadow-xl"
+                  className="h-12 px-8 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-black transition-all flex items-center gap-3 group border border-[#1e4a3a] shadow-xl"
                 >
                   <Microscope size={14} className="text-slate-400 group-hover:text-white transition-colors" />
                   Lab Tests
                 </button>
                 <button 
                   onClick={() => router.push('/nursing')}
-                  className="h-12 px-8 bg-white border border-slate-300 text-slate-950 rounded-xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center gap-3 group shadow-sm"
+                  className="h-12 px-8 bg-white border border-slate-300 text-[#1e4a3a] rounded-xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center gap-3 group shadow-sm"
                 >
-                  <Hand size={14} className="text-slate-400 group-hover:text-slate-950 transition-colors" />
+                  <Hand size={14} className="text-slate-400 group-hover:text-[#1e4a3a] transition-colors" />
                   Nursing & Care
                 </button>
               </div>
@@ -148,12 +137,10 @@ export default function CartPage() {
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
               
-              {/* Left: Cart Items & Scheduling */}
               <div className="lg:col-span-8 space-y-8">
                 
-                {/* Items List */}
                 <div className="space-y-4">
-                  <h3 className="text-[12px] font-black text-slate-950 uppercase tracking-[0.2em] ml-1 mb-4 flex items-center gap-3">
+                  <h3 className="text-[12px] font-black text-[#1e4a3a] uppercase tracking-[0.2em] ml-1 mb-4 flex items-center gap-3">
                     Selected Services
                     <span className="w-5 h-5 bg-slate-100 rounded-full flex items-center justify-center text-[10px] text-slate-500 border border-slate-200">{cartCount}</span>
                   </h3>
@@ -181,11 +168,11 @@ export default function CartPage() {
                                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-tight">{item.category}</span>
                                 )}
                               </div>
-                              <h4 className="text-[15px] font-black text-slate-900 tracking-tight">{item.name}</h4>
+                              <h4 className="text-[15px] font-black text-[#1e4a3a] tracking-tight">{item.name}</h4>
                               <p className="text-[11px] font-bold text-slate-400 mt-0.5 line-clamp-1">{item.providerName || 'Meditaj Certified Doctor'}</p>
                             </div>
                             <div className="text-right flex flex-col items-end gap-3 px-4">
-                              <p className="text-[16px] font-black text-slate-950 font-mono tracking-tighter">৳{item.price}</p>
+                              <p className="text-[16px] font-black text-[#1e4a3a] font-mono tracking-tighter">৳{item.price}</p>
                               <button 
                                 onClick={() => removeFromCart(item.id, item.type)}
                                 className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-300 hover:text-rose-500 hover:bg-rose-50 transition-all border border-transparent hover:border-rose-100"
@@ -200,9 +187,8 @@ export default function CartPage() {
                   </div>
                 </div>
 
-                {/* Scheduling Details */}
                 <div className="space-y-6 pt-4">
-                  <h3 className="text-[12px] font-black text-slate-950 uppercase tracking-[0.2em] ml-1 flex items-center gap-3">
+                  <h3 className="text-[12px] font-black text-[#1e4a3a] uppercase tracking-[0.2em] ml-1 flex items-center gap-3">
                     Scheduling & Contact
                     <div className="flex-1 h-px bg-slate-200" />
                   </h3>
@@ -241,7 +227,7 @@ export default function CartPage() {
                           value={formData.phone}
                           onChange={(e) => setFormData({...formData, phone: e.target.value})}
                           placeholder="01XXXXXXXXX"
-                          className="w-full h-12 px-5 bg-white border border-slate-300 rounded-lg outline-none text-[13px] font-bold focus:border-slate-950 transition-all placeholder:text-slate-200"
+                          className="w-full h-12 px-5 bg-white border border-slate-300 rounded-lg outline-none text-[13px] font-bold focus:border-[#1e4a3a] transition-all placeholder:text-slate-200"
                         />
                       </div>
                       <div className="space-y-1.5">
@@ -253,7 +239,7 @@ export default function CartPage() {
                           value={formData.location}
                           onChange={(e) => setFormData({...formData, location: e.target.value})}
                           placeholder="House, Road, Area..."
-                          className="w-full h-12 px-5 py-3 bg-white border border-slate-300 rounded-lg outline-none text-[13px] font-bold focus:border-slate-950 transition-all placeholder:text-slate-200 resize-none"
+                          className="w-full h-12 px-5 py-3 bg-white border border-slate-300 rounded-lg outline-none text-[13px] font-bold focus:border-[#1e4a3a] transition-all placeholder:text-slate-200 resize-none"
                         />
                       </div>
                     </div>
@@ -261,26 +247,25 @@ export default function CartPage() {
                 </div>
               </div>
 
-              {/* Right: Summary */}
               <div className="lg:col-span-4">
-                <div className="bg-white border border-slate-300 rounded-xl p-8 sticky top-44 overflow-hidden relative">
+                <div className="bg-white border border-slate-300 rounded-xl p-8 sticky top-44 overflow-hidden relative shadow-xl shadow-[#1e4a3a]/5">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-full blur-3xl -z-10 -mr-16 -mt-16 opacity-40" />
                   
-                  <h3 className="text-[11px] font-black text-slate-950 uppercase tracking-[0.2em] mb-8">Service Summary</h3>
+                  <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-[0.2em] mb-8">Service Summary</h3>
                   
                   <div className="space-y-6">
                     <div className="space-y-4">
                       <div className="flex justify-between items-center text-[13px] font-bold">
                         <span className="text-slate-400 uppercase tracking-widest leading-none">Subtotal</span>
-                        <span className="text-slate-900 font-mono tracking-tighter">৳{getSubtotal()}</span>
+                        <span className="text-[#1e4a3a] font-mono tracking-tighter">৳{getSubtotal()}</span>
                       </div>
                       <div className="flex justify-between items-center text-[13px] font-bold pb-2 border-b border-slate-200">
                         <span className="text-slate-400 uppercase tracking-widest leading-none">Vat / Taxes</span>
-                        <span className="text-slate-900 font-mono tracking-tighter">৳0.00</span>
+                        <span className="text-[#1e4a3a] font-mono tracking-tighter">৳0.00</span>
                       </div>
                       <div className="flex justify-between items-center text-[16px] font-black pt-4">
-                        <span className="text-slate-950 uppercase tracking-[0.2em] leading-none">Total Payable</span>
-                        <span className="text-slate-950 font-mono tracking-tighter text-2xl">৳{getSubtotal()}</span>
+                        <span className="text-[#1e4a3a] uppercase tracking-[0.2em] leading-none">Total Payable</span>
+                        <span className="text-[#1e4a3a] font-mono tracking-tighter text-2xl">৳{getSubtotal()}</span>
                       </div>
                     </div>
 
@@ -288,7 +273,7 @@ export default function CartPage() {
                       <button
                         onClick={handleCheckout}
                         disabled={cartCount === 0}
-                        className="w-full h-12 bg-slate-950 hover:bg-black text-white rounded-lg text-[11px] font-bold uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3"
+                        className="w-full h-12 bg-[#1e4a3a] hover:bg-black text-white rounded-lg text-[11px] font-bold uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-3 shadow-lg shadow-[#1e4a3a]/10"
                       >
                         Proceed to Checkout
                         <ArrowRight size={16} />
@@ -300,8 +285,6 @@ export default function CartPage() {
                         Add More Services
                       </button>
                     </div>
-
-
                   </div>
                 </div>
               </div>
@@ -316,24 +299,5 @@ export default function CartPage() {
         .scrollbar-thin::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
       `}</style>
     </main>
-  );
-}
-
-function Phone({ size, className }) {
-  return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      width={size} 
-      height={size} 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      className={className}
-    >
-      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l2.27-2.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-    </svg>
   );
 }

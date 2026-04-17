@@ -53,7 +53,7 @@ export default function ReceptionistDashboard() {
  <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest mt-1">Real-time Patient Flow & Queue Management</p>
  </div>
  <div className="flex items-center gap-3">
- <button className="h-10 px-6 bg-slate-900 text-white rounded-lg text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-slate-800 transition-all group">
+ <button className="h-10 px-6 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-slate-800 transition-all group">
  <Plus size={14} className="text-emerald-400" />
  New Appointment
  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
@@ -86,7 +86,7 @@ export default function ReceptionistDashboard() {
  
  <div className="flex items-center gap-3 w-full lg:w-auto">
  <div className="relative flex-1 lg:w-[420px] group">
- <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-slate-900 transition-colors" size={16} />
+ <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#1e4a3a] transition-colors" size={16} />
  <input 
  type="text" 
  placeholder="Search identifier, name or contact..."
@@ -108,7 +108,7 @@ export default function ReceptionistDashboard() {
  <thead>
  <tr className="bg-slate-50/50 border-b border-slate-100">
  {['ID No.', 'Patient Name', 'Status', 'Due', 'Phone', 'Age', 'Next Appointment', 'Action'].map((head, i) => (
- <th key={i} className="px-8 py-5 text-[10px] font-bold text-slate-900 uppercase tracking-widest whitespace-nowrap">
+ <th key={i} className="px-8 py-5 text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest whitespace-nowrap">
  {head}
  </th>
  ))}
@@ -128,7 +128,7 @@ export default function ReceptionistDashboard() {
  <div className="w-9 h-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-[11px] font-bold text-slate-400 group-hover:border-slate-300 transition-colors">
  {patient.name.charAt(0)}
  </div>
- <span className="text-[14px] font-bold text-slate-900 tracking-tight uppercase">{patient.name}</span>
+ <span className="text-[14px] font-bold text-[#1e4a3a] tracking-tight uppercase">{patient.name}</span>
  </div>
  </td>
  <td className="px-8 py-6">
@@ -155,7 +155,7 @@ export default function ReceptionistDashboard() {
  <span className="text-[12px] font-bold text-slate-600 tracking-tight uppercase">{patient.nextAppt}</span>
  </td>
  <td className="px-8 py-6 text-right">
- <button className="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-300 hover:text-slate-900 hover:bg-white hover:border-slate-400 hover: transition-all opacity-0 group-hover:opacity-100">
+ <button className="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center text-slate-300 hover:text-[#1e4a3a] hover:bg-white hover:border-slate-400 hover: transition-all opacity-0 group-hover:opacity-100">
  <MoreHorizontal size={18} />
  </button>
  </td>
@@ -209,7 +209,7 @@ export default function ReceptionistDashboard() {
 
  {/* Sidebar: Health Profile Summary */}
  <div className="space-y-6">
- <div className="bg-slate-900 rounded-xl p-6 text-white relative overflow-hidden group">
+ <div className="bg-[#1e4a3a] rounded-xl p-6 text-white relative overflow-hidden group">
  <div className="absolute top-0 right-0 w-32 h-32 bg-med-primary/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-700" />
  <h3 className="text-sm font-bold tracking-tight mb-4 flex items-center gap-2 italic relative z-10">
  <Stethoscope size={16} className="text-med-primary" />

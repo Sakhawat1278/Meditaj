@@ -10,14 +10,12 @@ import {
   ChevronRight, ChevronDown, Sparkles, ShieldCheck, Home, Stethoscope, LayoutGrid,
   Ambulance, FlaskConical, ClipboardPlus, Boxes, LayoutPanelLeft, UserCog, Loader2, MapPin
 } from 'lucide-react';
-import { useLanguage } from '@/context/LanguageContext';
 import { useAuth } from '@/context/AuthContext';
 import { db } from '@/lib/firebase';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import RestrictedAccessPopup from '@/components/Auth/RestrictedAccessPopup';
 
 export default function DashboardLayout({ children, role = 'patient' }) {
- const { t } = useLanguage();
  const { logout, profile } = useAuth();
  const router = useRouter();
  const pathname = usePathname();
@@ -149,7 +147,7 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  initial={false}
  animate={{ width: isSidebarOpen ? '260px' : '80px' }}
  transition={{ type: "spring", stiffness: 300, damping: 30 }}
- className="fixed lg:relative z-50 h-full bg-[#ECF4E8] flex flex-col transition-shadow duration-300 ease-in-out border-r border-slate-900/20 overflow-hidden"
+ className="fixed lg:relative z-50 h-full bg-[#ECF4E8] flex flex-col transition-shadow duration-300 ease-in-out border-r border-[#1e4a3a]/20 overflow-hidden"
  >
  {/* Sidebar Header with Integrated Toggle */}
  <div className={`h-[72px] flex items-center mb-2 px-6 ${isSidebarOpen ? 'justify-between' : 'justify-center'}`}>
@@ -166,7 +164,7 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center shrink-0 -500/20">
  <Sparkles size={16} className="text-white" />
  </div>
- <span className="font-extrabold text-slate-900 tracking-tighter text-xl uppercase truncate">
+ <span className="font-extrabold text-[#1e4a3a] tracking-tighter text-xl uppercase truncate">
  Meditaj
  </span>
  </motion.div>
@@ -175,7 +173,7 @@ export default function DashboardLayout({ children, role = 'patient' }) {
 
  <button 
  onClick={() => setIsSidebarOpen(!isSidebarOpen)}
- className={`flex items-center justify-center transition-all shrink-0 ${isSidebarOpen ? 'w-9 h-9 border border-slate-900/20 rounded-lg text-slate-400 hover:bg-slate-50 hover:text-slate-900' : 'w-12 h-12 rounded-lg bg-slate-900 text-white border border-slate-900/20'}`}
+ className={`flex items-center justify-center transition-all shrink-0 ${isSidebarOpen ? 'w-9 h-9 border border-[#1e4a3a]/20 rounded-lg text-slate-400 hover:bg-slate-50 hover:text-[#1e4a3a]' : 'w-12 h-12 rounded-lg bg-[#1e4a3a] text-white border border-[#1e4a3a]/20'}`}
  >
  {isSidebarOpen ? <X size={18} /> : <Menu size={20} />}
  </button>
@@ -204,10 +202,10 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  <div key={`dropdown-${idx}`} className="space-y-1">
  <button
  onClick={() => toggleGroup(item.id)}
- className={`w-full group flex items-center transition-all relative ${isSidebarOpen ? 'gap-4 h-11 px-4 rounded-lg' : 'justify-center h-12 w-12 mx-auto rounded-lg'} ${(isAnyChildActive || isExpanded) ? 'bg-slate-50 text-slate-900 border border-slate-100/50' : 'text-slate-600 hover:bg-slate-900/10 hover:text-slate-900'}`}
+ className={`w-full group flex items-center transition-all relative ${isSidebarOpen ? 'gap-4 h-11 px-4 rounded-lg' : 'justify-center h-12 w-12 mx-auto rounded-lg'} ${(isAnyChildActive || isExpanded) ? 'bg-slate-50 text-[#1e4a3a] border border-slate-100/50' : 'text-slate-600 hover:bg-[#1e4a3a]/10 hover:text-[#1e4a3a]'}`}
  >
  <div className="flex items-center justify-center shrink-0">
- <item.icon size={18} className={`shrink-0 ${(isAnyChildActive || isExpanded) ? 'text-slate-900' : (item.color || 'text-slate-400')}`} />
+ <item.icon size={18} className={`shrink-0 ${(isAnyChildActive || isExpanded) ? 'text-[#1e4a3a]' : (item.color || 'text-slate-400')}`} />
  </div>
  {isSidebarOpen && (
  <>
@@ -228,7 +226,7 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  <Link 
  key={`child-${cIdx}`} 
  href={childUrl}
- className={`flex items-center gap-4 h-10 px-4 rounded-lg transition-all ${isChildActive ? 'bg-slate-900 text-white -200' : 'text-slate-500 hover:bg-slate-50'}`}
+ className={`flex items-center gap-4 h-10 px-4 rounded-lg transition-all ${isChildActive ? 'bg-[#1e4a3a] text-white -200' : 'text-slate-500 hover:bg-slate-50'}`}
  >
  <child.icon size={14} className={isChildActive ? 'text-white' : (child.color || 'text-slate-300')} />
  <span className="text-[12px] font-bold tracking-tight">{child.name}</span>
@@ -250,7 +248,7 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  <Link 
  key={item.view || item.name} 
  href={itemUrl}
- className={`group flex items-center transition-all relative ${isSidebarOpen ? 'gap-4 h-11 px-4 rounded-lg' : 'justify-center h-12 w-12 mx-auto rounded-lg'} ${isActive ? 'bg-slate-900 text-white -300' : 'text-slate-600 hover:bg-slate-900/10 hover:text-slate-900'}`}
+ className={`group flex items-center transition-all relative ${isSidebarOpen ? 'gap-4 h-11 px-4 rounded-lg' : 'justify-center h-12 w-12 mx-auto rounded-lg'} ${isActive ? 'bg-[#1e4a3a] text-white -300' : 'text-slate-600 hover:bg-[#1e4a3a]/10 hover:text-[#1e4a3a]'}`}
  >
  <div className="flex items-center justify-center shrink-0">
  <div className="relative">
@@ -270,7 +268,7 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  )}
  
  {!isSidebarOpen && (
- <div className="fixed left-20 ml-2 px-3 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-[100] whitespace-nowrap uppercase tracking-widest">
+ <div className="fixed left-20 ml-2 px-3 py-1.5 bg-[#1e4a3a] text-white text-[10px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-[100] whitespace-nowrap uppercase tracking-widest">
  {item.name}
  </div>
  )}
@@ -288,7 +286,7 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  <Home size={18} />
  {isSidebarOpen && <span className="text-[13px] font-bold tracking-tight">Go to Home</span>}
  {!isSidebarOpen && (
- <div className="fixed left-20 ml-2 px-3 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-[100] whitespace-nowrap uppercase tracking-widest hidden lg:block">
+ <div className="fixed left-20 ml-2 px-3 py-1.5 bg-[#1e4a3a] text-white text-[10px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-[100] whitespace-nowrap uppercase tracking-widest hidden lg:block">
  Go to Home
  </div>
  )}
@@ -300,7 +298,7 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  <LogOut size={18} />
  {isSidebarOpen && <span className="text-[13px] font-bold tracking-tight">Sign Out</span>}
  {!isSidebarOpen && (
- <div className="fixed left-20 ml-2 px-3 py-1.5 bg-slate-900 text-white text-[10px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-[100] whitespace-nowrap uppercase tracking-widest hidden lg:block">
+ <div className="fixed left-20 ml-2 px-3 py-1.5 bg-[#1e4a3a] text-white text-[10px] font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-[100] whitespace-nowrap uppercase tracking-widest hidden lg:block">
  Sign Out
  </div>
  )}
@@ -313,12 +311,12 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  
  {/* Top Tier Header (Integrated & Slim) */}
  <header className="h-[72px] px-8 shrink-0 relative z-40">
- <div className="flex items-center justify-between h-full border-b border-slate-900/5">
+ <div className="flex items-center justify-between h-full border-b border-[#1e4a3a]/5">
  <div className="flex items-center gap-6">
  <div className="flex flex-col">
- <h1 className="text-[14px] font-extrabold text-slate-900 tracking-tight leading-none uppercase">Admin Terminal</h1>
+ <h1 className="text-[14px] font-extrabold text-[#1e4a3a] tracking-tight leading-none uppercase">Admin Terminal</h1>
  </div>
- <div className="hidden lg:flex items-center gap-2 h-9 px-4 bg-slate-50 border border-slate-900/20 rounded-lg w-[280px]">
+ <div className="hidden lg:flex items-center gap-2 h-9 px-4 bg-slate-50 border border-[#1e4a3a]/20 rounded-lg w-[280px]">
  <Search size={14} className="text-slate-400" />
  <input type="text" placeholder="Global command search..." className="bg-transparent outline-none flex-1 text-[11px] font-bold text-slate-600 placeholder:text-slate-400" />
  </div>
@@ -328,7 +326,7 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  <div className="relative">
  <button 
  onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
- className={`relative w-10 h-10 ${isNotificationsOpen ? 'bg-slate-900 text-white' : 'bg-white/80'} border border-slate-900/20 rounded-lg flex items-center justify-center text-slate-500 hover:bg-white hover:text-slate-900 transition-all`}
+ className={`relative w-10 h-10 ${isNotificationsOpen ? 'bg-[#1e4a3a] text-white' : 'bg-white/80'} border border-[#1e4a3a]/20 rounded-lg flex items-center justify-center text-slate-500 hover:bg-white hover:text-[#1e4a3a] transition-all`}
  >
  <Bell size={18} className={isNotificationsOpen ? 'text-white' : ''} />
  {pendingCount > 0 && (
@@ -345,10 +343,10 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  initial={{ opacity: 0, y: 10, scale: 0.95 }}
  animate={{ opacity: 1, y: 0, scale: 1 }}
  exit={{ opacity: 0, y: 10, scale: 0.95 }}
- className="absolute right-0 mt-3 w-[320px] bg-white rounded-lg border border-slate-900/20 z-50 overflow-hidden"
+ className="absolute right-0 mt-3 w-[320px] bg-white rounded-lg border border-[#1e4a3a]/20 z-50 overflow-hidden"
  >
  <div className="p-4 border-b border-slate-100 flex items-center justify-between">
- <h3 className="text-[13px] font-bold text-slate-900 uppercase tracking-tight">Clinical Alerts</h3>
+ <h3 className="text-[13px] font-bold text-[#1e4a3a] uppercase tracking-tight">Clinical Alerts</h3>
  <span className="text-[10px] font-bold bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full">{notifications.length} New</span>
  </div>
  <div className="max-h-[300px] overflow-y-auto">
@@ -359,7 +357,7 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  <Activity size={14} />
  </div>
  <div className="flex-1">
- <h4 className="text-[11px] font-bold text-slate-900">{notif.title}</h4>
+ <h4 className="text-[11px] font-bold text-[#1e4a3a]">{notif.title}</h4>
  <p className="text-[11px] text-slate-500 mt-0.5">{notif.message}</p>
  <span className="text-[9px] text-slate-400 font-bold uppercase mt-1 block">{notif.time}</span>
  </div>
@@ -396,12 +394,12 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  className="flex items-center gap-4 pl-4 border-l border-slate-200/50 hover:opacity-70 transition-opacity text-right"
  >
  <div className="flex flex-col items-end hidden md:flex">
- <span className="text-[12px] font-extrabold text-slate-900 tracking-tight uppercase">{profile?.fullName || 'Meditaj User'}</span>
- <span className="text-[9px] font-bold text-white bg-slate-900 px-2 py-0.5 rounded-full uppercase tracking-widest leading-none mt-1 ">
+ <span className="text-[12px] font-extrabold text-[#1e4a3a] tracking-tight uppercase">{profile?.fullName || 'Meditaj User'}</span>
+ <span className="text-[9px] font-bold text-white bg-[#1e4a3a] px-2 py-0.5 rounded-full uppercase tracking-widest leading-none mt-1 ">
  {role === 'admin' ? 'Platform Admin' : role}
  </span>
  </div>
- <div className="w-10 h-10 rounded-lg bg-slate-200 border border-slate-900/10 flex items-center justify-center text-slate-500 overflow-hidden">
+ <div className="w-10 h-10 rounded-lg bg-slate-200 border border-[#1e4a3a]/10 flex items-center justify-center text-slate-500 overflow-hidden">
  {profile?.photoURL ? (
  <img src={profile.photoURL} className="w-full h-full object-cover" />
  ) : (
@@ -427,7 +425,7 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
  <motion.div 
  initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
- className="absolute inset-0 bg-slate-900/40"
+ className="absolute inset-0 bg-[#1e4a3a]/40"
  onClick={() => setShowLogoutModal(false)}
  />
  <motion.div 

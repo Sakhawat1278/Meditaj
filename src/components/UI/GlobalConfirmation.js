@@ -58,7 +58,7 @@ export default function GlobalConfirmation({
  animate={{ opacity: 1 }}
  exit={{ opacity: 0 }}
  onClick={onCancel}
- className="absolute inset-0 bg-slate-900/40 backdrop-blur-[1px]"
+ className="absolute inset-0 bg-[#1e4a3a]/40 backdrop-blur-[1px]"
  />
  
  <motion.div 
@@ -76,7 +76,7 @@ export default function GlobalConfirmation({
  </div>
  
  <div className="pt-1">
- <h3 className="text-[15px] font-bold text-slate-900 tracking-tight">
+ <h3 className="text-[15px] font-bold text-[#1e4a3a] tracking-tight">
  {title}
  </h3>
  <p className="text-[12px] font-medium text-slate-500 leading-relaxed mt-1.5 px-0.5">

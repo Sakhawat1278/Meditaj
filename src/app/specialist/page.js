@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { Search, User, Stethoscope } from 'lucide-react';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import LandingNavbar from '@/components/Home/LandingNavbar';
 import CustomDropdown from '@/components/UI/CustomDropdown';
 
 import { useSearchParams } from 'next/navigation';
@@ -47,10 +46,9 @@ export default function SpecialistPage() {
   });
 
   return (
-    <main className="min-h-screen bg-[#FCFCFC] font-sans text-slate-900 selection:bg-emerald-50">
-      <LandingNavbar />
+    <main className="min-h-screen bg-[#FCFCFC] font-sans text-[#1e4a3a] selection:bg-emerald-50">
 
-      <div className="pt-52 pb-24 px-4 lg:px-6 container mx-auto">
+      <div className="pt-28 lg:pt-36 pb-24 w-full max-w-[1825px] mx-auto px-4 lg:px-10">
         {/* --- Header Controls --- */}
         <div className="flex flex-col sm:flex-row items-end justify-between gap-6 mb-8 pb-4 border-b border-zinc-200">
           <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto items-end">

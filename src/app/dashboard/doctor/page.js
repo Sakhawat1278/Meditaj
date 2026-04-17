@@ -148,7 +148,7 @@ export default function DoctorDashboard() {
           <div className="flex items-center gap-3">
             <div className="flex -space-x-2 mr-4">
               {[1,2,3].map(i => <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-slate-100 overflow-hidden"><User size={24} className="text-slate-300 translate-y-2 translate-x-1" /></div>)}
-              <div className="w-8 h-8 rounded-full border-2 border-white bg-slate-900 flex items-center justify-center text-[10px] text-white font-bold">+2</div>
+              <div className="w-8 h-8 rounded-full border-2 border-white bg-[#1e4a3a] flex items-center justify-center text-[10px] text-white font-bold">+2</div>
             </div>
             <button className="h-9 px-4 bg-med-text text-white rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-slate-800 transition-all flex items-center gap-2">
               Generate Report <FileText size={14} />
@@ -240,7 +240,7 @@ export default function DoctorDashboard() {
                       onClick={() => setSelectedDay(day)}
                       className={`py-2.5 rounded-xl border text-[9px] font-bold uppercase tracking-widest transition-all ${
                         selectedDay === day 
-                        ? 'bg-slate-900 text-white border-slate-900' 
+                        ? 'bg-[#1e4a3a] text-white border-[#1e4a3a]' 
                         : 'bg-white text-slate-400 border-slate-100 hover:border-slate-300'
                       }`}
                     >
@@ -252,7 +252,7 @@ export default function DoctorDashboard() {
                 <div className="bg-slate-50/50 border border-slate-200 rounded-2xl p-6">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                     <div>
-                      <h4 className="text-[13px] font-bold text-slate-900 uppercase tracking-tight">{selectedDay} Availability</h4>
+                      <h4 className="text-[13px] font-bold text-[#1e4a3a] uppercase tracking-tight">{selectedDay} Availability</h4>
                       <p className="text-[10px] text-slate-400 font-medium">Define your consultation slots</p>
                     </div>
                     <div className="flex items-center gap-2 bg-white p-1.5 rounded-xl border border-slate-200 focus-within:border-med-primary transition-all">

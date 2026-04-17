@@ -6,10 +6,8 @@ import {
   ChevronRight, Info, CheckCircle2, ArrowRight,
   ShieldCheck, Clock, CreditCard, X, Beaker, Calendar
 } from 'lucide-react';
-import LandingNavbar from '@/components/Home/LandingNavbar';
 import CustomDropdown from '@/components/UI/CustomDropdown';
 import DatePicker from '@/components/UI/DatePicker';
-import { useLanguage } from '@/context/LanguageContext';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
@@ -20,7 +18,6 @@ import LabTestCard from '@/components/Labs/LabTestCard';
 import { toast } from 'react-hot-toast';
 
 export default function LabTestsPage() {
-  const { t, locale } = useLanguage();
   const { user, profile } = useAuth();
   const { cartItems, addToCart, removeFromCart } = useCart();
   const router = useRouter();
@@ -122,15 +119,14 @@ export default function LabTestsPage() {
 
   return (
     <main className="min-h-screen bg-[#FDFDFD]">
-      <LandingNavbar />
 
-      <div className="pt-52 pb-24 container mx-auto px-4 lg:px-6">
+      <div className="pt-28 lg:pt-36 pb-24 w-full max-w-[1825px] mx-auto px-4 lg:px-10">
         
         {/* --- HIERARCHICAL FILTERS --- */}
-        <div className="bg-white border border-slate-300 rounded-xl p-6 mb-10">
+        <div className="bg-white border border-slate-300 rounded-xl p-6 mb-10 shadow-sm">
           <div className="flex items-center gap-2 mb-6">
             <MapPin size={18} className="text-emerald-500" />
-            <h2 className="text-[12px] font-black text-slate-900 uppercase tracking-[0.2em]">Select Location & Provider</h2>
+            <h2 className="text-[12px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Select Location & Provider</h2>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -198,7 +194,7 @@ export default function LabTestsPage() {
                 <Building2 size={120} strokeWidth={0.5} />
                 <MapPin size={40} strokeWidth={2} className="absolute bottom-4 right-4 text-emerald-500" />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2">Ready to find your tests?</h3>
+              <h3 className="text-xl font-bold text-[#1e4a3a] mb-2">Ready to find your tests?</h3>
               <p className="text-slate-400 font-medium text-[14px] max-w-sm mx-auto uppercase tracking-wide">
                 Select a location and provider to view available tests.
               </p>
@@ -213,7 +209,7 @@ export default function LabTestsPage() {
               {/* Provider Info Header */}
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-300 pb-6">
                 <div>
-                  <h1 className="text-xl font-black text-slate-900 uppercase tracking-wide mb-0.5">{selectedProvider.name}</h1>
+                  <h1 className="text-xl font-black text-[#1e4a3a] uppercase tracking-wide mb-0.5">{selectedProvider.name}</h1>
                   <div className="flex items-center gap-2 text-slate-500 text-[13px] font-medium">
                     <MapPin size={14} className="text-emerald-500" />
                     <span>{selectedProvider.area}, {selectedProvider.district}</span>
@@ -249,23 +245,6 @@ export default function LabTestsPage() {
         </AnimatePresence>
       </div>
 
- 
-
-
     </main>
-  );
-}
-
-function NavLink({ href, label, active = false }) {
-  const { locale } = useLanguage();
-  return (
-    <Link
-      href={href}
-      className={`text-[12px] font-bold uppercase ${locale === 'en' ? 'tracking-[0.15em]' : 'tracking-normal'} transition-all whitespace-nowrap ${
-        active ? 'text-med-primary' : 'text-slate-500 hover:text-med-primary'
-      }`}
-    >
-      {label}
-    </Link>
   );
 }

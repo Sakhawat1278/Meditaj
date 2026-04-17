@@ -5,7 +5,6 @@ import {
   User, Check, ChevronRight, Star, ShieldCheck, 
   Baby, Activity, HeartPulse, Stethoscope, Clock, Briefcase, Package
 } from 'lucide-react';
-import LandingNavbar from '@/components/Home/LandingNavbar';
 import { useAuth } from '@/context/AuthContext';
 import { useCart } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
@@ -73,10 +72,9 @@ export default function NursingPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white font-sans text-slate-900 antialiased selection:bg-emerald-100">
-      <LandingNavbar />
+    <main className="min-h-screen bg-white font-sans text-[#1e4a3a] antialiased selection:bg-emerald-100">
 
-      <div className="pt-32 lg:pt-52 pb-24 container mx-auto max-w-[1488px]">
+      <div className="pt-24 lg:pt-32 pb-24 w-full max-w-[1825px] mx-auto px-4 lg:px-10">
         <div className="space-y-6">
           
           {/* --- Section: Select Caregiver Type --- */}
@@ -101,7 +99,7 @@ export default function NursingPage() {
                         <Stethoscope className={selectedType === type.id ? 'text-[#10B981]' : 'text-slate-300'} size={20} />
                       )}
                     </div>
-                    <span className={`text-[14px] font-semibold ${selectedType === type.id ? 'text-black' : 'text-slate-600 group-hover:text-slate-900'}`}>
+                    <span className={`text-[14px] font-semibold ${selectedType === type.id ? 'text-black' : 'text-slate-600 group-hover:text-[#1e4a3a]'}`}>
                       {type.label}
                     </span>
                   </button>
@@ -163,7 +161,7 @@ export default function NursingPage() {
 
               {/* Active Filters / Tags */}
               <div className="flex items-center gap-2 mb-6">
-                <div className="bg-slate-900 px-3 py-1 rounded-md text-[10px] font-bold text-white uppercase tracking-widest">
+                <div className="bg-[#1e4a3a] px-3 py-1 rounded-md text-[10px] font-bold text-white uppercase tracking-widest">
                   {nursingTypes.find(t => t.id === selectedType)?.label}
                 </div>
                 <div className="bg-emerald-500 px-3 py-1 rounded-md text-[10px] font-bold text-white uppercase tracking-widest">
@@ -219,7 +217,7 @@ export default function NursingPage() {
                         <div className="px-4 pb-4 mt-auto">
                           <button
                             onClick={() => handleBooking(caregiver)}
-                            className="w-full h-9 rounded-lg border border-slate-300 bg-white text-slate-950 text-[11px] font-bold uppercase tracking-wider hover:bg-slate-950 hover:border-slate-950 hover:text-white transition-all shadow-sm"
+                            className="w-full h-9 rounded-lg border border-slate-300 bg-white text-[#1e4a3a] text-[11px] font-bold uppercase tracking-wider hover:bg-[#1e4a3a] hover:border-[#1e4a3a] hover:text-white transition-all shadow-sm"
                           >
                             Book Profile
                           </button>

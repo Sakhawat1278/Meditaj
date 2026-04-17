@@ -64,7 +64,7 @@ export default function AmbulanceManagement({
             </div>
             <div>
               <p className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-2">{stat.label}</p>
-              <p className="text-3xl font-black text-slate-900 tracking-tighter leading-none">{stat.value}</p>
+              <p className="text-3xl font-black text-[#1e4a3a] tracking-tighter leading-none">{stat.value}</p>
             </div>
           </motion.div>
         ))}
@@ -87,7 +87,7 @@ export default function AmbulanceManagement({
               <button
                 key={tab.id}
                 onClick={() => setActiveSubTab(tab.id)}
-                className={`flex items-center gap-3 px-6 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all relative ${activeSubTab === tab.id ? 'text-slate-900' : 'text-slate-400 hover:text-slate-600'}`}
+                className={`flex items-center gap-3 px-6 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all relative ${activeSubTab === tab.id ? 'text-[#1e4a3a]' : 'text-slate-400 hover:text-slate-600'}`}
               >
                 {activeSubTab === tab.id && (
                   <motion.div 
@@ -117,7 +117,7 @@ export default function AmbulanceManagement({
             {activeSubTab === 'fleet' && (
               <button 
                 onClick={onAddAmbulance}
-                className="h-12 px-8 bg-slate-900 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] flex items-center gap-3 hover:bg-emerald-600 transition-all shadow-lg active:scale-95"
+                className="h-12 px-8 bg-[#1e4a3a] text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] flex items-center gap-3 hover:bg-emerald-600 transition-all shadow-lg active:scale-95"
               >
                 <Plus size={18} />
                 Add Ambulance
@@ -169,7 +169,7 @@ export default function AmbulanceManagement({
                               {booking.patientName?.charAt(0)}
                             </div>
                             <div>
-                              <p className="text-[14px] font-black text-slate-900 leading-none mb-2">{booking.patientName}</p>
+                              <p className="text-[14px] font-black text-[#1e4a3a] leading-none mb-2">{booking.patientName}</p>
                               <p className="text-[10px] text-slate-400 font-extrabold uppercase tracking-widest flex items-center gap-2">
                                 <Phone size={11} className="text-slate-300" /> {booking.phone}
                               </p>
@@ -194,7 +194,7 @@ export default function AmbulanceManagement({
                         <td className="px-8 py-6">
                           {booking.assignedAmbulanceId ? (
                             <div className="space-y-2">
-                              <p className="text-[12px] font-black text-slate-900 leading-none flex items-center gap-2 uppercase tracking-tight">
+                              <p className="text-[12px] font-black text-[#1e4a3a] leading-none flex items-center gap-2 uppercase tracking-tight">
                                 <Ambulance size={14} className="text-blue-500" /> {fleet.find(f => f.id === booking.assignedAmbulanceId)?.plateNumber}
                               </p>
                               <p className="text-[11px] text-slate-400 font-bold ml-5">{fleet.find(f => f.id === booking.assignedAmbulanceId)?.driverName}</p>
@@ -218,7 +218,7 @@ export default function AmbulanceManagement({
                             {booking.status === 'pending' ? (
                               <button 
                                 onClick={() => onAssignAmbulance(booking)}
-                                className="h-10 px-6 bg-slate-900 text-white rounded-xl text-[10px] font-black uppercase tracking-[0.15em] hover:bg-emerald-600 transition-all shadow-md active:scale-95"
+                                className="h-10 px-6 bg-[#1e4a3a] text-white rounded-xl text-[10px] font-black uppercase tracking-[0.15em] hover:bg-emerald-600 transition-all shadow-md active:scale-95"
                               >
                                 Dispatch
                               </button>
@@ -226,7 +226,7 @@ export default function AmbulanceManagement({
                               <select 
                                 value={booking.status}
                                 onChange={(e) => onUpdateStatus(booking, e.target.value)}
-                                className="h-10 bg-white border border-slate-200 rounded-xl px-4 text-[11px] font-black uppercase tracking-widest outline-none focus:border-slate-900 transition-all cursor-pointer"
+                                className="h-10 bg-white border border-slate-200 rounded-xl px-4 text-[11px] font-black uppercase tracking-widest outline-none focus:border-[#1e4a3a] transition-all cursor-pointer"
                               >
                                 <option value="assigned">Assigned</option>
                                 <option value="ongoing">On Trip</option>
@@ -281,7 +281,7 @@ export default function AmbulanceManagement({
                               <Ambulance size={20} />
                             </div>
                             <div>
-                              <p className="text-[14px] font-black text-slate-900 leading-none mb-2 tracking-tighter uppercase">{unit.plateNumber}</p>
+                              <p className="text-[14px] font-black text-[#1e4a3a] leading-none mb-2 tracking-tighter uppercase">{unit.plateNumber}</p>
                               <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">{unit.model || 'Standard Ambulance'}</p>
                             </div>
                           </div>
@@ -313,7 +313,7 @@ export default function AmbulanceManagement({
                         <td className="px-8 py-6 text-right">
                            <button 
                              onClick={() => onEditAmbulance(unit)}
-                             className="w-10 h-10 rounded-xl border border-slate-200 text-slate-400 hover:text-slate-900 hover:bg-white hover:shadow-md transition-all inline-flex items-center justify-center active:scale-90"
+                             className="w-10 h-10 rounded-xl border border-slate-200 text-slate-400 hover:text-[#1e4a3a] hover:bg-white hover:shadow-md transition-all inline-flex items-center justify-center active:scale-90"
                            >
                              <Edit3 size={16} />
                            </button>
