@@ -1266,17 +1266,28 @@ function AdminDashboardContent() {
               if (isProduct) {
                 const orderData = bookingSnap.data();
                 if (Array.isArray(orderData.items)) {
+                  console.log(`[Inventory] Processing ${orderData.items.length} items for order ${booking.id}`);
                   for (const item of orderData.items) {
-                    if (item.productId || item.id) {
+                    const pid = item.id || item.productId;
+                    if (pid) {
                       try {
-                        const productRef = doc(db, 'products', item.productId || item.id);
-                        await updateDoc(productRef, {
-                          stock: increment(-(item.quantity || 1))
-                        });
-                        console.log(`Deducted stock for ${item.name}`);
+                        const productRef = doc(db, 'products', pid);
+                        const pSnap = await getDoc(productRef);
+                        
+                        if (pSnap.exists()) {
+                          const qty = Number(item.quantity) || 1;
+                          await updateDoc(productRef, {
+                            stock: increment(-qty)
+                          });
+                          console.log(`[Inventory] Deducted ${qty} from stock for: ${item.name} (${pid})`);
+                        } else {
+                          console.error(`[Inventory] Product document not found for ID: ${pid} (${item.name})`);
+                        }
                       } catch (err) {
-                        console.error(`Inventory sync failed for ${item.name}:`, err);
+                        console.error(`[Inventory] Stock adjustment error for ${item.name}:`, err);
                       }
+                    } else {
+                      console.warn(`[Inventory] Item missing valid ID:`, item);
                     }
                   }
                 }
