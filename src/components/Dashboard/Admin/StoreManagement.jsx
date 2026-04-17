@@ -417,7 +417,9 @@ export default function StoreManagement() {
                       </td>
                       <td className="px-6 py-3.5 text-center">
                         <div className="flex flex-col items-center">
-                          <span className="text-[12px] font-black text-[#1e4a3a]">{order.items?.length || 0}</span>
+                          <span className="text-[12px] font-black text-[#1e4a3a]">
+                            {order.items?.reduce((sum, i) => sum + (i.quantity || 1), 0) || 0}
+                          </span>
                           <span className="text-[8px] font-black text-slate-300 uppercase tracking-widest">Units</span>
                         </div>
                       </td>
@@ -504,9 +506,12 @@ export default function StoreManagement() {
                             <div key={i} className="flex justify-between items-center group">
                               <div className="flex items-center gap-3">
                                 <span className="w-6 h-6 rounded-md bg-white border border-slate-200 flex items-center justify-center text-[10px] font-black text-[#1e4a3a]">{i+1}</span>
-                                <span className="text-[13px] font-bold text-[#1e4a3a]">{item.name}</span>
+                                <div className="flex flex-col">
+                                  <span className="text-[13px] font-bold text-[#1e4a3a]">{item.name}</span>
+                                  <span className="text-[10px] font-bold text-slate-400">৳{item.price} x {item.quantity || 1}</span>
+                                </div>
                               </div>
-                              <span className="text-[13px] font-black text-[#1e4a3a]">৳{item.price}</span>
+                              <span className="text-[13px] font-black text-[#1e4a3a]">৳{(item.price * (item.quantity || 1)).toLocaleString()}</span>
                             </div>
                           ))}
                           <div className="pt-3 border-t border-slate-200 mt-2 flex justify-between items-center">

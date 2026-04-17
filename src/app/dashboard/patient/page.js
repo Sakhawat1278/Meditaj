@@ -203,7 +203,7 @@ export default function PatientDashboard() {
     ...productOrders.map(p => ({
       ...p,
       doctor: 'Health Store',
-      service: p.items?.map(i => i.name).join(', ') || 'Pharmacy',
+      service: p.items?.map(i => `${i.name}${i.quantity > 1 ? ` (x${i.quantity})` : ''}`).join(', ') || 'Pharmacy',
       serviceType: 'Pharmacy',
       date: p.date || p.createdAt?.toDate?.()?.toLocaleDateString('en-GB') || 'Recent'
     }))
