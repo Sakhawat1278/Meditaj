@@ -1274,10 +1274,7 @@ function AdminDashboardContent() {
       
       setIsProcessingPayment(true);
       const toastId = toast.loading('Processing rejection...');
-    
-    setIsProcessingPayment(true);
-    const toastId = toast.loading('Processing rejection...');
-    try {
+
       // 1. Identify all related bookings
       const related = payment.relatedBookings || [
         { id: payment.appointmentId, collection: payment.appointmentCollection || 'appointments' }
@@ -1311,7 +1308,7 @@ function AdminDashboardContent() {
       toast.success('Payment rejected & bookings cancelled', { id: toastId });
     } catch (error) {
       console.error(error);
-      toast.error('Rejection failed', { id: toastId });
+      toast.error('Rejection failed', { id: (typeof toastId !== 'undefined' ? toastId : undefined) });
     } finally {
       setIsProcessingPayment(false);
     }
