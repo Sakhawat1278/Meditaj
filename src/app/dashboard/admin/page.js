@@ -1253,11 +1253,13 @@ function AdminDashboardContent() {
             const bookingSnap = await getDoc(bookingRef);
             
             if (bookingSnap.exists()) {
+              const isProduct = booking.collection === 'product_orders';
               await updateDoc(bookingRef, {
-                status: 'confirmed',
+                status: isProduct ? 'processing' : 'confirmed',
                 paymentStatus: 'paid',
-                confirmedAt: new Date().toISOString(),
-                manualVerificationId: payment.id
+                [isProduct ? 'paidAt' : 'confirmedAt']: new Date().toISOString(),
+                manualVerificationId: payment.id,
+                verifiedBy: 'admin'
               });
               successes++;
             } else {
@@ -1322,10 +1324,12 @@ function AdminDashboardContent() {
             const bookingSnap = await getDoc(bookingRef);
             
             if (bookingSnap.exists()) {
+              const isProduct = booking.collection === 'product_orders';
               await updateDoc(bookingRef, {
-                status: 'cancelled',
+                status: isProduct ? 'failed' : 'cancelled',
                 paymentStatus: 'failed',
-                rejectionReason: 'Payment verification failed'
+                [isProduct ? 'failedAt' : 'cancelledAt']: new Date().toISOString(),
+                rejectionReason: 'Manual Payment Rejected'
               });
             }
           } catch (err) {
