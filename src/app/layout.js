@@ -29,14 +29,14 @@ export default function RootLayout({ children }) {
       <body className={`${inter.variable} font-sans antialiased text-med-text overflow-x-hidden`} suppressHydrationWarning>
         <AuthProvider>
           <CartProvider>
-            <ConfirmationProvider>
-              <MotionProvider>
+            <MotionProvider>
+              <ConfirmationProvider>
                 <NavigationWrapper />
                 <main>{children}</main>
                 <FooterWrapper />
-              </MotionProvider>
-              <Toaster position="bottom-right" toastOptions={{ duration: 3000 }} />
-            </ConfirmationProvider>
+                <Toaster position="bottom-right" toastOptions={{ duration: 3000 }} />
+              </ConfirmationProvider>
+            </MotionProvider>
           </CartProvider>
         </AuthProvider>
       </body>
