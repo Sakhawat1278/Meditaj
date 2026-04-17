@@ -391,6 +391,7 @@ function AdminDashboardContent() {
  const [pendingPayments, setPendingPayments] = useState([]);
  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
  const [allAppointments, setAllAppointments] = useState([]);
+ const [productOrders, setProductOrders] = useState([]);
  const [financials, setFinancials] = useState({
  totalEarnings: 0,
  serviceFees: 0,
@@ -569,12 +570,17 @@ function AdminDashboardContent() {
   const unAmbulanceBookings = onSnapshot(query(collection(db, 'ambulance_bookings'), orderBy('createdAt', 'desc')), (snap) => {
     setAmbulanceBookings(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
   });
+
+  const unProductOrders = onSnapshot(query(collection(db, 'product_orders'), orderBy('createdAt', 'desc')), (snap) => {
+    setProductOrders(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+  });
   const unAmbulanceFleet = onSnapshot(collection(db, 'ambulance_fleet'), (snap) => {
     setAmbulanceFleet(snap.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     setIsAmbulanceLoading(false);
   });
   return () => {
     unAmbulanceBookings();
+    unProductOrders();
     unAmbulanceFleet();
   };
  }, []);
@@ -618,38 +624,59 @@ function AdminDashboardContent() {
  setIsUpdatingProfile(false);
  };
 
- // Live Financial Calculations
+ // Universal Financial Aggregator
  useEffect(() => {
- const completedAppts = allAppointments.filter(a => a.status === 'completed' || a.paymentStatus === 'paid');
- 
- let earnings = 0;
- let fees = 0;
- let monthly = new Array(12).fill(0).map((_, i) => ({ month: i, revenue: 0, commission: 0 }));
+   const allTransactions = [
+     ...allAppointments.filter(a => a.status === 'completed' || a.status === 'confirmed' || a.paymentStatus === 'paid'),
+     ...(labBookings || []).filter(l => l.status === 'confirmed' || l.paymentStatus === 'paid'),
+     ...(nursingBookings || []).filter(n => n.status === 'confirmed' || n.paymentStatus === 'paid'),
+     ...(productOrders || []).filter(p => (p.status === 'delivered' || p.status === 'processing') && p.paymentStatus !== 'failed')
+   ];
+   
+   let earnings = 0;
+   let fees = 0;
+   let monthly = new Array(12).fill(0).map((_, i) => ({ month: i, revenue: 0, commission: 0 }));
 
- completedAppts.forEach(appt => {
- const amount = Number(appt.amount) || 0;
- const commission = (amount * (Number(globalSettings.platformCommission) || 10)) / 100;
- 
- earnings += amount;
- fees += commission;
+   const commissionRate = Number(globalSettings?.platformCommission) || 10;
 
- if (appt.createdAt) {
- const date = appt.createdAt.toDate ? appt.createdAt.toDate() : new Date(appt.createdAt);
- const month = date.getMonth();
- if (month >= 0 && month < 12) {
- monthly[month].revenue += amount;
- monthly[month].commission += commission;
- }
- }
- });
+   allTransactions.forEach(tx => {
+     const amount = Number(tx.amount || tx.totalAmount || tx.total || 0);
+     const commission = (amount * commissionRate) / 100;
+     
+     earnings += amount;
+     fees += commission;
 
- setFinancials({
- totalEarnings: earnings,
- serviceFees: fees,
- pendingPayouts: doctors.reduce((acc, doc) => acc + (Number(doc.balance) || 0), 0),
- activeCoupons: coupons.filter(c => c.status === 'active').length,
- monthlyData: monthly
- });
+     if (tx.createdAt) {
+       let date;
+       if (tx.createdAt.toDate) date = tx.createdAt.toDate();
+       else date = new Date(tx.createdAt);
+
+       if (!isNaN(date.getTime())) {
+         const month = date.getMonth();
+         if (month >= 0 && month < 12) {
+           monthly[month].revenue += amount;
+           monthly[month].commission += commission;
+         }
+       }
+     }
+   });
+
+   setFinancials({
+     totalEarnings: earnings,
+     serviceFees: fees,
+     pendingPayouts: doctors.reduce((acc, doc) => acc + (Number(doc.balance) || 0), 0),
+     activeCoupons: coupons.filter(c => c.status === 'active').length,
+     monthlyData: monthly
+   });
+
+   setStats(prev => {
+     const newStats = [...prev];
+     if (newStats[3]) {
+       newStats[3] = { ...newStats[3], value: `৳${(earnings / 1000).toFixed(1)}k` };
+     }
+     return newStats;
+   });
+ }, [allAppointments, labBookings, nursingBookings, productOrders, globalSettings, doctors, coupons]);
 
  // Update main stats
  setStats(prev => [
@@ -747,13 +774,14 @@ function AdminDashboardContent() {
     return [
       ...allAppointments.map(a => ({ ...a, category: 'Specialist', providerName: a.doctorName || 'General Physician' })),
       ...labBookings.map(l => ({ ...l, category: 'Laboratory', providerName: 'Diagnostic Wing' })),
-      ...nursingBookings.map(n => ({ ...n, category: 'Nursing', providerName: n.caregiverName || 'Healthcare Provider' }))
+      ...nursingBookings.map(n => ({ ...n, category: 'Nursing', providerName: n.caregiverName || 'Healthcare Provider' })),
+      ...productOrders.map(p => ({ ...p, category: 'Pharmacy', providerName: 'HealthStore' }))
     ].sort((a, b) => {
       const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
       const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
       return dateB - dateA;
     });
-  }, [allAppointments, labBookings, nursingBookings]);
+  }, [allAppointments, labBookings, nursingBookings, productOrders]);
 
   const filteredAppointments = useMemo(() => allClinicalRecords.filter(appt => {
     const searchLower = (apptSearch || '').toLowerCase();
