@@ -26,6 +26,7 @@ export default function CheckoutPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   
   // Editable Patient Info State
+  const [patientName, setPatientName] = useState('');
   const [patientPhone, setPatientPhone] = useState('');
   const [location, setLocation] = useState('');
   const [bookingDate, setBookingDate] = useState('');
