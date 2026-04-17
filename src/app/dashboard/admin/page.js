@@ -13,7 +13,7 @@ import {
  Camera, Lock, MapPin, Briefcase, ShieldAlert, LogOut, Navigation, Tag, MoreVertical, ImagePlus
 } from 'lucide-react';
 import { m as motion, AnimatePresence } from 'framer-motion';
-import { collection, query, where, getDocs, getDoc, doc, updateDoc, onSnapshot, setDoc, deleteDoc, addDoc, arrayUnion, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs, getDoc, doc, updateDoc, onSnapshot, setDoc, deleteDoc, addDoc, arrayUnion, orderBy, increment } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, auth, secondaryAuth, storage } from '@/lib/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
@@ -1261,6 +1261,27 @@ function AdminDashboardContent() {
                 manualVerificationId: payment.id,
                 verifiedBy: 'admin'
               });
+
+              // --- AUTO-INVENTORY DEDUCTION ---
+              if (isProduct) {
+                const orderData = bookingSnap.data();
+                if (Array.isArray(orderData.items)) {
+                  for (const item of orderData.items) {
+                    if (item.productId || item.id) {
+                      try {
+                        const productRef = doc(db, 'products', item.productId || item.id);
+                        await updateDoc(productRef, {
+                          stock: increment(-(item.quantity || 1))
+                        });
+                        console.log(`Deducted stock for ${item.name}`);
+                      } catch (err) {
+                        console.error(`Inventory sync failed for ${item.name}:`, err);
+                      }
+                    }
+                  }
+                }
+              }
+              // --------------------------------
               successes++;
             } else {
               console.warn(`Booking document missing: ${booking.collection}/${booking.id}`);

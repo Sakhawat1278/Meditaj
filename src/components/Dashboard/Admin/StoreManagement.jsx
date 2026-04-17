@@ -83,10 +83,15 @@ export default function StoreManagement() {
 
   // Finance Calculations
   const financeStats = useMemo(() => {
-    const totalRevenue = orders.filter(o => o.status === 'delivered').reduce((acc, o) => acc + (o.total || 0), 0);
-    const totalCost = orders.filter(o => o.status === 'delivered').reduce((acc, o) => {
-      // Calculate cost from items if stored, otherwise use aggregate if available
-      return acc + (o.items?.reduce((itemAcc, item) => itemAcc + ((item.costPrice || 0) * (item.quantity || 1)), 0) || 0);
+    // 1. Calculate Realized Revenue (All orders that have been paid for)
+    const paidOrders = orders.filter(o => o.paymentStatus === 'paid' || o.status === 'delivered' || o.status === 'processing' || o.status === 'shipped');
+    
+    const totalRevenue = paidOrders.reduce((acc, o) => acc + (o.total || 0), 0);
+    
+    const totalCost = paidOrders.reduce((acc, o) => {
+      // Calculate cost from items stored in the order
+      const orderCost = o.items?.reduce((itemAcc, item) => itemAcc + ((item.costPrice || 0) * (item.quantity || 1)), 0) || 0;
+      return acc + orderCost;
     }, 0);
     
     const pendingOrders = orders.filter(o => o.status === 'pending').length;
