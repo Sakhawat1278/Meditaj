@@ -269,9 +269,79 @@ export default function CheckoutPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
             
-            {/* LEFT COLUMN: ORDER SUMMARY & CONTEXT */}
+            {/* LEFT COLUMN: PATIENT REGISTRATION FORM */}
             <div className="space-y-6">
+              <div className="bg-white border border-slate-200 rounded-xl p-6 lg:p-8 overflow-hidden relative">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full blur-3xl -z-10 -mr-16 -mt-16" />
+                
+                <div className="flex items-center justify-between mb-8">
+                  <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Patient Information</h3>
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                </div>
 
+                <div className="space-y-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Patient Identity</label>
+                    <input 
+                      type="text" 
+                      value={patientName}
+                      onChange={(e) => setPatientName(e.target.value)}
+                      placeholder="Enter Full Name"
+                      className="w-full h-11 px-5 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Contact Number</label>
+                      <input 
+                        type="tel" 
+                        value={patientPhone}
+                        onChange={(e) => setPatientPhone(e.target.value)}
+                        placeholder="01XXX-XXXXXX"
+                        className="w-full h-11 px-5 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all font-mono"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Service Address / Location</label>
+                      <input 
+                        type="text" 
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        placeholder="House, Road, Area..."
+                        className="w-full h-11 px-5 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Date & Time Selection (Conditional for Nursing/Clinical) */}
+                  {(checkoutData?.type === 'nursing' || !checkoutData?.date) && (
+                    <div className="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-slate-100">
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Preferred Start Date</label>
+                        <input 
+                          type="date" 
+                          value={bookingDate}
+                          onChange={(e) => setBookingDate(e.target.value)}
+                          className="w-full h-11 px-5 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all uppercase"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Start Time</label>
+                        <input 
+                          type="time" 
+                          value={bookingTime}
+                          onChange={(e) => setBookingTime(e.target.value)}
+                          className="w-full h-11 px-5 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* RIGHT COLUMN: SUMMARY & PAYMENT */}
+            <div className="space-y-6">
               {/* Order Summary */}
               <div className="bg-white border border-slate-200 rounded-xl overflow-hidden flex flex-col">
                 <div className="px-5 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
@@ -341,78 +411,11 @@ export default function CheckoutPage() {
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* RIGHT COLUMN: PAYMENT ACTIONS */}
-            <div className="space-y-6">
-              <div className="bg-white border border-slate-200 rounded-xl p-6 lg:p-8 xl:sticky xl:top-40 overflow-hidden relative">
+              <div className="bg-white border border-slate-200 rounded-xl p-6 lg:p-8 overflow-hidden relative">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full blur-3xl -z-10 -mr-16 -mt-16" />
                 
                 <div className="flex items-center justify-between mb-8">
-                  <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Patient Information</h3>
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                </div>
-
-                <div className="space-y-4 mb-8">
-                  <div className="space-y-1.5">
-                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Patient Identity</label>
-                    <input 
-                      type="text" 
-                      value={patientName}
-                      onChange={(e) => setPatientName(e.target.value)}
-                      placeholder="Enter Full Name"
-                      className="w-full h-11 px-5 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Contact Number</label>
-                      <input 
-                        type="tel" 
-                        value={patientPhone}
-                        onChange={(e) => setPatientPhone(e.target.value)}
-                        placeholder="01XXX-XXXXXX"
-                        className="w-full h-11 px-5 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all font-mono"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Service Address / Location</label>
-                      <input 
-                        type="text" 
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                        placeholder="House, Road, Area..."
-                        className="w-full h-11 px-5 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Date & Time Selection (Conditional for Nursing/Clinical) */}
-                  {(checkoutData?.type === 'nursing' || !checkoutData?.date) && (
-                    <div className="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-slate-100">
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Preferred Start Date</label>
-                        <input 
-                          type="date" 
-                          value={bookingDate}
-                          onChange={(e) => setBookingDate(e.target.value)}
-                          className="w-full h-11 px-5 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all uppercase"
-                        />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Start Time</label>
-                        <input 
-                          type="time" 
-                          value={bookingTime}
-                          onChange={(e) => setBookingTime(e.target.value)}
-                          className="w-full h-11 px-5 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all"
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex items-center justify-between mb-8 pt-8 border-t border-slate-100">
                   <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Select Payment</h3>
                   <div className="flex items-center gap-1.5">
                     <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Live Gateway</span>
