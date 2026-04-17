@@ -1193,60 +1193,65 @@ function AdminDashboardContent() {
   };
 
   const approveManualPayment = async (payment) => {
-    const isConfirmed = await confirm({
-      title: 'Verify & Approve Payment?',
-      message: `You are about to verify the transaction for ${payment.userName}. This will automatically confirm all related clinical bookings and notify the patient.`,
-      confirmText: 'Approve & Confirm',
-      type: 'success'
-    });
-    
-    if (!isConfirmed) return;
-    
-    setIsProcessingPayment(true);
-    const toastId = toast.loading('Processing approval...');
     try {
-      // 1. Identify all related bookings (handle legacy single-entry and new array-based entries)
-      const related = payment.relatedBookings || [
-        { id: payment.appointmentId, collection: payment.appointmentCollection || 'appointments' }
-      ];
+      if (!payment?.id) return alert("Critical: No payment ID found");
       
-      let successCount = 0;
-      // 2. Update status for all linked services/products
+      const isConfirmed = window.confirm(`Approve payment of ৳${payment.amount} for ${payment.userName || 'this user'}?`);
+      if (!isConfirmed) return;
+      
+      setIsProcessingPayment(true);
+      const toastId = toast.loading('Verifying payment & updating linked bookings...');
+      
+      // 1. Resolve related bookings safely
+      let related = [];
+      if (Array.isArray(payment.relatedBookings)) {
+        related = payment.relatedBookings;
+      } else if (payment.appointmentId) {
+        related = [{ id: payment.appointmentId, collection: payment.appointmentCollection || 'appointments' }];
+      }
+
+      let successes = 0;
+      // 2. Process updates sequentially
       for (const booking of related) {
-        if (booking.id && booking.collection) {
+        if (booking?.id && booking?.collection) {
           try {
             await updateDoc(doc(db, booking.collection, booking.id), {
               status: 'confirmed',
               paymentStatus: 'paid',
-              confirmedAt: new Date().toISOString()
+              confirmedAt: new Date().toISOString(),
+              manualVerificationId: payment.id
             });
-            successCount++;
-          } catch (err) {
-            console.error(`Failed to update booking ${booking.id}:`, err);
+            successes++;
+          } catch (e) {
+            console.error(`Booking update failed [${booking.id}]:`, e);
           }
         }
       }
-      
-      // 3. Update the manual payment record
+
+      // 3. Update the payment record
       await updateDoc(doc(db, 'manual_payments', payment.id), {
         status: 'approved',
         processedAt: new Date().toISOString(),
-        successCount
+        verifiedBy: auth.currentUser?.email || 'admin',
+        successCount: successes
       });
-      
-      toast.success(successCount > 0 ? 'Payment verified & all related bookings confirmed' : 'Payment marked approved, but no related bookings were found', { id: toastId });
+
+      toast.success(successes > 0 ? `Verified! Updated ${successes} linked bookings.` : 'Payment approved (no linked bookings found).', { id: toastId });
     } catch (error) {
-      console.error(error);
-      toast.error('Verification failed: ' + (error.message || 'Unknown error'), { id: toastId });
+      console.error("Approve Error:", error);
+      alert("Verification Error: " + error.message);
+      toast.error('Process failed');
     } finally {
       setIsProcessingPayment(false);
     }
   };
 
   const rejectManualPayment = async (payment) => {
-    const isConfirmed = await confirm({
+    if (!payment) return alert("Error: No payment data received");
+    
+    const isConfirmed = window.confirm(`Reject payment from ${payment.userName || 'User'}?`) || await confirm({
       title: 'Reject Payment Request?',
-      message: 'This will mark the payment as failed and cancel all associated clinical bookings. The patient will be notified of the rejection.',
+      message: 'This will mark the payment as failed and cancel all associated clinical bookings.',
       confirmText: 'Reject & Cancel',
       type: 'danger'
     });
@@ -1291,41 +1296,36 @@ function AdminDashboardContent() {
   };
 
   const deleteManualPayment = async (payment) => {
-    const isConfirmed = await confirm({
-      title: 'Delete Payment Request?',
-      message: 'This will permanently remove the payment log AND all associated clinical bookings. This action is irreversible.',
-      confirmText: 'Delete Everything',
-      type: 'danger'
-    });
-    
-    if (!isConfirmed) return;
-    
-    setIsProcessingPayment(true);
-    const toastId = toast.loading('Deleting records...');
     try {
-      // 1. Identify all related bookings
-      const related = payment.relatedBookings || [
-        { id: payment.appointmentId, collection: payment.appointmentCollection || 'appointments' }
-      ];
+      if (!payment?.id) return alert("Error: Payment ID missing");
+      const isConfirmed = window.confirm("PERMANENTLY DELETE this record and ALL results?");
+      if (!isConfirmed) return;
       
-      // 2. Delete all linked services/products
+      setIsProcessingPayment(true);
+      const toastId = toast.loading('Purging records...');
+      
+      let related = [];
+      if (Array.isArray(payment.relatedBookings)) {
+        related = payment.relatedBookings;
+      } else if (payment.appointmentId) {
+        related = [{ id: payment.appointmentId, collection: payment.appointmentCollection || 'appointments' }];
+      }
+
       for (const booking of related) {
-        if (booking.id && booking.collection) {
+        if (booking?.id && booking?.collection) {
           try {
             await deleteDoc(doc(db, booking.collection, booking.id));
-          } catch (err) {
-            console.error(`Failed to delete booking ${booking.id}:`, err);
+          } catch (e) {
+            console.error("Link delete failed:", e);
           }
         }
       }
-      
-      // 3. Delete the manual payment record
+
       await deleteDoc(doc(db, 'manual_payments', payment.id));
-      
-      toast.success('Payment and associated bookings deleted successfully', { id: toastId });
+      toast.success('Record purged', { id: toastId });
     } catch (error) {
-      console.error(error);
-      toast.error('Deletion failed', { id: toastId });
+      console.error("Purge Error:", error);
+      alert("Delete Error: " + error.message);
     } finally {
       setIsProcessingPayment(false);
     }
@@ -2541,25 +2541,31 @@ function AdminDashboardContent() {
  <td className="px-6 py-4">
     <div className="flex justify-end gap-2">
       <button 
-        onClick={() => approveManualPayment(payment)}
-        disabled={isProcessingPayment}
-        className="h-8 px-4 bg-emerald-600 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-700 transition-all disabled:opacity-50"
+        onClick={() => {
+          console.log("APPROVE BTN CLICKED");
+          approveManualPayment(payment);
+        }}
+        className="h-8 px-4 bg-emerald-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-[#1e4a3a] transition-all"
       >
         Approve
       </button>
       <button 
-        onClick={() => rejectManualPayment(payment)}
-        disabled={isProcessingPayment}
+        onClick={() => {
+          console.log("REJECT BTN CLICKED");
+          rejectManualPayment(payment);
+        }}
         title="Reject Payment"
-        className="h-8 w-8 bg-amber-50 text-amber-600 border border-amber-100 rounded-lg flex items-center justify-center hover:bg-amber-100 transition-all disabled:opacity-50"
+        className="h-8 w-8 bg-amber-50 text-amber-600 border border-amber-200 rounded-lg flex items-center justify-center hover:bg-amber-100 transition-all"
       >
         <X size={14} />
       </button>
       <button 
-        onClick={() => deleteManualPayment(payment)}
-        disabled={isProcessingPayment}
+        onClick={() => {
+          console.log("DELETE BTN CLICKED");
+          deleteManualPayment(payment);
+        }}
         title="Permanently Delete"
-        className="h-8 w-8 bg-rose-50 text-rose-500 border border-rose-100 rounded-lg flex items-center justify-center hover:bg-rose-100 transition-all disabled:opacity-50"
+        className="h-8 w-8 bg-rose-50 text-rose-500 border border-rose-200 rounded-lg flex items-center justify-center hover:bg-rose-100 transition-all"
       >
         <Trash2 size={14} />
       </button>
