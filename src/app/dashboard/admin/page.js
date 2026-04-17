@@ -1214,20 +1214,27 @@ function AdminDashboardContent() {
   };
 
   const approveManualPayment = async (payment) => {
+    console.log("APPROVE_PAYMENT_START", payment.id);
+    setIsProcessingPayment(true);
     try {
-      if (!payment?.id) return toast.error("Critical: No payment ID found");
+      if (!payment?.id) {
+        setIsProcessingPayment(false);
+        return toast.error("Critical: No payment ID found");
+      }
       
       const isConfirmed = await confirm({
-        title: 'Verify & Approve Payment?',
-        message: `Are you sure you want to verify the transaction of ৳${payment.amount} for ${payment.userName || 'this user'}? This will confirm all linked services.`,
-        confirmText: 'Approve & Confirm',
+        title: 'Approve Payment?',
+        message: `Verify transaction ${payment.transactionId} for ৳${payment.amount}? This will confirm all linked laboratory, nursing, and specialist bookings.`,
+        confirmText: 'Verify & Approve',
         type: 'success'
       });
       
-      if (!isConfirmed) return;
-      
-      setIsProcessingPayment(true);
-      const toastId = toast.loading('Verifying payment & updating linked bookings...');
+      if (!isConfirmed) {
+        setIsProcessingPayment(false);
+        return;
+      }
+
+      toast.loading('Synchronizing service records...', { id: 'manual-pay' });
       
       // 1. Resolve related bookings safely
       let related = [];
@@ -1270,31 +1277,38 @@ function AdminDashboardContent() {
         successCount: successes
       });
 
-      toast.success(successes > 0 ? `Verified! Updated ${successes} linked bookings.` : 'Payment approved (no linked bookings found).', { id: toastId });
+      toast.success(successes > 0 ? `Verified! Updated ${successes} linked bookings.` : 'Payment approved (no linked bookings found).', { id: 'manual-pay' });
     } catch (error) {
       console.error("Approve Error:", error);
       alert("Verification Error: " + error.message);
-      toast.error('Process failed');
+      toast.error('Process failed', { id: 'manual-pay' });
     } finally {
       setIsProcessingPayment(false);
     }
   };
 
   const rejectManualPayment = async (payment) => {
+    console.log("REJECT_PAYMENT_START", payment.id);
+    setIsProcessingPayment(true);
     try {
-      if (!payment?.id) return toast.error("Error: Payment data missing");
-      
+      if (!payment?.id) {
+        setIsProcessingPayment(false);
+        return toast.error("Critical: No payment ID found");
+      }
+
       const isConfirmed = await confirm({
-        title: 'Reject Payment Request?',
-        message: `Reject payment from ${payment.userName || 'this user'}? This will mark the request as failed and cancel linked bookings.`,
-        confirmText: 'Reject & Cancel',
+        title: 'Reject & Cancel?',
+        message: `Reject transaction ${payment.transactionId}? This will cancel all associated medical bookings.`,
+        confirmText: 'Reject Payment',
         type: 'danger'
       });
-      
-      if (!isConfirmed) return;
-      
-      setIsProcessingPayment(true);
-      const toastId = toast.loading('Processing rejection...');
+
+      if (!isConfirmed) {
+        setIsProcessingPayment(false);
+        return;
+      }
+
+      toast.loading('Cancelling associated bookings...', { id: 'manual-pay' });
 
       // 1. Identify all related bookings
       const related = payment.relatedBookings || [
@@ -1326,30 +1340,32 @@ function AdminDashboardContent() {
         processedAt: new Date().toISOString()
       });
 
-      toast.success('Payment rejected & bookings cancelled', { id: toastId });
+      toast.success('Payment rejected & bookings cancelled', { id: 'manual-pay' });
     } catch (error) {
       console.error(error);
-      toast.error('Rejection failed', { id: (typeof toastId !== 'undefined' ? toastId : undefined) });
+      toast.error('Rejection failed', { id: 'manual-pay' });
     } finally {
       setIsProcessingPayment(false);
     }
   };
 
   const deleteManualPayment = async (payment) => {
+    console.log("DELETE_PAYMENT_START", payment.id);
+    setIsProcessingPayment(true);
     try {
-      if (!payment?.id) return toast.error("Error: Payment ID missing");
-      
       const isConfirmed = await confirm({
-        title: 'Delete Payment Request?',
-        message: 'Are you sure? This will PERMANENTLY remove the payment record and all associated clinical bookings. This cannot be undone.',
+        title: 'Delete Record Permanently?',
+        message: 'This will purge the payment record and all associated unverified bookings from the system. This cannot be undone.',
         confirmText: 'Delete Permanently',
         type: 'danger'
       });
-      
-      if (!isConfirmed) return;
-      
-      setIsProcessingPayment(true);
-      const toastId = toast.loading('Purging records...');
+
+      if (!isConfirmed) {
+        setIsProcessingPayment(false);
+        return;
+      }
+
+      toast.loading('Purging records...', { id: 'manual-pay' });
       
       let related = [];
       if (Array.isArray(payment.relatedBookings)) {
@@ -2549,6 +2565,15 @@ function AdminDashboardContent() {
  <h3 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-widest">Payment Approvals</h3>
  <p className="text-[10px] text-slate-600 font-bold uppercase tracking-widest mt-1">Review manual transactions via bKash/Nagad/Rocket</p>
  </div>
+ {isProcessingPayment && (
+ <button 
+ type="button" 
+ onClick={() => setIsProcessingPayment(false)} 
+ className="px-3 py-1 bg-amber-50 text-amber-600 border border-amber-200 rounded-lg text-[9px] font-black uppercase tracking-widest animate-pulse cursor-pointer relative z-50 pointer-events-auto"
+ >
+ Force Unlock
+ </button>
+ )}
  </div>
 
  <div className="overflow-x-auto">
