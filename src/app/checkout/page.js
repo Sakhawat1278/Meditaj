@@ -24,6 +24,12 @@ export default function CheckoutPage() {
   const [trxId, setTrxId] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  
+  // Editable Patient Info State
+  const [patientPhone, setPatientPhone] = useState('');
+  const [location, setLocation] = useState('');
+  const [bookingDate, setBookingDate] = useState('');
+  const [bookingTime, setBookingTime] = useState('');
 
   const [isMounted, setIsMounted] = useState(false);
 
@@ -40,7 +46,18 @@ export default function CheckoutPage() {
       router.push('/');
       return;
     }
-    setCheckoutData(JSON.parse(savedData));
+    const data = JSON.parse(savedData);
+    setCheckoutData(data);
+    
+    // Initialize editable states from payload or defaults
+    setPatientName(data.patientName || profile?.fullName || user.displayName || '');
+    setPatientPhone(data.patientPhone || profile?.phone || '');
+    setLocation(data.location || '');
+    
+    // Date/Time specifically handling for Nursing/Direct Bookings
+    const isImmediate = data.time === 'Immediate Coordination' || !data.time;
+    setBookingDate(isImmediate ? '' : (data.date || ''));
+    setBookingTime(isImmediate ? '' : (data.time || ''));
 
     if (!db) return;
     const unsubscribe = onSnapshot(collection(db, 'payment_methods'), (snapshot) => {
@@ -48,7 +65,7 @@ export default function CheckoutPage() {
     });
 
     return () => unsubscribe();
-  }, [isMounted, router]);
+  }, [isMounted, router, profile, user]);
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
@@ -83,9 +100,11 @@ export default function CheckoutPage() {
       const items = checkoutData.items || [];
       const userBase = {
         userId: user.uid,
-        userName: profile?.fullName || user.email || 'Patient',
-        patientPhone: checkoutData.patientPhone || '',
-        location: checkoutData.location || '',
+        userName: patientName || profile?.fullName || user.email || 'Patient',
+        patientPhone: patientPhone || '',
+        location: location || '',
+        date: bookingDate || checkoutData.date || new Date().toLocaleDateString('en-GB'),
+        time: bookingTime || checkoutData.time || '10:00 AM',
         paymentMethod: selectedPayment.provider,
         trxId: trxId,
         status: 'pending',
@@ -370,9 +389,72 @@ export default function CheckoutPage() {
                 <div className="absolute top-0 right-0 w-32 h-32 bg-slate-50 rounded-full blur-3xl -z-10 -mr-16 -mt-16" />
                 
                 <div className="flex items-center justify-between mb-8">
+                  <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Patient Information</h3>
+                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                </div>
+
+                <div className="space-y-4 mb-8">
+                  <div className="space-y-1.5">
+                    <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Patient Identity</label>
+                    <input 
+                      type="text" 
+                      value={patientName}
+                      onChange={(e) => setPatientName(e.target.value)}
+                      placeholder="Enter Full Name"
+                      className="w-full h-11 px-5 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Contact Number</label>
+                      <input 
+                        type="tel" 
+                        value={patientPhone}
+                        onChange={(e) => setPatientPhone(e.target.value)}
+                        placeholder="01XXX-XXXXXX"
+                        className="w-full h-11 px-5 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all font-mono"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Service Address / Location</label>
+                      <input 
+                        type="text" 
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        placeholder="House, Road, Area..."
+                        className="w-full h-11 px-5 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Date & Time Selection (Conditional for Nursing/Clinical) */}
+                  {(checkoutData?.type === 'nursing' || !checkoutData?.date) && (
+                    <div className="grid grid-cols-2 gap-4 mt-4 pt-4 border-t border-slate-100">
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Preferred Start Date</label>
+                        <input 
+                          type="date" 
+                          value={bookingDate}
+                          onChange={(e) => setBookingDate(e.target.value)}
+                          className="w-full h-11 px-5 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all uppercase"
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Start Time</label>
+                        <input 
+                          type="time" 
+                          value={bookingTime}
+                          onChange={(e) => setBookingTime(e.target.value)}
+                          className="w-full h-11 px-5 bg-slate-50 border border-slate-200 rounded-xl text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex items-center justify-between mb-8 pt-8 border-t border-slate-100">
                   <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Select Payment</h3>
                   <div className="flex items-center gap-1.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Live Gateway</span>
                   </div>
                 </div>
