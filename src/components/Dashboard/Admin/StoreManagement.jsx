@@ -576,21 +576,24 @@ export default function StoreManagement() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <div className="bg-white p-5 rounded-xl border border-slate-300 shadow-sm">
                 <h4 className="text-[10px] font-black text-[#1e4a3a] uppercase tracking-[0.2em] mb-5 flex items-center gap-3">
-                  <ExternalLink size={14} className="text-slate-400" /> Recent Delivered Invoices
+                  <ExternalLink size={14} className="text-slate-400" /> Recent Paid Invoices
                 </h4>
                 <div className="space-y-2.5">
-                  {orders.filter(o => o.status === 'delivered').slice(0, 5).map(o => (
+                  {orders.filter(o => o.paymentStatus === 'paid' || o.status === 'delivered' || o.status === 'processing').slice(0, 5).map(o => (
                     <div key={o.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg hover:bg-slate-100 transition-colors border border-slate-100">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 bg-white rounded flex items-center justify-center text-emerald-600 shadow-sm border border-slate-200">
-                          <Check size={14} />
+                          {o.status === 'delivered' ? <Check size={14} /> : <Clock size={14} />}
                         </div>
                         <div>
-                          <p className="text-[11px] font-black text-[#1e4a3a] leading-none mb-1">{o.customerName}</p>
-                          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">INV#{o.id.slice(-8)}</p>
+                          <p className="text-[11px] font-black text-[#1e4a3a] leading-none mb-1">{o.customerName || 'Customer'}</p>
+                          <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest">INV#{o.id.slice(-8).toUpperCase()}</p>
                         </div>
                       </div>
-                      <p className="text-[13px] font-black text-[#1e4a3a]">৳{o.total?.toLocaleString()}</p>
+                      <div className="text-right">
+                        <p className="text-[13px] font-black text-[#1e4a3a]">৳{o.total?.toLocaleString()}</p>
+                        <p className="text-[7px] font-black text-emerald-600 uppercase tracking-widest leading-none mt-1">{o.status}</p>
+                      </div>
                     </div>
                   ))}
                 </div>
