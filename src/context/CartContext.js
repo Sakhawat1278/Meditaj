@@ -83,7 +83,7 @@ export function CartProvider({ children }) {
       removeFromCart, 
       clearCart, 
       getSubtotal,
-      cartCount: cartItems.length
+      cartCount: cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0)
     }}>
       {children}
     </CartContext.Provider>
