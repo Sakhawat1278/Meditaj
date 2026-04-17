@@ -271,40 +271,6 @@ export default function CheckoutPage() {
             
             {/* LEFT COLUMN: ORDER SUMMARY & CONTEXT */}
             <div className="space-y-6">
-              {/* Booking Context */}
-              <div className="bg-white border border-slate-200 rounded-xl p-6 space-y-6">
-                <div className="flex items-center justify-between pb-4 border-b border-slate-200">
-                  <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Booking Context</h3>
-                  <div className="p-1.5 bg-slate-50 rounded-lg"><Phone className="text-slate-400" size={14} /></div>
-                </div>
-                <div className="space-y-6">
-                  {checkoutData.date && (
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#1e4a3a] shrink-0">
-                        <Calendar size={18} />
-                      </div>
-                      <div>
-                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">Schedule</p>
-                        <p className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">{checkoutData.date}</p>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter mt-0.5">{checkoutData.time}</p>
-                      </div>
-                    </div>
-                  )}
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#1e4a3a] shrink-0">
-                      <Phone size={18} />
-                    </div>
-                    <div>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">{checkoutData.date ? 'Verified Contact' : 'Recipient Phone'}</p>
-                      <p className="text-[14px] font-black text-[#1e4a3a] tracking-widest font-mono">{checkoutData.patientPhone || 'N/A'}</p>
-                    </div>
-                  </div>
-                  {checkoutData.location && (
-                    <div className="flex items-start gap-4 pt-4 border-t border-slate-200">
-                      <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-[#1e4a3a] shrink-0">
-                        <MapPin size={18} />
-                      </div>
-                      <div className="flex-1">
                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1.5">{checkoutData.date ? 'Point of Service' : 'Shipping Address'}</p>
                         <p className="text-[12px] font-bold text-slate-700 leading-relaxed tracking-tight">{checkoutData.location}</p>
                       </div>
