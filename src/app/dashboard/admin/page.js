@@ -1194,9 +1194,15 @@ function AdminDashboardContent() {
 
   const approveManualPayment = async (payment) => {
     try {
-      if (!payment?.id) return alert("Critical: No payment ID found");
+      if (!payment?.id) return toast.error("Critical: No payment ID found");
       
-      const isConfirmed = window.confirm(`Approve payment of ৳${payment.amount} for ${payment.userName || 'this user'}?`);
+      const isConfirmed = await confirm({
+        title: 'Verify & Approve Payment?',
+        message: `Are you sure you want to verify the transaction of ৳${payment.amount} for ${payment.userName || 'this user'}? This will confirm all linked services.`,
+        confirmText: 'Approve & Confirm',
+        type: 'success'
+      });
+      
       if (!isConfirmed) return;
       
       setIsProcessingPayment(true);
@@ -1254,16 +1260,20 @@ function AdminDashboardContent() {
   };
 
   const rejectManualPayment = async (payment) => {
-    if (!payment) return alert("Error: No payment data received");
-    
-    const isConfirmed = window.confirm(`Reject payment from ${payment.userName || 'User'}?`) || await confirm({
-      title: 'Reject Payment Request?',
-      message: 'This will mark the payment as failed and cancel all associated clinical bookings.',
-      confirmText: 'Reject & Cancel',
-      type: 'danger'
-    });
-    
-    if (!isConfirmed) return;
+    try {
+      if (!payment?.id) return toast.error("Error: Payment data missing");
+      
+      const isConfirmed = await confirm({
+        title: 'Reject Payment Request?',
+        message: `Reject payment from ${payment.userName || 'this user'}? This will mark the request as failed and cancel linked bookings.`,
+        confirmText: 'Reject & Cancel',
+        type: 'danger'
+      });
+      
+      if (!isConfirmed) return;
+      
+      setIsProcessingPayment(true);
+      const toastId = toast.loading('Processing rejection...');
     
     setIsProcessingPayment(true);
     const toastId = toast.loading('Processing rejection...');
@@ -1274,13 +1284,18 @@ function AdminDashboardContent() {
       ];
 
       for (const booking of related) {
-        if (booking.id && booking.collection) {
+        if (booking?.id && booking?.collection) {
           try {
-            await updateDoc(doc(db, booking.collection, booking.id), {
-              status: 'cancelled',
-              paymentStatus: 'failed',
-              rejectionReason: 'Payment verification failed'
-            });
+            const bookingRef = doc(db, booking.collection, booking.id);
+            const bookingSnap = await getDoc(bookingRef);
+            
+            if (bookingSnap.exists()) {
+              await updateDoc(bookingRef, {
+                status: 'cancelled',
+                paymentStatus: 'failed',
+                rejectionReason: 'Payment verification failed'
+              });
+            }
           } catch (err) {
             console.error(`Failed to cancel booking ${booking.id}:`, err);
           }
@@ -1304,8 +1319,15 @@ function AdminDashboardContent() {
 
   const deleteManualPayment = async (payment) => {
     try {
-      if (!payment?.id) return alert("Error: Payment ID missing");
-      const isConfirmed = window.confirm("PERMANENTLY DELETE this record and ALL results?");
+      if (!payment?.id) return toast.error("Error: Payment ID missing");
+      
+      const isConfirmed = await confirm({
+        title: 'Delete Payment Request?',
+        message: 'Are you sure? This will PERMANENTLY remove the payment record and all associated clinical bookings. This cannot be undone.',
+        confirmText: 'Delete Permanently',
+        type: 'danger'
+      });
+      
       if (!isConfirmed) return;
       
       setIsProcessingPayment(true);
@@ -2552,31 +2574,25 @@ function AdminDashboardContent() {
  <td className="px-6 py-4">
     <div className="flex justify-end gap-2">
       <button 
-        onClick={() => {
-          console.log("APPROVE BTN CLICKED");
-          approveManualPayment(payment);
-        }}
-        className="h-8 px-4 bg-emerald-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-[#1e4a3a] transition-all"
+        onClick={() => approveManualPayment(payment)}
+        disabled={isProcessingPayment}
+        className="h-8 px-4 bg-emerald-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-[#1e4a3a] transition-all disabled:opacity-50"
       >
         Approve
       </button>
       <button 
-        onClick={() => {
-          console.log("REJECT BTN CLICKED");
-          rejectManualPayment(payment);
-        }}
+        onClick={() => rejectManualPayment(payment)}
+        disabled={isProcessingPayment}
         title="Reject Payment"
-        className="h-8 w-8 bg-amber-50 text-amber-600 border border-amber-200 rounded-lg flex items-center justify-center hover:bg-amber-100 transition-all"
+        className="h-8 w-8 bg-amber-50 text-amber-600 border border-amber-200 rounded-lg flex items-center justify-center hover:bg-amber-100 transition-all disabled:opacity-50"
       >
         <X size={14} />
       </button>
       <button 
-        onClick={() => {
-          console.log("DELETE BTN CLICKED");
-          deleteManualPayment(payment);
-        }}
+        onClick={() => deleteManualPayment(payment)}
+        disabled={isProcessingPayment}
         title="Permanently Delete"
-        className="h-8 w-8 bg-rose-50 text-rose-500 border border-rose-200 rounded-lg flex items-center justify-center hover:bg-rose-100 transition-all"
+        className="h-8 w-8 bg-rose-50 text-rose-500 border border-rose-200 rounded-lg flex items-center justify-center hover:bg-rose-100 transition-all disabled:opacity-50"
       >
         <Trash2 size={14} />
       </button>
