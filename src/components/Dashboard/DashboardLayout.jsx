@@ -8,7 +8,7 @@ import {
   Settings, LogOut, Search, Bell, Menu, X, 
   UserCircle, Activity, HeartPulse, CreditCard,
   ChevronRight, ChevronDown, Sparkles, ShieldCheck, Home, Stethoscope, LayoutGrid,
-  Ambulance, FlaskConical, ClipboardPlus, Boxes, LayoutPanelLeft, UserCog, Loader2, MapPin, ShoppingCart
+  Ambulance, FlaskConical, ClipboardPlus, Boxes, LayoutPanelLeft, UserCog, Loader2, MapPin, ShoppingCart, Radio
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { db } from '@/lib/firebase';
@@ -126,17 +126,32 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  { name: 'Payment Desk', icon: CreditCard, href: '/dashboard/receptionist/payments', color: 'text-amber-500' },
  ],
  doctor: [
- { name: 'Medical Room', icon: LayoutDashboard, href: '/dashboard/doctor', color: 'text-indigo-500' },
- { name: 'Appointment Queue', icon: ClipboardList, href: '/dashboard/doctor/queue', color: 'text-blue-500' },
- { name: 'Health Records', icon: HeartPulse, href: '/dashboard/doctor/records', color: 'text-rose-500' },
- { name: 'Availability', icon: Calendar, href: '/dashboard/doctor/schedule', color: 'text-amber-500' },
+  { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard/doctor', view: 'overview', color: 'text-indigo-500' },
+  
+  { type: 'heading', name: 'Clinical Operations' },
+  { name: 'Appointments', icon: ClipboardList, href: '/dashboard/doctor', view: 'queue', color: 'text-blue-500' },
+  { name: 'Schedule', icon: Calendar, href: '/dashboard/doctor', view: 'schedule', color: 'text-amber-500' },
+  { name: 'Sessions', icon: Activity, href: '/dashboard/doctor', view: 'sessions', color: 'text-purple-500' },
+  
+  { type: 'heading', name: 'Account' },
+  { name: 'Settings', icon: Settings, href: '/dashboard/doctor', view: 'settings', color: 'text-slate-500' },
  ],
  patient: [
- { name: 'My Health', icon: LayoutDashboard, href: '/dashboard/patient', color: 'text-indigo-500' },
- { name: 'Book Appointment', icon: Sparkles, href: '/dashboard/patient/book', color: 'text-amber-500' },
- { name: 'Medical Results', icon: HeartPulse, href: '/dashboard/patient/results', color: 'text-rose-500' },
- { name: 'Billings', icon: CreditCard, href: '/dashboard/patient/billing', color: 'text-emerald-500' },
- ]
+  { name: 'My Health', icon: LayoutDashboard, href: '/dashboard/patient', view: 'overview', color: 'text-indigo-500' },
+  
+  { type: 'heading', name: 'Clinical Services' },
+  { name: 'Appointments', icon: Calendar, href: '/dashboard/patient', view: 'appointments', color: 'text-blue-500' },
+  { name: 'Instant Call', icon: Radio, href: '/dashboard/patient', view: 'instant-call', color: 'text-rose-500' },
+  { name: 'Lab Bookings', icon: FlaskConical, href: '/dashboard/patient', view: 'lab-bookings', color: 'text-sky-500' },
+  { name: 'Nursing Care', icon: ClipboardPlus, href: '/dashboard/patient', view: 'nursing', color: 'text-purple-500' },
+  { name: 'Ambulance Trips', icon: Ambulance, href: '/dashboard/patient', view: 'ambulance', color: 'text-red-600' },
+  { name: 'Pharmacy Orders', icon: ShoppingCart, href: '/dashboard/patient', view: 'pharmacy', color: 'text-orange-500' },
+  
+  { type: 'heading', name: 'Medical Identity' },
+  { name: 'Health Library', icon: HeartPulse, href: '/dashboard/patient', view: 'results', color: 'text-rose-500' },
+  { name: 'Billings', icon: CreditCard, href: '/dashboard/patient', view: 'billing', color: 'text-emerald-500' },
+  { name: 'Settings', icon: Settings, href: '/dashboard/patient', view: 'settings', color: 'text-slate-500' },
+  ]
  };
 
  const menuItems = navigation[role] || navigation.patient;
@@ -315,7 +330,12 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  <div className="flex items-center justify-between h-full border-b border-[#1e4a3a]/5">
  <div className="flex items-center gap-6">
  <div className="flex flex-col">
- <h1 className="text-[14px] font-extrabold text-[#1e4a3a] tracking-tight leading-none uppercase">Admin Terminal</h1>
+   <h1 className="text-[14px] font-extrabold text-[#1e4a3a] tracking-tight leading-none uppercase">
+    {role === 'patient' ? 'Patient Terminal' : 
+     role === 'doctor' ? 'Medical Terminal' : 
+     role === 'receptionist' ? 'Front Desk Terminal' : 
+     'Admin Terminal'}
+  </h1>
  </div>
  <div className="hidden lg:flex items-center gap-2 h-9 px-4 bg-slate-50 border border-[#1e4a3a]/20 rounded-lg w-[280px]">
  <Search size={14} className="text-slate-400" />
@@ -413,7 +433,7 @@ export default function DashboardLayout({ children, role = 'patient' }) {
  </header>
 
  {/* Dashboard Dynamic Content */}
- <main className="flex-1 overflow-y-auto px-8 py-5 custom-scrollbar">
+ <main className="flex-1 overflow-y-auto px-6 py-4 custom-scrollbar">
  <Suspense fallback={<div className="flex items-center justify-center h-full"><Loader2 className="animate-spin text-slate-300" /></div>}>
  {children}
  </Suspense>

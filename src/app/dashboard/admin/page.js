@@ -83,6 +83,8 @@ function AdminDashboardContent() {
  const [isDoctorsLoading, setIsDoctorsLoading] = useState(true);
  const [selectedDoctor, setSelectedDoctor] = useState(null);
  const [editingDoctor, setEditingDoctor] = useState(null);
+ const [selectedAppointment, setSelectedAppointment] = useState(null);
+ const [showApptModal, setShowApptModal] = useState(false);
  const [isEditingPatient, setIsEditingPatient] = useState(false);
  const [profileTab, setProfileTab] = useState('history'); // history, files
  const [patientFile, setPatientFile] = useState(null);

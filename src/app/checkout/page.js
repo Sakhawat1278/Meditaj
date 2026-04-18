@@ -232,10 +232,14 @@ export default function CheckoutPage() {
           <div className="w-20 h-20 bg-emerald-50 rounded-xl flex items-center justify-center mb-8 border border-emerald-200">
             <CheckCircle2 size={40} className="text-emerald-500" />
           </div>
-          <h2 className="text-xl font-bold text-[#1e4a3a] mb-4 tracking-tight uppercase">Booking Confirmed</h2>
+          <h2 className="text-xl font-bold text-[#1e4a3a] mb-4 tracking-tight uppercase">
+            {checkoutData?.type === 'instant' ? 'Clinical Link Active' : 'Booking Confirmed'}
+          </h2>
           <p className="text-slate-400 font-bold uppercase tracking-widest leading-loose mb-8 text-[11px]">
-            Your scheduling request has been received. Our clinical team is verifying your payment. 
-            Redirecting to dashboard...
+            {checkoutData?.type === 'instant' 
+              ? 'Synchronizing with the first available professional. Please stay online for immediate connection.' 
+              : 'Your scheduling request has been received. Our clinical team is verifying your payment.'}
+            <span className="block mt-2">Redirecting to console...</span>
           </p>
           <button 
             onClick={() => router.push('/dashboard/patient')} 

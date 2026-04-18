@@ -22,6 +22,7 @@ export const metadata = {
 import NavigationWrapper from "@/components/Home/NavigationWrapper";
 import FooterWrapper from "@/components/Home/FooterWrapper";
 import MotionProvider from "@/components/UI/MotionProvider";
+import GlobalConsultationListener from "@/components/Consultation/GlobalConsultationListener";
 
 export default function RootLayout({ children }) {
   return (
@@ -32,6 +33,7 @@ export default function RootLayout({ children }) {
             <MotionProvider>
               <ConfirmationProvider>
                 <NavigationWrapper />
+                <GlobalConsultationListener />
                 <main>{children}</main>
                 <FooterWrapper />
                 <Toaster position="bottom-right" toastOptions={{ duration: 3000 }} />
