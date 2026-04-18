@@ -813,6 +813,117 @@ function DoctorDashboardContent() {
     </div>
   );
 
+  // --- FINANCE VIEW ---
+  const financeStats = useMemo(() => {
+    const completed = allAppointments.filter(a => a.status === 'completed' || a.status === 'Completed');
+    const total = completed.reduce((sum, a) => sum + (Number(a.fees) || Number(a.consultationFee) || 0), 0);
+    const pending = allAppointments.filter(a => a.status === 'confirmed' || a.status === 'Confirmed').reduce((sum, a) => sum + (Number(a.fees) || Number(a.consultationFee) || 0), 0);
+    
+    return {
+      totalEarnings: total,
+      pendingEarnings: pending,
+      completedCount: completed.length
+    };
+  }, [allAppointments]);
+
+  const renderFinance = () => (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-[18px] font-black text-[#1e4a3a] tracking-tighter uppercase">Clinical Earnings</h2>
+          <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest mt-0.5 flex items-center gap-2">
+            <ShieldCheck size={12} className="text-emerald-500" />
+            Verified Revenue & Payouts
+          </p>
+        </div>
+        <button className="h-9 px-6 bg-[#1e4a3a] text-white rounded-[8px] text-[10px] font-black uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-md active:scale-95">
+          Request Payout
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white rounded-[16px] border border-slate-200 p-6 shadow-sm overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50 rounded-full blur-3xl -mr-12 -mt-12 opacity-50" />
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Net Earnings</p>
+          <div className="flex items-end gap-2">
+            <span className="text-[28px] font-black text-[#1e4a3a] font-mono tracking-tighter leading-none">৳{financeStats.totalEarnings}</span>
+            <span className="text-[10px] font-bold text-emerald-500 uppercase pb-1 tracking-widest">Released</span>
+          </div>
+        </div>
+        <div className="bg-white rounded-[16px] border border-slate-200 p-6 shadow-sm overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-amber-50 rounded-full blur-3xl -mr-12 -mt-12 opacity-50" />
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Pending Verification</p>
+          <div className="flex items-end gap-2">
+            <span className="text-[28px] font-black text-amber-600 font-mono tracking-tighter leading-none">৳{financeStats.pendingEarnings}</span>
+            <span className="text-[10px] font-bold text-amber-400 uppercase pb-1 tracking-widest">Incoming</span>
+          </div>
+        </div>
+        <div className="bg-white rounded-[16px] border border-slate-200 p-6 shadow-sm overflow-hidden relative">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-50 rounded-full blur-3xl -mr-12 -mt-12 opacity-50" />
+          <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Services Rendered</p>
+          <div className="flex items-end gap-2">
+            <span className="text-[28px] font-black text-indigo-600 font-mono tracking-tighter leading-none">{financeStats.completedCount}</span>
+            <span className="text-[10px] font-bold text-indigo-400 uppercase pb-1 tracking-widest">Consultations</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-[16px] border border-slate-200 overflow-hidden shadow-sm">
+        <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+          <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-[0.2em]">Live Transaction Ledger</h3>
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Updated in Real-time</span>
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-left">
+            <thead>
+              <tr className="bg-slate-50/30 border-b border-slate-100">
+                <th className="px-6 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest">Date & Reference</th>
+                <th className="px-6 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest">Patient Details</th>
+                <th className="px-6 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest">Service Fee</th>
+                <th className="px-6 py-4 text-[9px] font-black text-slate-400 uppercase tracking-widest">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-50">
+              {allAppointments.map((appt) => (
+                <tr key={appt.id} className="hover:bg-slate-50/50 transition-colors">
+                  <td className="px-6 py-4">
+                    <p className="text-[11px] font-bold text-slate-700">{appt.date || appt.createdAt?.toDate?.()?.toLocaleDateString()}</p>
+                    <p className="text-[9px] text-slate-400 uppercase tracking-widest font-mono">REF: {appt.id.slice(0, 8).toUpperCase()}</p>
+                  </td>
+                  <td className="px-6 py-4">
+                    <p className="text-[12px] font-bold text-[#1e4a3a]">{appt.patientName || appt.userName || 'Anonymous Patient'}</p>
+                    <p className="text-[9px] font-bold text-emerald-600 uppercase tracking-wide">{appt.type === 'instant' ? 'Instant Call' : 'Scheduled'}</p>
+                  </td>
+                  <td className="px-6 py-4">
+                    <p className="text-[13px] font-black text-slate-800 font-mono">৳{appt.fees || appt.consultationFee || profile?.consultationFee || 0}</p>
+                  </td>
+                  <td className="px-6 py-4">
+                    <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${
+                      appt.status === 'completed' ? 'bg-emerald-100 text-emerald-700' :
+                      appt.status === 'cancelled' ? 'bg-rose-100 text-rose-700' :
+                      'bg-amber-100 text-amber-700'
+                    }`}>
+                      {appt.status}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {allAppointments.length === 0 && (
+            <div className="text-center py-20">
+              <CreditCard size={32} className="text-slate-100 mx-auto mb-4" />
+              <p className="text-[11px] font-black text-slate-300 uppercase tracking-[0.2em]">No financial data synchronized</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
   // --- TAB ROUTER ---
 
   const renderActiveTab = () => {
@@ -821,6 +932,7 @@ function DoctorDashboardContent() {
       case 'queue': return renderAppointments();
       case 'schedule': return renderSchedule();
       case 'sessions': return renderSessions();
+      case 'finance': return renderFinance();
       case 'settings': return renderSettings();
       default: return renderOverview();
     }

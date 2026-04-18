@@ -132,6 +132,7 @@ export default function DashboardLayout({ children, role = 'patient' }) {
   { name: 'Appointments', icon: ClipboardList, href: '/dashboard/doctor', view: 'queue', color: 'text-blue-500' },
   { name: 'Schedule', icon: Calendar, href: '/dashboard/doctor', view: 'schedule', color: 'text-amber-500' },
   { name: 'Sessions', icon: Activity, href: '/dashboard/doctor', view: 'sessions', color: 'text-purple-500' },
+  { name: 'Earnings', icon: CreditCard, href: '/dashboard/doctor', view: 'finance', color: 'text-emerald-500' },
   
   { type: 'heading', name: 'Account' },
   { name: 'Settings', icon: Settings, href: '/dashboard/doctor', view: 'settings', color: 'text-slate-500' },
