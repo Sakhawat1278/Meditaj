@@ -151,6 +151,19 @@ function DoctorDashboardContent() {
     ];
   }, [allAppointments, patientQueue, consultationSessions]);
 
+  // --- FINANCE CALCULATIONS ---
+  const financeStats = useMemo(() => {
+    const completed = allAppointments.filter(a => a.status === 'completed' || a.status === 'Completed');
+    const total = completed.reduce((sum, a) => sum + (Number(a.fees) || Number(a.consultationFee) || 0), 0);
+    const pending = allAppointments.filter(a => a.status === 'confirmed' || a.status === 'Confirmed').reduce((sum, a) => sum + (Number(a.fees) || Number(a.consultationFee) || 0), 0);
+    
+    return {
+      totalEarnings: total,
+      pendingEarnings: pending,
+      completedCount: completed.length
+    };
+  }, [allAppointments]);
+
   // --- HANDLERS ---
 
   const checkInstantBookingEligibility = (doctorServices) => {
@@ -812,19 +825,6 @@ function DoctorDashboardContent() {
       </div>
     </div>
   );
-
-  // --- FINANCE VIEW ---
-  const financeStats = useMemo(() => {
-    const completed = allAppointments.filter(a => a.status === 'completed' || a.status === 'Completed');
-    const total = completed.reduce((sum, a) => sum + (Number(a.fees) || Number(a.consultationFee) || 0), 0);
-    const pending = allAppointments.filter(a => a.status === 'confirmed' || a.status === 'Confirmed').reduce((sum, a) => sum + (Number(a.fees) || Number(a.consultationFee) || 0), 0);
-    
-    return {
-      totalEarnings: total,
-      pendingEarnings: pending,
-      completedCount: completed.length
-    };
-  }, [allAppointments]);
 
   const renderFinance = () => (
     <div className="space-y-6">

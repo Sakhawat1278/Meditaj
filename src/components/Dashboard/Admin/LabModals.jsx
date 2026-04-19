@@ -59,34 +59,34 @@ export default function LabModals({
     <AnimatePresence>
       {showAddLabProvider && (
         <div key="add-lab-provider-modal" className="fixed inset-0 z-[130] flex items-center justify-center p-4">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowAddLabProvider(false)} />
-          <motion.div initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} className="relative w-full max-w-lg bg-white rounded-2xl overflow-hidden border border-slate-300 shadow-2xl">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#0F172A]/30 backdrop-blur-sm" onClick={() => setShowAddLabProvider(false)} />
+          <motion.div initial={{ opacity: 0, scale: 0.98, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.98, y: 10 }} className="relative w-full max-w-lg bg-white rounded-lg overflow-hidden border border-slate-300 shadow-2xl">
             <form onSubmit={handleSaveLabProvider} className="p-8 space-y-8 max-h-[90vh] overflow-y-auto custom-scrollbar">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-[18px] font-black text-[#1e4a3a] tracking-tight uppercase leading-none mb-2">{editingLabProvider ? 'Update Clinical Branch' : 'Register Diagnostic Provider'}</h3>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Configure Clinical Branch Details</p>
+                  <h3 className="text-[14px] font-bold text-[#1e4a3a] tracking-widest uppercase mb-1.5">{editingLabProvider ? 'Update Clinical Branch' : 'Register Diagnostic Provider'}</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest opacity-60">Fulfillment Configuration</p>
                 </div>
-                <button type="button" onClick={() => setShowAddLabProvider(false)} className="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 hover:text-[#1e4a3a] hover:bg-slate-100 flex items-center justify-center transition-all"><X size={20} /></button>
+                <button type="button" onClick={() => setShowAddLabProvider(false)} className="w-9 h-9 border border-slate-200 rounded-lg text-slate-400 hover:text-[#1e4a3a] hover:bg-slate-50 flex items-center justify-center transition-all"><X size={18} /></button>
               </div>
 
               <div className="space-y-6">
                 {/* 01. Identification */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] text-white flex items-center justify-center text-[10px] font-black">01</div>
-                    <h4 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest">Identity</h4>
+                    <div className="w-5 h-5 rounded bg-[#1e4a3a] text-white flex items-center justify-center text-[9px] font-bold">01</div>
+                    <h4 className="text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest">Identity Manifest</h4>
                   </div>
-                  <div className="space-y-1.5 font-bold">
-                    <label className="text-[10px] text-slate-400 uppercase tracking-widest ml-1">Provider / Center Name</label>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest ml-1 opacity-70">Provider / Center Name</label>
                     <div className="relative group">
-                      <Globe size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#1e4a3a] transition-colors" />
+                      <Globe size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#1e4a3a] transition-colors" />
                       <input 
                         required type="text" 
                         value={labProviderForm.name} 
                         onChange={e => setLabProviderForm({...labProviderForm, name: e.target.value})} 
                         placeholder="e.g. Popular Diagnostic Center..." 
-                        className="w-full h-12 bg-slate-50 border border-slate-200 rounded-xl pl-12 pr-4 text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all" 
+                        className="w-full h-11 bg-slate-50 border border-slate-200 rounded-lg pl-11 pr-4 text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] focus:bg-white transition-all uppercase tracking-tight" 
                       />
                     </div>
                   </div>
@@ -95,31 +95,31 @@ export default function LabModals({
                 {/* 02. Location Hierarchy */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] text-white flex items-center justify-center text-[10px] font-black">02</div>
-                    <h4 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest">Global Location Hierarchy</h4>
+                    <div className="w-5 h-5 rounded bg-[#1e4a3a] text-white flex items-center justify-center text-[9px] font-bold">02</div>
+                    <h4 className="text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest">Operational Hierarchy</h4>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4">
                     {/* Division */}
-                    <div className="space-y-1.5">
+                    <div className="space-y-2">
                       {isCustomDivision ? (
-                        <div className="space-y-1.5 font-bold">
-                          <label className="text-[10px] text-slate-400 uppercase tracking-widest ml-1">Custom Division</label>
+                        <div className="space-y-2 font-bold">
+                          <label className="text-[10px] text-[#1e4a3a] uppercase tracking-widest ml-1 opacity-70">Manual Division</label>
                           <div className="relative">
                             <input 
                               autoFocus
                               required type="text" 
                               value={labProviderForm.division} 
                               onChange={e => setLabProviderForm({...labProviderForm, division: e.target.value})} 
-                              className="w-full h-11 bg-white border-2 border-[#1e4a3a] rounded-xl px-4 text-[13px] font-bold outline-none" 
+                              className="w-full h-11 bg-white border border-[#1e4a3a] rounded-lg px-4 text-[13px] font-bold outline-none uppercase tracking-tight" 
                             />
-                            <button onClick={() => { setIsCustomDivision(false); setLabProviderForm({...labProviderForm, division: ''}); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-black uppercase text-rose-500 hover:scale-105 transition-transform">Reset</button>
+                            <button onClick={() => { setIsCustomDivision(false); setLabProviderForm({...labProviderForm, division: ''}); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-[8px] font-bold uppercase text-rose-500">Reset</button>
                           </div>
                         </div>
                       ) : (
                         <CustomDropdown 
-                          label="Division"
-                          placeholder="Select Division"
+                          label="Global Division"
+                          placeholder="Select"
                           icon={MapPin}
                           options={divisionOptions}
                           value={labProviderForm.division}
@@ -131,31 +131,32 @@ export default function LabModals({
                               setLabProviderForm({...labProviderForm, division: val, district: '', area: ''});
                             }
                           }}
+                          className="!h-11 border-slate-200"
                           searchable
                         />
                       )}
                     </div>
 
                     {/* District */}
-                    <div className="space-y-1.5">
+                    <div className="space-y-2">
                       {isCustomDistrict ? (
-                        <div className="space-y-1.5 font-bold">
-                          <label className="text-[10px] text-slate-400 uppercase tracking-widest ml-1">Custom District</label>
+                        <div className="space-y-2 font-bold">
+                          <label className="text-[10px] text-[#1e4a3a] uppercase tracking-widest ml-1 opacity-70">Manual District</label>
                           <div className="relative">
                             <input 
                               autoFocus
                               required type="text" 
                               value={labProviderForm.district} 
                               onChange={e => setLabProviderForm({...labProviderForm, district: e.target.value})} 
-                              className="w-full h-11 bg-white border-2 border-[#1e4a3a] rounded-xl px-4 text-[13px] font-bold outline-none" 
+                              className="w-full h-11 bg-white border border-[#1e4a3a] rounded-lg px-4 text-[13px] font-bold outline-none uppercase tracking-tight" 
                             />
-                            <button onClick={() => { setIsCustomDistrict(false); setLabProviderForm({...labProviderForm, district: ''}); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-black uppercase text-rose-500 hover:scale-105 transition-transform">Reset</button>
+                            <button onClick={() => { setIsCustomDistrict(false); setLabProviderForm({...labProviderForm, district: ''}); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-[8px] font-bold uppercase text-rose-500">Reset</button>
                           </div>
                         </div>
                       ) : (
                         <CustomDropdown 
-                          label="District"
-                          placeholder="Select District"
+                          label="Active District"
+                          placeholder="Select"
                           icon={Navigation}
                           options={getDistrictOptions(labProviderForm.division)}
                           value={labProviderForm.district}
@@ -167,6 +168,7 @@ export default function LabModals({
                               setLabProviderForm({...labProviderForm, district: val, area: ''});
                             }
                           }}
+                          className="!h-11 border-slate-200"
                           searchable
                           disabled={!labProviderForm.division}
                         />
@@ -175,25 +177,25 @@ export default function LabModals({
                   </div>
 
                   {/* Specific Area */}
-                  <div className="space-y-1.5">
+                  <div className="space-y-2">
                     {isCustomArea ? (
-                      <div className="space-y-1.5 font-bold">
-                        <label className="text-[10px] text-slate-400 uppercase tracking-widest ml-1">Custom Area / Branch</label>
+                      <div className="space-y-2 font-bold">
+                        <label className="text-[10px] text-[#1e4a3a] uppercase tracking-widest ml-1 opacity-70">Manual Area / Cluster</label>
                         <div className="relative">
                           <input 
                             autoFocus
                             required type="text" 
                             value={labProviderForm.area} 
                             onChange={e => setLabProviderForm({...labProviderForm, area: e.target.value})} 
-                            className="w-full h-11 bg-emerald-50 border-2 border-emerald-500 rounded-xl px-4 text-[13px] font-bold outline-none" 
+                            className="w-full h-11 bg-emerald-50 border border-emerald-500 rounded-lg px-4 text-[13px] font-bold outline-none uppercase tracking-tight" 
                           />
-                          <button onClick={() => { setIsCustomArea(false); setLabProviderForm({...labProviderForm, area: ''}); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-black uppercase text-rose-500 hover:scale-105 transition-transform">Reset</button>
+                          <button onClick={() => { setIsCustomArea(false); setLabProviderForm({...labProviderForm, area: ''}); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-[8px] font-bold uppercase text-rose-500">Reset</button>
                         </div>
                       </div>
                     ) : (
                       <CustomDropdown 
-                        label="Specific Area / Branch"
-                        placeholder="Gulshan-2, Road 45"
+                        label="Center Area / Cluster"
+                        placeholder="Identify specific location..."
                         icon={MapPin}
                         options={getAreaOptions(labProviderForm.division, labProviderForm.district)}
                         value={labProviderForm.area}
@@ -205,7 +207,7 @@ export default function LabModals({
                             setLabProviderForm({...labProviderForm, area: val});
                           }
                         }}
-                        className="border-emerald-500"
+                        className="!h-11 border-slate-200"
                         searchable
                         disabled={!labProviderForm.district}
                       />
@@ -214,30 +216,30 @@ export default function LabModals({
                 </div>
 
                 {/* 03. Visibility Status */}
-                <div className="flex items-center justify-between p-5 bg-slate-50 border border-slate-200 rounded-2xl">
+                <div className="flex items-center justify-between p-5 bg-slate-50 border border-slate-200 rounded-lg group">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-slate-400 shadow-sm">
-                      <Activity size={20} className={labProviderForm.status === 'active' ? 'text-emerald-500' : ''} />
+                    <div className={`w-9 h-9 rounded-lg border flex items-center justify-center transition-colors ${labProviderForm.status === 'active' ? 'bg-emerald-50 text-emerald-500 border-emerald-100' : 'bg-white text-slate-300 border-slate-200'}`}>
+                      <Activity size={16} />
                     </div>
                     <div>
-                      <h5 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest">Provider Status</h5>
-                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Currently visible to patients</p>
+                      <h5 className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-widest">Publication Status</h5>
+                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5 opacity-60">Visible within booking stream</p>
                     </div>
                   </div>
                   <button 
                     type="button"
                     onClick={() => setLabProviderForm({...labProviderForm, status: labProviderForm.status === 'active' ? 'inactive' : 'active'})}
-                    className={`relative w-12 h-6 rounded-full transition-all duration-300 ${labProviderForm.status === 'active' ? 'bg-emerald-500' : 'bg-slate-300'}`}
+                    className={`relative w-10 h-5 rounded-full transition-all duration-300 ${labProviderForm.status === 'active' ? 'bg-[#1e4a3a]' : 'bg-slate-300'}`}
                   >
-                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow-md transition-all duration-300 ${labProviderForm.status === 'active' ? 'left-7' : 'left-1'}`} />
+                    <div className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-all duration-300 ${labProviderForm.status === 'active' ? 'left-[22px]' : 'left-0.5'}`} />
                   </button>
                 </div>
               </div>
 
-              <div className="pt-6 flex gap-4">
-                <button type="button" onClick={() => setShowAddLabProvider(false)} className="flex-1 h-12 text-[12px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-600 transition-all">Discard</button>
-                <button type="submit" className="flex-[1.5] h-12 bg-[#0F172A] text-white rounded-xl text-[12px] font-black uppercase tracking-widest hover:bg-black transition-all active:scale-[0.98]">
-                  {editingLabProvider ? 'Update Records' : 'Confirm Registration'}
+              <div className="pt-6 flex gap-3">
+                <button type="button" onClick={() => setShowAddLabProvider(false)} className="flex-1 h-11 text-[11px] font-bold uppercase tracking-widest text-slate-400 hover:text-[#1e4a3a] transition-all">Discard</button>
+                <button type="submit" className="flex-[1.5] h-11 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-black transition-all">
+                  {editingLabProvider ? 'Commit Changes' : 'Confirm Registration'}
                 </button>
               </div>
             </form>
@@ -247,85 +249,65 @@ export default function LabModals({
 
       {showAddLabTest && (
         <div key="add-lab-test-modal" className="fixed inset-0 z-[130] flex items-center justify-center p-4">
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            exit={{ opacity: 0 }} 
-            className="absolute inset-0 bg-[#1e4a3a]/40" 
-            onClick={() => {
-              setShowAddLabTest(false);
-              setFilterDiv('');
-              setFilterDist('');
-              setFilterArea('');
-            }} 
-          />
-          <motion.div initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} className="relative w-full max-w-lg bg-white rounded-xl overflow-hidden border border-slate-300 shadow-2xl">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#0F172A]/30 backdrop-blur-sm" onClick={() => { setShowAddLabTest(false); setFilterDiv(''); setFilterDist(''); setFilterArea(''); }} />
+          <motion.div initial={{ opacity: 0, scale: 0.98, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.98, y: 10 }} className="relative w-full max-w-lg bg-white rounded-lg overflow-hidden border border-slate-300 shadow-2xl">
             <form onSubmit={handleSaveLabTest} className="p-8 space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-[18px] font-black text-[#1e4a3a] tracking-tight uppercase leading-none mb-2">{editingLabTest ? 'Modify Diagnostic Test' : 'Add Test to Catalog'}</h3>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Update Clinical Test Parameters</p>
+                  <h3 className="text-[14px] font-bold text-[#1e4a3a] tracking-widest uppercase mb-1.5">{editingLabTest ? 'Modify Diagnostic Test' : 'Add Test to Catalog'}</h3>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest opacity-60">Clinical Parameterization</p>
                 </div>
-                <button 
-                  type="button" 
-                  onClick={() => {
-                    setShowAddLabTest(false);
-                    setFilterDiv('');
-                    setFilterDist('');
-                    setFilterArea('');
-                  }} 
-                  className="w-10 h-10 rounded-xl bg-slate-50 text-slate-400 hover:text-[#1e4a3a] hover:bg-slate-100 flex items-center justify-center transition-all"
-                >
-                  <X size={20} />
-                </button>
+                <button type="button" onClick={() => { setShowAddLabTest(false); setFilterDiv(''); setFilterDist(''); setFilterArea(''); }} className="w-9 h-9 border border-slate-200 rounded-lg text-slate-400 hover:text-[#1e4a3a] hover:bg-slate-50 flex items-center justify-center transition-all"><X size={18} /></button>
               </div>
 
-              <div className="space-y-6 max-h-[65vh] overflow-y-auto pr-2 custom-scrollbar">
+              <div className="space-y-6 max-h-[65vh] overflow-y-auto pr-2 custom-scrollbar font-bold">
                 {/* 1. Basic Info */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] text-white flex items-center justify-center text-[10px] font-black">01</div>
-                    <h4 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest">Test Information</h4>
+                    <div className="w-5 h-5 rounded bg-[#1e4a3a] text-white flex items-center justify-center text-[9px] font-bold">01</div>
+                    <h4 className="text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest">Test Specification</h4>
                   </div>
-                  <div className="space-y-1.5 font-bold">
-                    <label className="text-[10px] text-slate-400 uppercase tracking-widest ml-1">Diagnostic Test Name</label>
-                    <input required type="text" value={labTestForm.name} onChange={e => setLabTestForm({...labTestForm, name: e.target.value})} placeholder="e.g. Blood Sugar (Fasting)" className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-[13px] font-bold outline-none focus:border-[#1e4a3a] focus:bg-white transition-all" />
+                  <div className="space-y-2">
+                    <label className="text-[10px] text-[#1e4a3a] uppercase tracking-widest ml-1 opacity-70">Diagnostic Test Title</label>
+                    <input required type="text" value={labTestForm.name} onChange={e => setLabTestForm({...labTestForm, name: e.target.value})} placeholder="e.g. Blood Sugar (Fasting)" className="w-full h-11 bg-slate-50 border border-slate-200 rounded-lg px-4 text-[13px] font-bold outline-none focus:border-[#1e4a3a] focus:bg-white transition-all uppercase tracking-tight" />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-1.5 font-bold">
-                      <label className="text-[10px] text-slate-400 uppercase tracking-widest ml-1">Category</label>
-                      <input required type="text" value={labTestForm.category} onChange={e => setLabTestForm({...labTestForm, category: e.target.value})} placeholder="Biochemistry" className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-[13px] font-bold outline-none focus:border-[#1e4a3a] focus:bg-white transition-all" />
+                    <div className="space-y-2">
+                      <label className="text-[10px] text-[#1e4a3a] uppercase tracking-widest ml-1 opacity-70">Category Segment</label>
+                      <input required type="text" value={labTestForm.category} onChange={e => setLabTestForm({...labTestForm, category: e.target.value})} placeholder="Biochemistry" className="w-full h-11 bg-slate-50 border border-slate-200 rounded-lg px-4 text-[13px] font-bold outline-none focus:border-[#1e4a3a] focus:bg-white transition-all uppercase tracking-tight" />
                     </div>
-                    <div className="space-y-1.5 font-bold">
-                      <label className="text-[10px] text-slate-400 uppercase tracking-widest ml-1">Base Price (৳)</label>
-                      <input required type="number" value={labTestForm.price} onChange={e => setLabTestForm({...labTestForm, price: e.target.value})} placeholder="500" className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl px-4 text-[13px] font-bold outline-none focus:border-[#1e4a3a] focus:bg-white transition-all" />
+                    <div className="space-y-2">
+                      <label className="text-[10px] text-[#1e4a3a] uppercase tracking-widest ml-1 opacity-70">Unit Fee (৳)</label>
+                      <input required type="number" value={labTestForm.price} onChange={e => setLabTestForm({...labTestForm, price: e.target.value})} placeholder="500" className="w-full h-11 bg-slate-50 border border-slate-200 rounded-lg px-4 text-[13px] font-bold outline-none focus:border-[#1e4a3a] focus:bg-white transition-all" />
                     </div>
                   </div>
                 </div>
 
                 {/* 2. Provider Location Filter */}
-                <div className="space-y-4 pt-4 border-t border-slate-100">
+                <div className="space-y-4 pt-6 border-t border-slate-100">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-lg bg-emerald-500 text-white flex items-center justify-center text-[10px] font-black">02</div>
-                    <h4 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest">Identify Provider Location</h4>
+                    <div className="w-5 h-5 rounded bg-emerald-500 text-white flex items-center justify-center text-[9px] font-bold">02</div>
+                    <h4 className="text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest">Route to Provider Center</h4>
                   </div>
 
                   <div className="grid grid-cols-3 gap-3">
                     <CustomDropdown 
-                      label="Division"
+                      label="Div"
                       placeholder="Select"
                       options={getDivisions().map(d => ({ label: d, value: d }))}
                       value={filterDiv}
                       onChange={(val) => { setFilterDiv(val); setFilterDist(''); setFilterArea(''); setLabTestForm({...labTestForm, providerId: ''}); }}
+                      className="!h-10 border-slate-200"
                       searchable={true}
                     />
                     <CustomDropdown 
-                      label="District"
+                      label="Dist"
                       placeholder="Select"
                       disabled={!filterDiv}
                       options={getDistricts(filterDiv).map(d => ({ label: d, value: d }))}
                       value={filterDist}
                       onChange={(val) => { setFilterDist(val); setFilterArea(''); setLabTestForm({...labTestForm, providerId: ''}); }}
+                      className="!h-10 border-slate-200"
                       searchable={true}
                     />
                     <CustomDropdown 
@@ -335,55 +317,45 @@ export default function LabModals({
                       options={getAreas(filterDiv, filterDist).map(a => ({ label: a, value: a }))}
                       value={filterArea}
                       onChange={(val) => { setFilterArea(val); setLabTestForm({...labTestForm, providerId: ''}); }}
+                      className="!h-10 border-slate-200"
                       searchable={true}
                     />
                   </div>
 
-                  <div className="space-y-1.5">
+                  <div className="space-y-2">
                     <CustomDropdown 
-                      label="Assign Clinical Provider"
-                      placeholder="Find lab in selected area..."
+                      label="Select Associated Clinical Provider"
+                      placeholder="Filter by location above..."
                       icon={ShieldCheck}
                       disabled={!filterArea}
                       options={filteredProviders.map(p => ({ label: p.name, value: p.id }))}
                       value={labTestForm.providerId}
                       onChange={(val) => setLabTestForm({...labTestForm, providerId: val})}
+                      className="!h-11 border-slate-200"
                       searchable={true}
-                      className="border-emerald-500"
                     />
-                    {!filterArea && <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest ml-1">Select location hierarchy to see providers</p>}
-                    {filterArea && filteredProviders.length === 0 && <p className="text-[9px] font-bold text-rose-500 uppercase tracking-widest ml-1">No providers found in this area</p>}
+                    {!filterArea && <p className="text-[8px] font-bold text-slate-400 uppercase tracking-widest ml-1">Define location parameters first</p>}
+                    {filterArea && filteredProviders.length === 0 && <p className="text-[8px] font-bold text-rose-500 uppercase tracking-widest ml-1">Manifest empty for this sector</p>}
                   </div>
                 </div>
 
                 {/* 3. Logistics */}
-                <div className="space-y-4 pt-4 border-t border-slate-100">
+                <div className="space-y-4 pt-6 border-t border-slate-100">
                   <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 rounded-lg bg-[#1e4a3a] text-white flex items-center justify-center text-[10px] font-black">03</div>
-                    <h4 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest">Clinical Logistics</h4>
+                    <div className="w-5 h-5 rounded bg-[#1e4a3a] text-white flex items-center justify-center text-[9px] font-bold">03</div>
+                    <h4 className="text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest">Clinical Protocol</h4>
                   </div>
-                  <div className="space-y-1.5 font-bold">
-                    <label className="text-[10px] text-slate-400 uppercase tracking-widest ml-1">Preparation & Description</label>
-                    <textarea value={labTestForm.preparation} onChange={e => setLabTestForm({...labTestForm, preparation: e.target.value})} placeholder="e.g. 8-10 hours fasting required. Morning sample preferred." className="w-full h-24 bg-slate-50 border border-slate-200 rounded-xl p-4 text-[12px] font-medium resize-none outline-none focus:border-[#1e4a3a] focus:bg-white transition-all" />
+                  <div className="space-y-2">
+                    <label className="text-[10px] text-[#1e4a3a] uppercase tracking-widest ml-1 opacity-70">Preparation Instruction</label>
+                    <textarea value={labTestForm.preparation} onChange={e => setLabTestForm({...labTestForm, preparation: e.target.value})} placeholder="e.g. 8-10 hours fasting required." className="w-full h-24 bg-slate-50 border border-slate-200 rounded-lg p-4 text-[12px] font-medium resize-none outline-none focus:border-[#1e4a3a] focus:bg-white transition-all" />
                   </div>
                 </div>
               </div>
 
-              <div className="pt-6 flex gap-4 border-t border-slate-100">
-                <button 
-                  type="button" 
-                  onClick={() => {
-                    setShowAddLabTest(false);
-                    setFilterDiv('');
-                    setFilterDist('');
-                    setFilterArea('');
-                  }} 
-                  className="flex-1 h-12 text-[12px] font-black uppercase tracking-widest text-slate-400"
-                >
-                  Cancel
-                </button>
-                <button type="submit" disabled={!labTestForm.providerId} className="flex-[1.5] h-12 bg-[#1e4a3a] text-white rounded-xl text-[12px] font-black uppercase tracking-widest hover:bg-black transition-all disabled:opacity-50 active:scale-[0.98]">
-                  {editingLabTest ? 'Apply Updates' : 'Confirm & Add to Index'}
+              <div className="pt-6 flex gap-3 border-t border-slate-100">
+                <button type="button" onClick={() => { setShowAddLabTest(false); setFilterDiv(''); setFilterDist(''); setFilterArea(''); }} className="flex-1 h-11 text-[11px] font-bold uppercase tracking-widest text-slate-400 hover:text-[#1e4a3a] transition-all">Cancel</button>
+                <button type="submit" disabled={!labTestForm.providerId} className="flex-[1.5] h-11 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-black transition-all disabled:opacity-40">
+                  {editingLabTest ? 'Apply Updates' : 'Confirm Entry'}
                 </button>
               </div>
             </form>

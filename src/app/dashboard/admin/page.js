@@ -1613,11 +1613,11 @@ function AdminDashboardContent() {
  initial={{ opacity: 0, y: 20 }}
  animate={{ opacity: 1, y: 0 }}
  transition={{ delay: idx * 0.15, duration: 0.15, ease: "easeOut" }}
- className={`p-5 ${stat.bg} rounded-xl border border-slate-300 transition-all hover:brightness-95`}
+ className="p-6 bg-white rounded-lg border border-slate-200 transition-all hover:border-slate-300"
  >
  <div className="flex items-center justify-between mb-4">
- <div className={`w-10 h-10 bg-white ${stat.color} rounded-lg flex items-center justify-center shrink-0 border border-slate-200`}>
- <stat.icon size={20} />
+ <div className={`w-10 h-10 bg-slate-50 ${stat.color} rounded-md flex items-center justify-center shrink-0 border border-slate-100`}>
+ <stat.icon size={18} strokeWidth={1.5} />
  </div>
  <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-1">
  <ArrowUpRight size={10} />
@@ -1641,15 +1641,15 @@ function AdminDashboardContent() {
  exit="exit"
  className="space-y-6"
  >
- <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-300 ">
+ <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-6 rounded-lg border border-slate-200 ">
  <div>
- <h2 className="text-[16px] font-extrabold text-[#1e4a3a] tracking-tight">Clinical Schedule</h2>
+ <h2 className="text-[14px] font-bold text-[#1e4a3a] tracking-tight uppercase">Clinical Schedule</h2>
  <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">
  Live monitoring of all patient consultations and bookings
  </p>
  </div>
  <div className="flex flex-wrap items-center gap-3">
- <div className="relative group overflow-hidden bg-slate-50 rounded-xl border border-slate-300 focus-within:border-slate-400 transition-all">
+ <div className="relative group overflow-hidden bg-slate-50 rounded-lg border border-slate-200 focus-within:border-slate-400 transition-all">
  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
  <input 
  type="text" 
@@ -1659,7 +1659,7 @@ function AdminDashboardContent() {
  className="w-[280px] h-10 pl-10 pr-4 bg-transparent text-[11px] font-bold text-[#1e4a3a] outline-none placeholder:text-slate-400 placeholder:font-medium" 
  />
  </div>
- <div className="flex items-center gap-1 p-1.5 bg-slate-50 border border-slate-300 rounded-xl">
+ <div className="flex items-center gap-1 p-1 bg-slate-50 border border-slate-200 rounded-lg">
  {[
  { id: 'all', label: 'All' },
  { id: 'today', label: 'Today' },
@@ -1679,21 +1679,21 @@ function AdminDashboardContent() {
  </div>
  </div>
 
- <div className="bg-white rounded-2xl border border-slate-300 overflow-hidden">
+ <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
  <div className="overflow-x-auto">
  <table className="w-full text-left border-collapse">
  <thead>
- <tr className="bg-slate-50/50 border-b border-slate-300">
-  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Booking ID</th>
-  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Patient Identity</th>
-  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Category</th>
-  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Provider / Dept</th>
-  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-center">Schedule</th>
-  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-center">Status</th>
-  <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-right">Action</th>
- </tr>
+            <tr className="bg-slate-50 border-b border-slate-200">
+              <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Booking Trace</th>
+              <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Identity Node</th>
+              <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Clinical Dept</th>
+              <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Provider Assign</th>
+              <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] text-center">Temporal Lock</th>
+              <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] text-center">Status Vector</th>
+              <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] text-right">Control</th>
+            </tr>
  </thead>
- <tbody className="divide-y divide-slate-200">
+ <tbody className="divide-y divide-slate-100">
  {filteredAppointments.map((appt, idx) => (
  <motion.tr 
  key={appt.id}
@@ -1787,9 +1787,9 @@ function AdminDashboardContent() {
  exit="exit"
  className="space-y-6"
  >
- <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-300">
+ <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-lg border border-slate-200">
  <div>
- <h2 className="text-[16px] font-extrabold text-[#1e4a3a] tracking-tight">Doctor Directory</h2>
+ <h2 className="text-[14px] font-bold text-[#1e4a3a] tracking-tight uppercase">Doctor Directory</h2>
  <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">
  Manage and audit approved medical professionals
  </p>
@@ -1802,12 +1802,12 @@ function AdminDashboardContent() {
  placeholder="Search by name, specialty or phone..." 
  value={doctorSearch}
  onChange={(e) => setDoctorSearch(e.target.value)}
- className="w-[300px] h-10 pl-10 pr-4 bg-slate-50 border border-slate-300 rounded-xl text-[12px] font-bold text-slate-600 outline-none focus:bg-white focus:border-med-primary/30 transition-all placeholder:text-slate-400 placeholder:font-medium" 
+ className="w-[300px] h-10 pl-10 pr-4 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-bold text-slate-600 outline-none focus:bg-white focus:border-med-primary/30 transition-all placeholder:text-slate-400 placeholder:font-medium" 
  />
  </div>
  <button 
  onClick={() => { setEditingDoctor(null); setShowRegisterDoctor(true); }}
- className="h-10 px-6 bg-[#1e4a3a] hover:bg-black text-white text-[11px] font-bold rounded-xl transition-all flex items-center gap-2"
+ className="h-10 px-6 bg-[#1e4a3a] hover:bg-black text-white text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all flex items-center gap-2"
  >
  <Plus size={14} />
  Register Doctor
@@ -1816,16 +1816,16 @@ function AdminDashboardContent() {
  </div>
 
  {filteredDoctors.length > 0 ? (
- <div className="bg-white rounded-2xl border border-slate-300">
+ <div className="bg-white rounded-lg border border-slate-200">
  <table className="w-full text-left border-collapse">
  <thead>
- <tr className="bg-slate-50/50 border-b border-slate-300">
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none border-b border-slate-300">Doctor</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none border-b border-slate-300">Specialty</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none border-b border-slate-300">Status</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none border-b border-slate-300">Credentials</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none border-b border-slate-300 text-right">Actions</th>
- </tr>
+            <tr className="bg-slate-50 border-b border-slate-200">
+              <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Physician Profile</th>
+              <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Clinical Specialty</th>
+              <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Network Status</th>
+              <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Credential Node</th>
+              <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] text-right">Control</th>
+            </tr>
  </thead>
  <tbody className="divide-y divide-slate-200">
  {filteredDoctors.map((doc) => (
@@ -1975,40 +1975,32 @@ function AdminDashboardContent() {
 
 
  {activeTab === 'patients' && (
- <motion.div 
- key="patients"
- variants={containerVariants}
- initial="hidden"
- animate="visible"
- exit="exit"
- className="space-y-6"
- >
- <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#1e4a3a]/20">
- <div>
- <h2 className="text-[16px] font-extrabold text-[#1e4a3a] tracking-tight">Patient Database</h2>
- <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">
- Secure repository for all registered patient profiles and clinical history
- </p>
- </div>
- <div className="flex items-center gap-3">
- <div className="relative group">
- <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-med-primary transition-colors" />
- <input 
- type="text" 
- placeholder="Search by name, email or ID..." 
- value={patientSearch}
- onChange={(e) => setPatientSearch(e.target.value)}
- className="w-[300px] h-10 pl-10 pr-4 bg-slate-50 border border-slate-300 rounded-xl text-[12px] font-bold text-slate-600 outline-none focus:bg-white focus:border-med-primary/30 transition-all placeholder:text-slate-400 placeholder:font-medium" 
- />
- </div>
- <div className="relative">
- <button 
- onClick={() => setShowFilterDropdown(!showFilterDropdown)}
- className={`h-10 px-5 rounded-xl text-[11px] font-bold flex items-center gap-2 transition-all ${filterStatus !== 'all' ? 'bg-med-primary text-white -primary/20' : 'bg-[#1e4a3a] text-white hover:bg-black'}`}
- >
- <Filter size={14} />
- {filterStatus === 'all' ? 'Filter' : filterStatus.charAt(0).toUpperCase() + filterStatus.slice(1)}
- </button>
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-lg border border-slate-200">
+        <div>
+          <h2 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-widest leading-none mb-1.5">Patient Database</h2>
+          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest opacity-60">Secure repository for all registered clinical profiles</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="relative group">
+            <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#1e4a3a] transition-colors" />
+            <input 
+              type="text" 
+              placeholder="Search by name, email or ID..." 
+              value={patientSearch}
+              onChange={(e) => setPatientSearch(e.target.value)}
+              className="w-full sm:w-[280px] h-10 pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-bold text-[#1e4a3a] outline-none" 
+            />
+          </div>
+          <button 
+            onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+            className={`h-10 px-6 rounded-lg text-[10px] font-bold uppercase tracking-widest transition-all ${filterStatus !== 'all' ? 'bg-[#1e4a3a] text-white shadow-md' : 'bg-slate-50 text-slate-400 border border-slate-200 hover:text-[#1e4a3a]'}`}
+          >
+            <Filter size={14} className="inline mr-2" />
+            {filterStatus === 'all' ? 'Filter Registry' : filterStatus.toUpperCase()}
+          </button>
+        </div>
+      </div>
  
  <AnimatePresence>
  {showFilterDropdown && (
@@ -2018,7 +2010,7 @@ function AdminDashboardContent() {
  initial={{ opacity: 0, y: 10, scale: 0.95 }}
  animate={{ opacity: 1, y: 0, scale: 1 }}
  exit={{ opacity: 0, y: 10, scale: 0.95 }}
- className="absolute right-0 mt-2 w-[180px] bg-white rounded-2xl border border-slate-200 p-2 z-[120] space-y-1"
+ className="absolute right-0 mt-2 w-[180px] bg-white rounded-lg border border-slate-200 p-2 z-[120] space-y-1"
  >
  {[
  { id: 'all', label: 'All Patients', icon: Users },
@@ -2028,9 +2020,9 @@ function AdminDashboardContent() {
  <button
  key={opt.id}
  onClick={() => { setFilterStatus(opt.id); setShowFilterDropdown(false); }}
- className={`w-full flex items-center gap-3 p-2.5 rounded-xl transition-all ${filterStatus === opt.id ? 'bg-slate-50 text-[#1e4a3a]' : 'text-slate-500 hover:bg-slate-50'}`}
+ className={`w-full flex items-center gap-3 p-2.5 rounded-lg transition-all ${filterStatus === opt.id ? 'bg-slate-50 text-[#1e4a3a]' : 'text-slate-500 hover:bg-slate-50'}`}
  >
- <opt.icon size={14} className={filterStatus === opt.id ? 'text-med-primary' : 'text-slate-300'} />
+ <opt.icon size={14} className={filterStatus === opt.id ? 'text-[#1e4a3a]' : 'text-slate-300'} />
  <span className="text-[12px] font-bold">{opt.label}</span>
  </button>
  ))}
@@ -2038,22 +2030,19 @@ function AdminDashboardContent() {
  </>
  )}
  </AnimatePresence>
- </div>
- </div>
- </div>
-
- <div className="bg-white rounded-2xl border border-[#1e4a3a]/20">
+ 
+ <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
  <table className="w-full text-left border-collapse">
  <thead>
- <tr className="bg-slate-50/50 border-b border-[#1e4a3a]/10">
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none rounded-tl-2xl">ID No.</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Patient Name</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Status</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Due</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Phone</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Age</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Next Appointment</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-right rounded-tr-2xl">Action</th>
+ <tr className="bg-slate-50 border-b border-slate-200">
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Patient Trace</th>
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Identity Node</th>
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Network Status</th>
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Balance</th>
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Comm Channel</th>
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Demographics</th>
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Temporal Node</th>
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] text-right">Control</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-slate-200">
@@ -2210,286 +2199,171 @@ function AdminDashboardContent() {
  </div>
  )}
  </div>
- </motion.div>
- )} {activeTab === 'receptionists' && (
- <motion.div 
- key="receptionists"
- variants={containerVariants}
- initial="hidden"
- animate="visible"
- exit="exit"
- className="space-y-6"
- >
- <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#1e4a3a]/20">
- <div>
- <h2 className="text-[16px] font-extrabold text-[#1e4a3a] tracking-tight">Staff Directory</h2>
- <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">
- Control platform access for receptionists and staff members
- </p>
- </div>
- <div className="flex items-center gap-3">
- <div className="relative group">
- <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-med-primary transition-colors" />
- <input 
- type="text" 
- placeholder="Search staff by name or email..." 
- value={staffSearch}
- onChange={(e) => setStaffSearch(e.target.value)}
- className="w-[300px] h-10 pl-10 pr-4 bg-slate-50 border border-slate-300 rounded-xl text-[12px] font-bold text-slate-600 outline-none focus:bg-white focus:border-med-primary/30 transition-all placeholder:text-slate-400 placeholder:font-medium" 
- />
- </div>
- <button 
- onClick={() => setShowAddStaff(true)}
- className="h-10 px-6 bg-[#1e4a3a] hover:bg-black text-white text-[11px] font-bold rounded-xl transition-all flex items-center gap-2"
- >
- <Plus size={14} />
- Register Staff
- </button>
- </div>
- </div>
+  </motion.div>
+ )}
 
- <div className="bg-white rounded-2xl border border-[#1e4a3a]/20">
- <table className="w-full text-left border-collapse">
- <thead>
- <tr className="bg-slate-50/50 border-b border-[#1e4a3a]/10">
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none rounded-tl-2xl">Identity</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Contact Info</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Joined Date</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Status</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-right rounded-tr-2xl">Action</th>
- </tr>
- </thead>
- <tbody className="divide-y divide-slate-200">
- {filteredStaff.map((member, mIdx) => {
- const name = member.fullName || member.name || 'Staff Member';
- const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
- const joinedDate = member.createdAt ? new Date(member.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : 'Recent';
- const isActive = member.status === 'active' || member.status === 'approved';
+ {activeTab === 'receptionists' && (
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-lg border border-slate-200">
+        <div>
+          <h2 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-widest leading-none mb-1.5">Staffing Matrix</h2>
+          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest opacity-60">System Operator Credentials</p>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="relative group">
+            <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#1e4a3a] transition-colors" />
+            <input 
+              type="text" 
+              placeholder="Filter staff node..." 
+              value={staffSearch}
+              onChange={(e) => setStaffSearch(e.target.value)}
+              className="w-full sm:w-[240px] h-10 pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-bold text-[#1e4a3a] outline-none" 
+            />
+          </div>
+          <button 
+            onClick={() => setShowAddStaff(true)}
+            className="h-10 px-6 bg-[#1e4a3a] text-white rounded-lg text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-all active:scale-95"
+          >
+            <UserPlus size={14} />
+            <span>Create Node</span>
+          </button>
+        </div>
+      </div>
 
- return (
- <motion.tr 
- key={member.id}
- initial={{ opacity: 0, y: 10 }}
- animate={{ opacity: 1, y: 0 }}
- transition={{ delay: mIdx * 0.02 }}
- className="group hover:bg-slate-50/50 transition-all cursor-default"
- >
- <td className="px-6 py-4">
- <div className="flex items-center gap-3">
- <div className="w-9 h-9 rounded-xl bg-slate-100 border border-slate-300 flex items-center justify-center text-slate-400 font-bold text-[12px]">
- {initials}
- </div>
- <div className="flex flex-col">
- <span className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">{name}</span>
- <span className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">ID: #{member.id.slice(0, 5).toUpperCase()}</span>
- </div>
- </div>
- </td>
- <td className="px-6 py-4">
- <div className="flex flex-col gap-1">
- <div className="flex items-center gap-2 text-[11px] font-bold text-slate-600">
- <Mail size={12} className="text-slate-300" /> {member.email}
- </div>
- <div className="flex items-center gap-2 text-[11px] font-bold text-slate-600">
- <Phone size={12} className="text-slate-300" /> {member.phone || '--'}
- </div>
- </div>
- </td>
- <td className="px-6 py-4">
- <span className="text-[12px] font-bold text-slate-600">{joinedDate}</span>
- </td>
- <td className="px-6 py-4">
- <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${isActive ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-rose-50 text-rose-600 border border-rose-100'}`}>
- {isActive ? 'Active' : 'Revoked'}
- </span>
- </td>
- <td className="px-6 py-4 text-right relative">
- <div className="flex justify-end">
- <button 
- onClick={() => setActiveMenuId(activeMenuId === member.id ? null : member.id)}
- className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${activeMenuId === member.id ? 'bg-[#1e4a3a] text-white' : 'text-slate-400 hover:bg-slate-100'}`}
- >
- <MoreHorizontal size={16} />
- </button>
- 
- <AnimatePresence>
- {activeMenuId === member.id && (
- <>
- <div className="fixed inset-0 z-[60]" onClick={() => setActiveMenuId(null)} />
- <motion.div 
- initial={{ opacity: 0, scale: 0.95, y: 10 }}
- animate={{ opacity: 1, scale: 1, y: 0 }}
- exit={{ opacity: 0, scale: 0.95, y: 10 }}
- className="absolute right-0 top-10 w-48 bg-white rounded-2xl border border-slate-200 p-2 z-[70] text-left"
- >
- <div className="px-3 py-2 border-b border-slate-200 mb-1">
- <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.15em]">Staff Controls</p>
- </div>
- <button onClick={() => { setActiveMenuId(null); toast.error('Edit feature coming soon'); }} className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 text-slate-700 transition-all font-bold text-[12px]">
- <div className="w-7 h-7 bg-amber-50 text-amber-600 rounded-lg flex items-center justify-center"><Edit3 size={14} /></div>
- Update Access
- </button>
- <div className="h-px bg-[#1e4a3a]/5 my-1" />
- {isActive ? (
- <button 
- onClick={async () => { 
- setActiveMenuId(null); 
- const isConfirmed = await confirm({
- title: 'Revoke Staff Access?',
- message: `You are about to deactivate system access for ${name}. They will be immediately logged out and blocked.`,
- type: 'danger'
- });
- if (isConfirmed) handleDeactivateDoctor(member.id);
- }} 
- className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-rose-50 text-rose-500 transition-all font-bold text-[12px]"
- >
- <div className="w-7 h-7 bg-rose-100 text-rose-600 rounded-lg flex items-center justify-center"><Trash2 size={14} /></div>
- Revoke Access
- </button>
- ) : (
- <button 
- onClick={async () => { 
- setActiveMenuId(null); 
- const isConfirmed = await confirm({
- title: 'Restore Staff Access?',
- message: `Re-enable clinical portal access for ${name}?`,
- type: 'success'
- });
- if (isConfirmed) handleReactivateDoctor(member.id);
- }} 
- className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-emerald-50 text-emerald-600 transition-all font-bold text-[12px]"
- >
- <div className="w-7 h-7 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center"><CheckCircle2 size={14} /></div>
- Restore Access
- </button>
- )}
- </motion.div>
- </>
- )}
- </AnimatePresence>
- </div>
- </td>
- </motion.tr>
- );
- })}
- </tbody>
- </table>
-
- {filteredStaff.length === 0 && (
- <div className="p-20 flex flex-col items-center justify-center text-center">
- <div className="w-20 h-20 bg-slate-50 rounded-3xl border border-slate-200 flex items-center justify-center text-slate-200 mb-6">
- <Users size={32} />
- </div>
- <h3 className="text-[16px] font-bold text-[#1e4a3a] tracking-tight">No Staff Members Found</h3>
- <p className="text-[13px] text-slate-500 font-medium max-w-xs mt-2">
- {staffSearch ? "No staff matches your search query." : "There are currently no registered staff members in your department."}
- </p>
- </div>
- )}
- </div>
- </motion.div>
- )}
+      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+        <table className="w-full text-left border-collapse">
+          <thead>
+            <tr className="bg-slate-50 border-b border-slate-200">
+              <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Credential Identity</th>
+              <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Contact Vector</th>
+              <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Security State</th>
+              <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] text-right">Control</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100">
+            {filteredStaff.map((member) => (
+              <tr key={member.id} className="hover:bg-slate-50/50 transition-colors group">
+                <td className="px-6 py-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-300 font-bold text-[12px]">
+                      {(member.fullName || member.name || 'SM').charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <span className="text-[13px] font-bold text-[#1e4a3a] tracking-tight uppercase">{member.fullName || member.name}</span>
+                      <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest mt-0.5">ID: #{member.id.slice(-6).toUpperCase()}</p>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-4">
+                  <p className="text-[12px] font-bold text-slate-500">{member.email}</p>
+                  <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest mt-0.5">{member.phone || 'NO_PH'}</p>
+                </td>
+                <td className="px-6 py-4">
+                  <span className={`px-2 py-0.5 text-[9px] font-bold uppercase rounded border ${member.status === 'active' || member.status === 'approved' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-rose-50 text-rose-600 border-rose-100'}`}>
+                    {member.status || 'inactive'}
+                  </span>
+                </td>
+                <td className="px-6 py-4 text-right">
+                  <button onClick={async () => { 
+                    const isConfirmed = await confirm({
+                      title: 'Purge Security Token?',
+                      message: `Revoke system access for ${member.fullName || member.name}?`,
+                      confirmText: 'Terminate Access',
+                      type: 'danger'
+                    });
+                    if (isConfirmed) handleDeactivateDoctor(member.id);
+                  }} className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-300 hover:text-rose-600 transition-all font-bold">
+                    <Trash2 size={14} />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </motion.div>
+  )}
 
  {activeTab === 'audits' && (
- <motion.div 
- key="audits"
- variants={containerVariants}
- initial="hidden"
- animate="visible"
- exit="exit"
- className="space-y-6"
- >
- <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-[#1e4a3a]/20">
- <div>
- <h2 className="text-[16px] font-extrabold text-[#1e4a3a] tracking-tight">Professional Credential Audit</h2>
- <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">Review pending provider applications for clinical network access</p>
- </div>
- <div className="flex items-center gap-2 px-4 py-1.5 bg-amber-50 text-amber-600 rounded-xl border border-amber-100">
- <ShieldCheck size={14} />
- <span className="text-[10px] font-bold uppercase tracking-widest">{pendingProviders.length} Pending Approval</span>
- </div>
- </div>
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-lg border border-slate-200">
+        <div>
+          <h2 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-widest leading-none mb-1.5">Network Audit</h2>
+          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest opacity-60">Pending Provider Authorization QUEUE</p>
+        </div>
+        <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-50 text-amber-600 rounded-lg border border-amber-100">
+          <ShieldAlert size={14} />
+          <span className="text-[9px] font-bold uppercase tracking-widest leading-none">{pendingProviders.length} Pending Approval</span>
+        </div>
+      </div>
 
- <div className="bg-white rounded-2xl border border-[#1e4a3a]/20">
- {pendingProviders.length === 0 ? (
- <div className="py-24 flex flex-col items-center justify-center text-center">
- <div className="w-20 h-20 rounded-3xl bg-slate-50 flex items-center justify-center text-slate-200 mb-6 border border-slate-200">
- <ShieldCheck size={32} />
- </div>
- <h3 className="text-[16px] font-bold text-[#1e4a3a] tracking-tight">Network Fully Synchronized</h3>
- <p className="text-[13px] text-slate-500 font-medium max-w-xs mt-2">No pending provider applications require your attention at this time.</p>
- </div>
- ) : (
- <table className="w-full text-left border-collapse">
- <thead>
- <tr className="bg-slate-50/50 border-b border-[#1e4a3a]/10">
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none rounded-tl-2xl">Provider & Role</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Contact Details</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Submission Date</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-right rounded-tr-2xl">Action</th>
- </tr>
- </thead>
- <tbody className="divide-y divide-slate-200">
- {pendingProviders.map((provider, pIdx) => (
- <motion.tr 
- key={provider.uid}
- initial={{ opacity: 0, y: 10 }}
- animate={{ opacity: 1, y: 0 }}
- transition={{ delay: pIdx * 0.05 }}
- className="group hover:bg-slate-50/50 transition-all cursor-default"
- >
- <td className="px-6 py-4">
- <div className="flex items-center gap-3">
- <div className="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 font-bold text-[13px]">
- {provider.fullName ? provider.fullName[0].toUpperCase() : 'P'}
- </div>
- <div className="flex flex-col">
- <span className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">{provider.fullName}</span>
- <span className="text-[9px] text-white bg-[#1e4a3a] px-2 py-0.5 rounded-md uppercase tracking-widest font-bold self-start mt-1 ">{provider.role}</span>
- </div>
- </div>
- </td>
- <td className="px-6 py-4">
- <div className="flex flex-col gap-1">
- <div className="flex items-center gap-2 text-[11px] font-bold text-slate-600">
- <Mail size={12} className="text-slate-300" /> {provider.email}
- </div>
- <div className="flex items-center gap-2 text-[11px] font-bold text-slate-600">
- <Phone size={12} className="text-slate-300" /> {provider.phone}
- </div>
- </div>
- </td>
- <td className="px-6 py-4">
- <div className="flex items-center gap-2 text-[12px] font-bold text-slate-600">
- <Clock size={12} className="text-slate-300" />
- {new Date(provider.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
- </div>
- </td>
- <td className="px-6 py-4">
- <div className="flex items-center justify-end gap-2">
- <button 
- onClick={() => approveProvider(provider.uid)}
- className="h-8 px-4 bg-emerald-600 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-emerald-700 transition-all"
- >
- <UserCheck size={12} />
- Approve
- </button>
- <button 
- onClick={() => rejectProvider(provider.uid)}
- className="h-8 w-8 bg-rose-50 text-rose-500 border border-rose-100 rounded-lg flex items-center justify-center hover:bg-rose-100 transition-all"
- >
- <X size={14} />
- </button>
- </div>
- </td>
- </motion.tr>
- ))}
- </tbody>
- </table>
- )}
- </div>
- </motion.div>
- )}
+      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+        {pendingProviders.length === 0 ? (
+          <div className="py-24 flex flex-col items-center justify-center text-center">
+            <div className="w-16 h-16 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-200 mb-4">
+              <ShieldCheck size={24} />
+            </div>
+            <h3 className="text-[12px] font-bold text-[#1e4a3a] uppercase tracking-widest">Network Synchronized</h3>
+            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-2 max-w-[200px]">No pending provider applications require mediation.</p>
+          </div>
+        ) : (
+          <table className="w-full text-left border-collapse">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200">
+                <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Applicant Profile</th>
+                <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Contact Vector</th>
+                <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Time of Submission</th>
+                <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] text-right">Decision Control</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {pendingProviders.map((provider) => (
+                <tr key={provider.uid} className="hover:bg-slate-50/50 transition-colors group">
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 font-bold text-[12px]">
+                        {provider.fullName?.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <span className="text-[13px] font-bold text-[#1e4a3a] tracking-tight uppercase leading-none block mb-1">{provider.fullName}</span>
+                        <span className="px-1.5 py-0.5 bg-[#1e4a3a] text-white text-[8px] rounded font-bold uppercase tracking-widest">{provider.role}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <p className="text-[12px] font-bold text-slate-500">{provider.email}</p>
+                    <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest mt-0.5">{provider.phone}</p>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2 text-[11px] font-bold text-slate-400">
+                      <Clock size={12} />
+                      <span>{new Date(provider.createdAt).toLocaleDateString()}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center justify-end gap-2">
+                      <button 
+                        onClick={() => approveProvider(provider.uid)}
+                        className="h-8 px-4 bg-emerald-600 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-all"
+                      >
+                        Authorize
+                      </button>
+                      <button 
+                        onClick={() => rejectProvider(provider.uid)}
+                        className="h-8 w-8 rounded-lg border border-rose-200 text-rose-500 hover:bg-rose-50 transition-all flex items-center justify-center"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    </motion.div>
+  )}
 
  {activeTab === 'finance' && (
  <motion.div 
@@ -2501,7 +2375,7 @@ function AdminDashboardContent() {
  className="space-y-8"
  >
  {/* Internal Sub-navigation */}
- <div className="flex items-center gap-2 p-1.5 bg-slate-50 border border-[#1e4a3a]/20 rounded-2xl w-fit sticky top-0 z-30 ">
+ <div className="flex items-center gap-2 p-1 bg-slate-50 border border-slate-200 rounded-lg w-fit sticky top-0 z-30 ">
  {[
  { id: 'overview', label: 'Overview', icon: LayoutGrid },
  { id: 'manual', label: 'Payment Approvals', icon: ShieldAlert },
@@ -2513,13 +2387,13 @@ function AdminDashboardContent() {
  <button
  key={tab.id}
  onClick={() => setFinanceTab(tab.id)}
- className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-bold uppercase tracking-widest transition-all ${
+ className={`flex items-center gap-2 px-4 py-2 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all ${
  financeTab === tab.id 
  ? 'bg-[#1e4a3a] text-white ' 
  : 'text-slate-500 hover:bg-slate-200/50 hover:text-[#1e4a3a]'
  }`}
  >
- <tab.icon size={14} />
+ <tab.icon size={13} />
  {tab.label}
  </button>
  ))}
@@ -2535,23 +2409,23 @@ function AdminDashboardContent() {
  { label: 'Pending Payouts', value: `৳${(financials.pendingPayouts / 1000).toFixed(1)}k`, growth: '-4.1%', icon: Clock, color: 'text-amber-700', bg: 'bg-white' },
  { label: 'Active Coupons', value: financials.activeCoupons.toString().padStart(2, '0'), growth: '0%', icon: Zap, color: 'text-indigo-700', bg: 'bg-white' },
  ].map((stat, i) => (
- <div key={i} className={`p-6 rounded-2xl border border-[#1e4a3a]/20 ${stat.bg} group hover:border-slate-400 transition-all`}>
+ <div key={i} className={`p-6 rounded-lg border border-slate-200 ${stat.bg} group hover:border-slate-300 transition-all`}>
  <div className="flex items-center justify-between mb-4">
- <div className={`w-12 h-12 rounded-xl border border-[#1e4a3a]/10 flex items-center justify-center bg-slate-50 ${stat.color}`}>
- <stat.icon size={24} />
+ <div className={`w-12 h-12 rounded-md border border-slate-100 flex items-center justify-center bg-slate-50 ${stat.color}`}>
+ <stat.icon size={22} strokeWidth={1.5} />
  </div>
  <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${stat.growth.startsWith('+') ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}`}>
  {stat.growth}
  </span>
  </div>
- <h4 className="text-[11px] font-bold text-slate-700 uppercase tracking-widest leading-none mb-2">{stat.label}</h4>
- <p className="text-2xl font-black text-[#1e4a3a] tracking-tight">{stat.value}</p>
+ <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-2">{stat.label}</h4>
+ <p className="text-2xl font-bold text-[#1e4a3a] tracking-tight">{stat.value}</p>
  </div>
  ))}
  </div>
 
  {/* Revenue Forecast (Visual Placeholder) */}
- <div className="bg-white rounded-2xl border border-[#1e4a3a]/20 p-8">
+ <div className="bg-white rounded-lg border border-slate-200 p-8">
  <div className="flex items-center justify-between mb-8">
  <div>
  <h3 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-widest">Revenue Forecast</h3>
@@ -2597,7 +2471,7 @@ function AdminDashboardContent() {
 
  {/* PAYMENT APPROVALS TAB */}
  {financeTab === 'manual' && (
- <div className="bg-white rounded-2xl border border-[#1e4a3a]/20 overflow-hidden ">
+ <div className="bg-white rounded-lg border border-slate-200 overflow-hidden ">
  <div className="p-8 border-b border-slate-100 flex items-center justify-between bg-white text-left">
  <div>
  <h3 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-widest">Payment Approvals</h3>
@@ -2607,7 +2481,7 @@ function AdminDashboardContent() {
  <button 
  type="button" 
  onClick={() => setIsProcessingPayment(false)} 
- className="px-3 py-1 bg-amber-50 text-amber-600 border border-amber-200 rounded-lg text-[9px] font-black uppercase tracking-widest animate-pulse cursor-pointer relative z-50 pointer-events-auto"
+ className="px-3 py-1 bg-amber-50 text-amber-600 border border-amber-200 rounded-lg text-[9px] font-bold uppercase tracking-widest animate-pulse cursor-pointer relative z-50 pointer-events-auto"
  >
  Force Unlock
  </button>
@@ -2617,14 +2491,14 @@ function AdminDashboardContent() {
  <div className="overflow-x-auto">
  <table className="w-full text-left border-collapse">
  <thead>
- <tr className="bg-slate-50/50 border-b border-[#1e4a3a]/10">
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Transaction ID</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Patient Identity</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Appointment</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Method</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none">Amount</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest leading-none text-right">Action</th>
- </tr>
+              <tr className="bg-slate-50 border-b border-slate-100">
+                <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Transaction Trace</th>
+                <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Identity Node</th>
+                <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Clinical REF</th>
+                <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Method</th>
+                <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Amount</th>
+                <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] text-right">Approval Control</th>
+              </tr>
  </thead>
  <tbody className="divide-y divide-slate-200">
  {pendingPayments.map((payment, idx) => (
@@ -2637,13 +2511,13 @@ function AdminDashboardContent() {
  >
  <td className="px-6 py-4">
  <div className="flex flex-col gap-1">
- <span className="text-[12px] font-black text-[#1e4a3a] uppercase tracking-tight">{payment.transactionId || 'N/A'}</span>
+ <span className="text-[12px] font-bold text-[#1e4a3a] uppercase tracking-tight">{payment.transactionId || 'N/A'}</span>
  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{payment.type || 'Booking'}</span>
  </div>
  </td>
  <td className="px-6 py-4">
  <div className="flex flex-col">
- <span className="text-[12px] font-black text-[#1e4a3a] leading-tight">{payment.userName || 'Anonymous'}</span>
+ <span className="text-[12px] font-bold text-[#1e4a3a] leading-tight">{payment.userName || 'Anonymous'}</span>
  <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">{payment.userPhone || 'No Phone'}</span>
  </div>
  </td>
@@ -2651,13 +2525,13 @@ function AdminDashboardContent() {
  <td className="px-6 py-4">
  <span className="text-[9px] text-[#1e4a3a] uppercase tracking-widest px-2 py-0.5 bg-slate-100 border border-slate-200 rounded-md font-bold">{payment.method}</span>
  </td>
- <td className="px-6 py-4 text-[12px] font-black text-[#1e4a3a]">৳{payment.amount}</td>
+ <td className="px-6 py-4 text-[12px] font-bold text-[#1e4a3a]">৳{payment.amount}</td>
  <td className="px-6 py-4">
     <div className="flex justify-end gap-2">
       <button 
         onClick={() => approveManualPayment(payment)}
         disabled={isProcessingPayment}
-        className="h-8 px-4 bg-emerald-600 text-white rounded-lg text-[10px] font-black uppercase tracking-widest hover:bg-[#1e4a3a] transition-all disabled:opacity-50"
+        className="h-8 px-4 bg-emerald-600 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-[#1e4a3a] transition-all disabled:opacity-50"
       >
         Approve
       </button>
@@ -2685,7 +2559,7 @@ function AdminDashboardContent() {
  <tr>
  <td colSpan="5" className="px-8 py-20 text-center">
  <div className="flex flex-col items-center gap-4 opacity-50">
- <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-300">
+ <div className="w-16 h-16 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-300">
  <ShieldCheck size={32} />
  </div>
  <p className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em]">Queue Clean • All payments verified</p>
@@ -2717,7 +2591,7 @@ function AdminDashboardContent() {
  }); 
  setShowPaymentModal(true); 
  }}
- className="h-9 px-5 bg-emerald-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-700 transition-all flex items-center gap-2"
+ className="h-9 px-5 bg-emerald-600 text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-emerald-700 transition-all flex items-center gap-2"
  >
  <Plus size={14} /> Add Account
  </button>
@@ -2725,17 +2599,17 @@ function AdminDashboardContent() {
 
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
  {paymentMethods.map((method) => (
- <div key={method.id} className="group bg-white p-4 rounded-2xl border border-[#1e4a3a]/20 transition-all relative overflow-hidden hover:border-slate-400">
+ <div key={method.id} className="group bg-white p-4 rounded-lg border border-slate-200 transition-all relative overflow-hidden hover:border-slate-300">
  <div className="flex items-start justify-between mb-6">
  <div className="flex items-center gap-3">
- <div className="w-10 h-10 rounded-xl border border-[#1e4a3a]/10 flex items-center justify-center p-1.5 bg-slate-50 overflow-hidden shrink-0">
+ <div className="w-10 h-10 rounded-lg border border-slate-200 flex items-center justify-center p-1.5 bg-slate-50 overflow-hidden shrink-0">
  {method.provider === 'bkash' && <img src="/bkash.webp" className="w-full h-full object-contain" />}
  {method.provider === 'nagad' && <img src="/nagad.webp" className="w-full h-full object-contain" />}
  {method.provider === 'rocket' && <img src="/rocket.webp" className="w-full h-full object-contain" />}
  {method.provider === 'bank' && <Building2 size={24} className="text-blue-600" />}
  </div>
  <div>
- <h4 className="text-[14px] font-black text-[#1e4a3a] uppercase tracking-tight">{method.provider}</h4>
+ <h4 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-tight">{method.provider}</h4>
  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded uppercase tracking-widest ${
  method.type === 'merchant' ? 'bg-emerald-50 text-emerald-700' : 
  method.type === 'agent' ? 'bg-amber-50 text-amber-700' :
@@ -2749,7 +2623,7 @@ function AdminDashboardContent() {
  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
  <button 
  onClick={() => { setEditingPayment(method.id); setPaymentForm({...method}); setShowPaymentModal(true); }}
- className="w-8 h-8 rounded-lg border border-[#1e4a3a]/10 flex items-center justify-center text-slate-500 hover:text-[#1e4a3a] hover:bg-slate-50 transition-all"
+ className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#1e4a3a] hover:bg-slate-50 transition-all"
  >
  <Edit3 size={14} />
  </button>
@@ -2766,7 +2640,7 @@ function AdminDashboardContent() {
  toast.success('Account removed');
  }
  }}
- className="w-8 h-8 rounded-lg border border-[#1e4a3a]/10 flex items-center justify-center text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all"
+ className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all"
  >
  <Trash2 size={14} />
  </button>
@@ -2782,7 +2656,7 @@ function AdminDashboardContent() {
  </div>
  <div className="space-y-0.5">
  <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none">Account Number</p>
- <p className="text-[13px] font-black text-[#1e4a3a] tracking-tighter">{method.accountNumber}</p>
+ <p className="text-[13px] font-bold text-[#1e4a3a] tracking-tighter">{method.accountNumber}</p>
  <p className="text-[10px] font-bold text-slate-600 truncate uppercase mt-0.5">{method.bankName}</p>
  </div>
  </div>
@@ -2790,7 +2664,7 @@ function AdminDashboardContent() {
  <div className="space-y-2">
  <div className="space-y-0.5">
  <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none">Account Number</p>
- <p className="text-[16px] font-black text-[#1e4a3a] tracking-tight">{method.accountNumber}</p>
+ <p className="text-[16px] font-bold text-[#1e4a3a] tracking-tight">{method.accountNumber}</p>
  </div>
  </div>
  )}
@@ -2815,7 +2689,7 @@ function AdminDashboardContent() {
  setCouponForm({ code: '', type: 'percentage', value: '', status: 'active' }); 
  setShowCouponModal(true); 
  }}
- className="h-9 px-5 bg-[#1e4a3a] text-white rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-all flex items-center gap-2"
+ className="h-9 px-5 bg-[#1e4a3a] text-white rounded-lg text-[10px] font-bold uppercase tracking-widest hover:bg-black transition-all flex items-center gap-2"
  >
  <Plus size={14} /> Create Coupon
  </button>
@@ -2823,20 +2697,20 @@ function AdminDashboardContent() {
 
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
  {coupons.map((coupon) => (
- <div key={coupon.id} className="group bg-white rounded-2xl border border-[#1e4a3a]/20 p-5 transition-all hover:border-slate-400 relative flex flex-col justify-between min-h-[160px]">
+ <div key={coupon.id} className="group bg-white rounded-lg border border-slate-200 p-5 transition-all hover:border-slate-300 relative flex flex-col justify-between min-h-[160px]">
  <div className="flex items-start justify-between">
  <div className="space-y-4">
  <div className="flex items-center gap-3">
- <div className="w-10 h-10 rounded-xl bg-[#1e4a3a] text-white flex items-center justify-center shrink-0">
+ <div className="w-10 h-10 rounded-lg bg-[#1e4a3a] text-white flex items-center justify-center shrink-0">
  <Zap size={20} />
  </div>
- <h4 className="text-[20px] font-black text-[#1e4a3a] tracking-wider">#{coupon.code}</h4>
+ <h4 className="text-[20px] font-bold text-[#1e4a3a] tracking-wider">#{coupon.code}</h4>
  </div>
  <div className="flex items-center gap-2">
  <span className={`px-3 py-1 rounded-lg text-[9px] font-bold uppercase tracking-widest border transition-all ${coupon.status === 'active' ? 'bg-emerald-50 border-emerald-100 text-emerald-700' : 'bg-slate-50 border-slate-200 text-slate-500'}`}>
  {coupon.status}
  </span>
- <span className="px-3 py-1 rounded-lg text-[9px] font-extrabold bg-blue-50 text-blue-700 border border-blue-100 uppercase tracking-tight">
+ <span className="px-3 py-1 rounded-lg text-[9px] font-bold bg-blue-50 text-blue-700 border border-blue-100 uppercase tracking-tight">
  {coupon.type === 'percentage' ? `${coupon.value}% OFF` : `৳${coupon.value} OFF`}
  </span>
  </div>
@@ -2845,7 +2719,7 @@ function AdminDashboardContent() {
  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all">
  <button 
  onClick={() => { setEditingCoupon(coupon.id); setCouponForm({...coupon}); setShowCouponModal(true); }}
- className="w-8 h-8 rounded-lg border border-[#1e4a3a]/10 flex items-center justify-center text-slate-500 hover:text-[#1e4a3a] hover:bg-slate-50 transition-all"
+ className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#1e4a3a] hover:bg-slate-50 transition-all"
  >
  <Edit3 size={14} />
  </button>
@@ -2862,7 +2736,7 @@ function AdminDashboardContent() {
  toast.success('Coupon removed');
  }
  }}
- className="w-8 h-8 rounded-lg border border-[#1e4a3a]/10 flex items-center justify-center text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all"
+ className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all"
  >
  <Trash2 size={14} />
  </button>
@@ -2883,10 +2757,10 @@ function AdminDashboardContent() {
  {financeTab === 'economics' && (
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
  {/* Fee Config */}
- <div className="bg-white rounded-2xl border border-[#1e4a3a]/10 overflow-hidden/50">
+ <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
  <div className="p-6 border-b border-slate-50 bg-slate-50/30">
  <div className="flex items-center gap-3">
- <div className="w-10 h-10 rounded-xl border border-[#1e4a3a]/10 flex items-center justify-center text-[#1e4a3a] bg-white">
+ <div className="w-10 h-10 rounded-lg border border-slate-200 flex items-center justify-center text-[#1e4a3a] bg-white">
  <Landmark size={20} />
  </div>
  <div>
@@ -3093,308 +2967,150 @@ function AdminDashboardContent() {
  className="space-y-4"
  >
  <div className="space-y-4">
- <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-lg border border-slate-300">
+ <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-lg border border-slate-200">
  <div>
- <h2 className="text-[15px] font-bold text-[#1e4a3a] tracking-tight">Medical Setup</h2>
+ <h2 className="text-[14px] font-bold text-[#1e4a3a] tracking-tight uppercase">Medical Setup</h2>
  <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">Manage medical specialties and services</p>
  </div>
  <button 
  onClick={() => setShowAddSpecialty(true)}
- className="h-9 px-5 bg-[#1e4a3a] hover:bg-black text-white text-[12px] font-bold rounded-lg transition-all flex items-center gap-2"
+ className="h-9 px-5 bg-[#1e4a3a] hover:bg-black text-white text-[10px] font-bold uppercase tracking-widest rounded-lg transition-all flex items-center gap-2"
  >
  <Plus size={14} />
  Add Specialty
  </button>
  </div>
-
-  {/* --- SPECIALTY LIST (ACCORDION) --- */}
-  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
-
- {specialties.map((spec) => (
-  <div key={spec.id} className="flex flex-col bg-white border border-slate-300 rounded-lg overflow-hidden transition-all">
-    <div 
-      onClick={() => setSelectedSpecialty(selectedSpecialty?.id === spec.id ? null : spec)}
-      className="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-50 transition-colors"
-    >
-      <div className="flex items-center gap-4">
-        <div className={`w-10 h-10 ${spec.bg || 'bg-slate-50'} ${spec.color || 'text-slate-500'} rounded-lg flex items-center justify-center opacity-80 border border-slate-200`}>
-          <IconComponent name={spec.icon} size={20} />
-        </div>
+ {activeTab === 'services' && (
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-lg border border-slate-200">
         <div>
-          <h3 className="text-[14px] font-bold text-[#1e4a3a] tracking-tight">{spec.name}</h3>
-          <p className="text-[11px] text-slate-500 font-medium tracking-tight mt-0.5">{spec.services?.length || 0} services</p>
+          <h2 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-widest leading-none mb-1.5">Service Registry</h2>
+          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest opacity-60">Clinical Department Topology</p>
         </div>
-      </div>
-      <div className="flex items-center gap-3">
-        <button onClick={(e) => { e.stopPropagation(); handleDeleteSpecialty(spec.id); }} className="p-1.5 rounded-md text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-all">
-          <Trash2 size={16} />
+        <button 
+          onClick={() => setShowAddSpecialty(true)}
+          className="h-10 px-6 bg-[#1e4a3a] text-white rounded-lg text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-all shadow-md"
+        >
+          <Plus size={14} />
+          <span>Provision Specialty</span>
         </button>
-        <div className={`p-1 text-slate-400 transform transition-transform duration-200 ${selectedSpecialty?.id === spec.id ? 'rotate-180' : ''}`}>
-          <ChevronDown size={18} />
-        </div>
       </div>
-    </div>
-    
-    <AnimatePresence>
-      {selectedSpecialty?.id === spec.id && (
-         <motion.div
-           initial={{ height: 0, opacity: 0 }}
-           animate={{ height: "auto", opacity: 1 }}
-           exit={{ height: 0, opacity: 0 }}
-           className="border-t border-slate-200 bg-slate-50/50 overflow-hidden"
-         >
-           <div className="p-5">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="text-[13px] font-bold text-[#1e4a3a]">Services under {spec.name}</h4>
-                <button
-                  onClick={() => {
-                   setEditingService(null);
-                   setServiceForm({ name: '', price: '', telemed: false, telemedPrice: '' });
-                   setShowAddService(true);
-                  }}
-                  className="h-8 px-4 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold tracking-tight hover:bg-black transition-all flex items-center gap-2"
-                >
-                  <Plus size={14} /> Add Service
-                </button>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {specialties.map((spec) => (
+          <div key={spec.id} className="bg-white rounded-lg border border-slate-200 overflow-hidden hover:border-slate-300 transition-all">
+            <div className="p-4 border-b border-slate-100 bg-slate-50/30 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`w-9 h-9 ${spec.bg || 'bg-slate-200'} rounded-lg flex items-center justify-center border border-slate-200`}>
+                  <IconComponent name={spec.icon} size={18} className={spec.color} />
+                </div>
+                <div>
+                  <h3 className="text-[13px] font-bold text-[#1e4a3a] uppercase tracking-tight">{spec.name}</h3>
+                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-0.5">{spec.services?.length || 0} Procedures</p>
+                </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 {(selectedSpecialty.services || []).map((service, idx) => (
-                    <div 
-                      key={idx} 
-                      className="group p-4 bg-white border border-slate-200 rounded-lg hover:border-slate-300 transition-all relative"
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                         <div className="space-y-1">
-                            <h4 className="text-[13px] font-bold text-[#1e4a3a] tracking-tight">{service.name}</h4>
-                            {service.telemed && (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-[10px] font-bold border border-blue-100">
-                                <Activity size={10} /> Telemedicine
-                              </span>
-                            )}
-                         </div>
-                         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-all">
-                            <button 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setEditingService(idx);
-                                setServiceForm({ ...service });
-                                setShowAddService(true);
-                              }}
-                              className="w-7 h-7 rounded-md border border-slate-200 flex items-center justify-center text-slate-500 hover:text-[#1e4a3a] hover:bg-slate-50 transition-all"
-                            >
-                              <Edit3 size={12} />
-                            </button>
-                            <button 
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteService(idx);
-                              }}
-                              className="w-7 h-7 rounded-md border border-slate-200 flex items-center justify-center text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-all"
-                            >
-                              <Trash2 size={12} />
-                            </button>
-                         </div>
-                      </div>
-
-                      <div className="flex items-end justify-between pt-3 border-t border-slate-100">
-                         <div className="space-y-0.5">
-                            <p className="text-[10px] text-slate-500 font-medium">In-Clinic Price</p>
-                            <p className="text-[14px] font-bold text-[#1e4a3a]">৳{service.price}</p>
-                         </div>
-                         {service.telemed && (
-                           <div className="text-right space-y-0.5">
-                              <p className="text-[10px] text-blue-500 font-medium">Telemed Fee</p>
-                              <p className="text-[13px] font-bold text-blue-600">৳{service.telemedPrice}</p>
-                           </div>
-                         )}
-                      </div>
-                    </div>
-                 ))}
-                 {(selectedSpecialty.services || []).length === 0 && (
-                   <div className="col-span-full py-8 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-lg bg-white">
-                      <p className="text-[12px] font-bold text-slate-500">No services configured yet</p>
-                   </div>
-                 )}
+              <div className="flex items-center gap-1">
+                <button onClick={() => { setSelectedSpecialty(spec); setShowAddService(true); }} className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-[#1e4a3a] transition-all"><Plus size={14} /></button>
+                <button onClick={() => handleDeleteSpecialty(spec.id)} className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-rose-600 transition-all"><Trash2 size={14} /></button>
               </div>
-           </div>
-         </motion.div>
-      )}
-    </AnimatePresence>
-  </div>
- ))}
-  </div>
- </div>
- </motion.div>
- )}
+            </div>
+            
+            <div className="p-4 space-y-2">
+              {(spec.services || []).map((service, idx) => (
+                <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-lg group hover:border-[#1e4a3a]/20 hover:bg-white transition-all">
+                  <div>
+                    <span className="text-[12px] font-bold text-[#1e4a3a] uppercase tracking-tight block">{service.name}</span>
+                    <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">৳{service.price} • {service.telemed ? 'Hybrid Ready' : 'In-Clinic Only'}</span>
+                  </div>
+                  <button 
+                    onClick={() => { setEditingService(idx); setSelectedSpecialty(spec); setServiceForm({...service}); setShowAddService(true); }}
+                    className="w-7 h-7 rounded border border-slate-200 flex items-center justify-center text-slate-300 hover:text-[#1e4a3a] opacity-0 group-hover:opacity-100 transition-all"
+                  >
+                    <Edit3 size={12} />
+                  </button>
+                </div>
+              ))}
+              {(spec.services || []).length === 0 && (
+                <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center py-4 border border-dashed border-slate-200 rounded-lg">Defaulting: No node defined</p>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  )}
 
- {activeTab === 'settings' && (
- <motion.div 
- key="settings"
- variants={containerVariants}
- initial="hidden"
- animate="visible"
- exit="exit"
- className="space-y-8"
- >
- {/* Settings Sub-navigation */}
- <div className="flex items-center gap-2 p-1.5 bg-slate-50 border border-slate-300 rounded-2xl w-fit sticky top-0 z-30 ">
- {[
- { id: 'profile', label: 'Profile Settings', icon: UserCircle },
- { id: 'finance', label: 'Finance Shortcuts', icon: Landmark },
- { id: 'security', label: 'Security & Auth', icon: Lock },
- ].map((tab) => (
- <button
- key={tab.id}
- onClick={() => setSettingsTab(tab.id)}
- className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-bold uppercase tracking-widest transition-all ${
- settingsTab === tab.id 
- ? 'bg-[#1e4a3a] text-white ' 
- : 'text-slate-500 hover:bg-slate-200/50 hover:text-[#1e4a3a]'
- }`}
- >
- <tab.icon size={14} />
- {tab.label}
- </button>
- ))}
- </div>
+  {activeTab === 'settings' && (
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6" key="settings">
+      <div className="flex items-center gap-2 p-1 bg-slate-50 border border-slate-200 rounded-lg w-fit">
+        {[
+          { id: 'profile', label: 'Admin Identity', icon: UserCircle },
+          { id: 'security', label: 'System Lock', icon: Lock },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setSettingsTab(tab.id)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all ${
+              settingsTab === tab.id ? 'bg-[#1e4a3a] text-white shadow-md' : 'text-slate-500 hover:bg-white hover:text-[#1e4a3a]'
+            }`}
+          >
+            <tab.icon size={13} />
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
- {settingsTab === 'profile' && (
- <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
- {/* Profile Card */}
- <div className="lg:col-span-1 space-y-6">
- <div className="bg-white rounded-2xl border border-slate-300 p-8 text-center flex flex-col items-center">
- <div className="relative group mb-6">
- <div className="w-32 h-32 rounded-3xl border-2 border-slate-100 overflow-hidden bg-slate-50 flex items-center justify-center">
- {adminProfile.photoURL ? (
- <img src={adminProfile.photoURL} className="w-full h-full object-cover" />
- ) : (
- <UserCircle size={64} className="text-slate-200" />
- )}
- </div>
- <button 
- onClick={() => document.getElementById('admin-photo-upload').click()}
- disabled={isUpdatingProfile}
- className="absolute -bottom-2 -right-2 w-10 h-10 bg-[#1e4a3a] text-white rounded-xl flex items-center justify-center hover:scale-110 transition-all disabled:opacity-50"
- >
- <Camera size={18} />
- </button>
- <input 
- id="admin-photo-upload"
- type="file"
- accept="image/*"
- onChange={handleAdminPhotoUpload}
- className="hidden"
- />
- </div>
- <h3 className="text-[16px] font-black text-[#1e4a3a] uppercase tracking-widest">{adminProfile.fullName || 'Admin User'}</h3>
- <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-1">Hospital Administrator</p>
- 
- <div className="w-full h-px bg-slate-100 my-8" />
- 
- <div className="w-full space-y-4">
- <div className="flex items-center justify-between">
- <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Account Status</span>
- <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 text-[9px] font-black uppercase tracking-widest rounded-md border border-emerald-100">Verified</span>
- </div>
- <div className="flex items-center justify-between">
- <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Access Level</span>
- <span className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-tight">Root Admin</span>
- </div>
- </div>
- </div>
- </div>
+      <div className="max-w-4xl">
+        {settingsTab === 'profile' && (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-1 bg-white p-8 rounded-lg border border-slate-200 flex flex-col items-center">
+              <div className="w-24 h-24 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-200 mb-6 relative group overflow-hidden">
+                {adminProfile.photoURL ? <img src={adminProfile.photoURL} className="w-full h-full object-cover" /> : <User size={40} />}
+                <div onClick={() => document.getElementById('admin-photo-upload').click()} className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all flex items-center justify-center text-white text-[9px] font-bold uppercase tracking-widest cursor-pointer">Modify</div>
+                <input id="admin-photo-upload" type="file" accept="image/*" onChange={handleAdminPhotoUpload} className="hidden" />
+              </div>
+              <h3 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-tight">{adminProfile.fullName || 'System Master'}</h3>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Super Administrator</p>
+            </div>
+            
+            <div className="md:col-span-2 bg-white p-8 rounded-lg border border-slate-200 space-y-6">
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest ml-1">Identity Tag</label>
+                  <input 
+                    type="text" 
+                    value={adminProfile.fullName} 
+                    onChange={(e) => setAdminProfile({...adminProfile, fullName: e.target.value})}
+                    className="w-full h-10 px-4 bg-slate-50 border border-slate-200 rounded-lg text-[13px] font-bold text-slate-700 outline-none" 
+                    placeholder="Master Admin" 
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-bold text-slate-400 uppercase tracking-widest ml-1">Primary Email Node</label>
+                  <input type="email" value={adminProfile.email} className="w-full h-10 px-4 bg-slate-100 border border-slate-200 rounded-lg text-[13px] font-bold text-slate-400 outline-none" disabled />
+                </div>
+              </div>
+              <button 
+                onClick={handleUpdateAdminProfile}
+                disabled={isUpdatingProfile}
+                className="w-full h-11 bg-[#1e4a3a] text-white rounded-lg text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-black transition-all disabled:opacity-50"
+              >
+                {isUpdatingProfile ? 'Syncing...' : 'Synchronize Core'}
+              </button>
+            </div>
+          </div>
+        )}
 
- {/* Form Area */}
- <div className="lg:col-span-2 space-y-8">
- <div className="bg-white rounded-2xl border border-slate-300 p-10">
- <h4 className="text-[13px] font-black text-[#1e4a3a] uppercase tracking-widest mb-10 flex items-center gap-2">
- <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
- Identity Information
- </h4>
- 
- <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
- <div className="group">
- <label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest mb-3 block group-focus-within:text-[#1e4a3a] transition-colors">Full Name</label>
- <input 
- type="text" 
- value={adminProfile.fullName}
- onChange={(e) => setAdminProfile({...adminProfile, fullName: e.target.value})}
- placeholder="Enter administrator name"
- className="w-full bg-transparent text-[15px] font-bold text-[#1e4a3a] outline-none placeholder:text-slate-200 pb-2 border-b-2 border-slate-300 focus:border-[#1e4a3a] transition-all"
- />
- </div>
- <div className="group opacity-60">
- <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 block">Email Address (Primary)</label>
- <div className="w-full bg-transparent text-[15px] font-bold text-slate-400 outline-none pb-2 border-b-2 border-slate-300">
- {adminProfile.email || auth.currentUser?.email}
- </div>
- </div>
- <div className="group">
- <label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest mb-3 block group-focus-within:text-[#1e4a3a] transition-colors">Contact Phone</label>
- <input 
- type="tel" 
- value={adminProfile.phone}
- onChange={(e) => setAdminProfile({...adminProfile, phone: e.target.value})}
- placeholder="+880 1XXX-XXXXXX"
- className="w-full bg-transparent text-[15px] font-bold text-[#1e4a3a] outline-none placeholder:text-slate-200 pb-2 border-b-2 border-slate-300 focus:border-[#1e4a3a] transition-all"
- />
- </div>
- <div className="group">
- <label className="text-[10px] font-bold text-slate-700 uppercase tracking-widest mb-3 block group-focus-within:text-[#1e4a3a] transition-colors">Department</label>
- <input 
- type="text" 
- defaultValue="General Administration"
- disabled
- className="w-full bg-transparent text-[15px] font-bold text-slate-400 outline-none pb-2 border-b-2 border-slate-300"
- />
- </div>
- </div>
-
- <div className="mt-16 pt-8 border-t border-slate-50 flex justify-end">
- <button 
- onClick={handleUpdateAdminProfile}
- disabled={isUpdatingProfile}
- className="h-12 px-10 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-bold uppercase tracking-widest hover:bg-black transition-all active:scale-[0.98] disabled:opacity-50"
- >
- {isUpdatingProfile ? 'Saving Changes...' : 'Update Profile'}
- </button>
- </div>
- </div>
- </div>
- </div>
- )}
-
- {settingsTab === 'finance' && (
- <div className="bg-white rounded-2xl border border-slate-300 p-12 text-center max-w-2xl mx-auto">
- <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-center mx-auto mb-6">
- <Landmark size={32} className="text-slate-300" />
- </div>
- <h3 className="text-[16px] font-black text-[#1e4a3a] uppercase tracking-widest">Finance Shortcuts</h3>
- <p className="text-[12px] text-slate-400 font-medium uppercase tracking-widest mt-2 leading-relaxed">
- Advanced financial settings, payment accounts, and coupon management have been moved for better organization.
- </p>
- <button 
- onClick={() => router.push('/dashboard/admin?view=finance')}
- className="mt-8 px-8 h-12 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-black uppercase tracking-widest hover:bg-black transition-all"
- >
- Go to Finance Panel
- </button>
- </div>
- )}
-
- {settingsTab === 'security' && (
- <div className="bg-white rounded-2xl border border-slate-300 p-20 text-center">
- <div className="w-20 h-20 bg-slate-50 rounded-3xl border border-slate-300 flex items-center justify-center text-slate-200 mx-auto mb-6">
- <Lock size={32} />
- </div>
- <h3 className="text-[16px] font-bold text-[#1e4a3a] tracking-tight">Security Credentials</h3>
- <p className="text-[13px] text-slate-500 font-medium max-w-xs mx-auto mt-2">
- Multi-factor authentication and password policy management is coming soon to the administration panel.
- </p>
- </div>
- )}
- </motion.div>
- )}
+        {settingsTab === 'security' && (
+          <div className="bg-white p-8 rounded-lg border border-slate-200">
+             <h3 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-widest mb-6">Security configuration</h3>
+             <p className="text-[12px] text-slate-500 font-bold uppercase tracking-tight mb-8">Password and access control settings are locked to Root Administrator.</p>
+             <button className="h-10 px-6 border border-slate-200 rounded-lg text-[10px] font-bold uppercase tracking-widest text-slate-400">Request override</button>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  )}
 
  {activeTab === 'nursing' && (
   <motion.div 
@@ -3405,10 +3121,10 @@ function AdminDashboardContent() {
   exit="exit"
   className="space-y-6"
   >
-    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-300 ">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-lg border border-slate-200">
       <div>
-        <h2 className="text-[16px] font-extrabold text-[#1e4a3a] tracking-tight">Nursing & Care Control</h2>
-        <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">Manage home care specialists and track site-wide nursing requests</p>
+        <h2 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-widest leading-none mb-1.5">Nursing & Care Control</h2>
+        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest opacity-60">Home Care Logistics & Specialist Registry</p>
       </div>
       <div className="flex flex-wrap items-center gap-4">
         {nursingTab === 'caregivers' && (
@@ -3421,21 +3137,21 @@ function AdminDashboardContent() {
               photoURL: '', selectedPackage: ''
             }); 
             setShowAddCaregiver(true); 
-          }} className="h-10 px-6 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-all">
+          }} className="h-10 px-6 bg-[#1e4a3a] text-white rounded-lg text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-all">
             <Plus size={16} /> Add Caregiver
           </button>
         )}
         <div className="h-10 w-px bg-slate-300 hidden lg:block mx-1" />
-        <div className="flex items-center gap-1 p-1 bg-slate-100/50 border border-slate-300 rounded-xl">
+        <div className="flex items-center gap-1 p-1 bg-slate-50 border border-slate-200 rounded-lg">
           {[
-            { id: 'bookings', label: 'Care Bookings', icon: ClipboardPlus },
+            { id: 'bookings', label: 'Bookings', icon: ClipboardPlus },
             { id: 'caregivers', label: 'Specialists', icon: Users },
-            { id: 'config', label: 'Service Config', icon: Settings },
+            { id: 'config', label: 'Configuration', icon: Settings },
           ].map(tab => (
             <button
               key={tab.id}
               onClick={() => setNursingTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${nursingTab === tab.id ? 'bg-[#1e4a3a] text-white ' : 'text-slate-500 hover:text-[#1e4a3a] hover:bg-white'}`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all ${nursingTab === tab.id ? 'bg-[#1e4a3a] text-white shadow-md' : 'text-slate-500 hover:bg-white hover:text-[#1e4a3a]'}`}
             >
               <tab.icon size={13} />
               {tab.label}
@@ -3446,18 +3162,18 @@ function AdminDashboardContent() {
     </div>
 
     {nursingTab === 'bookings' && (
-      <div className="bg-white rounded-2xl border border-slate-300 overflow-hidden">
+      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50/50 border-b border-slate-300">
-                <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Request ID</th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Patient Details</th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Care Specialist</th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Package Plan</th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Period</th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Status</th>
-                <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest text-right">Action</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest">Request ID</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest">Patient Details</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest">Care Specialist</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest">Package Plan</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest">Period</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest">Status</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest text-right">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-300 text-[12px] font-bold text-slate-700">
@@ -3475,7 +3191,7 @@ function AdminDashboardContent() {
                       <div className="flex flex-col gap-2">
                         {bk.items.map((item, idx) => (
                           <div key={idx} className="flex items-center gap-2">
-                            <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 border border-slate-200">
+                            <div className="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 border border-slate-200">
                                {item.name?.[0] || 'C'}
                             </div>
                             <span className="text-slate-700">{item.name}</span>
@@ -3484,7 +3200,7 @@ function AdminDashboardContent() {
                       </div>
                     ) : (
                       <div className="flex items-center gap-2">
-                         <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 border border-slate-200">
+                         <div className="w-6 h-6 rounded-lg bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 border border-slate-200">
                             {bk.caregiverName?.[0] || 'C'}
                          </div>
                          <span className="text-slate-700">{bk.caregiverName}</span>
@@ -3509,7 +3225,7 @@ function AdminDashboardContent() {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className={`px-2 py-0.5 text-[9px] font-black uppercase rounded border ${bk.status === 'confirmed' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 'bg-amber-50 border-amber-100 text-amber-600'}`}>
+                    <span className={`px-2 py-0.5 text-[9px] font-bold uppercase rounded border ${bk.status === 'confirmed' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 'bg-amber-50 border-amber-100 text-amber-600'}`}>
                       {bk.status}
                     </span>
                   </td>
@@ -3537,9 +3253,9 @@ function AdminDashboardContent() {
     {nursingTab === 'caregivers' && (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         {caregivers.map(nc => (
-          <div key={nc.id} className="bg-white p-4 rounded-xl border border-slate-300 hover:border-slate-400 transition-all group">
+          <div key={nc.id} className="bg-white p-4 rounded-lg border border-slate-200 hover:border-slate-300 transition-all group">
             <div className="flex items-start justify-between mb-4">
-              <div className="w-12 h-12 bg-white border border-slate-200 rounded-xl flex items-center justify-center overflow-hidden transition-colors">
+              <div className="w-12 h-12 bg-white border border-slate-200 rounded-lg flex items-center justify-center overflow-hidden transition-colors">
                 {nc.photoURL ? (
                   <img src={nc.photoURL} className="w-full h-full object-cover" />
                 ) : (
@@ -3547,7 +3263,7 @@ function AdminDashboardContent() {
                 )}
               </div>
               <div className="flex gap-2">
-                <button onClick={() => { setEditingCaregiver(nc.id); setCaregiverForm({...nc}); setShowAddCaregiver(true); }} className="w-8 h-8 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#1e4a3a] hover:border-slate-400 transition-all shadow-sm"><Edit3 size={12} /></button>
+                <button onClick={() => { setEditingCaregiver(nc.id); setCaregiverForm({...nc}); setShowAddCaregiver(true); }} className="w-8 h-8 bg-white border border-slate-200 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#1e4a3a] hover:border-slate-300 transition-all shadow-sm"><Edit3 size={12} /></button>
                 <button onClick={async () => {
                   const isConfirmed = await confirm({
                     title: 'Remove Specialist?',
@@ -3559,10 +3275,10 @@ function AdminDashboardContent() {
                     await deleteDoc(doc(db, 'nursing_providers', nc.id));
                     toast.success('Profile removed');
                   }
-                }} className="w-8 h-8 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-200 transition-all shadow-sm"><Trash2 size={12} /></button>
+                }} className="w-8 h-8 bg-white border border-slate-200 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-200 transition-all shadow-sm"><Trash2 size={12} /></button>
               </div>
             </div>
-            <h4 className="text-[14px] font-black text-[#1e4a3a] uppercase tracking-tight">{nc.name}</h4>
+            <h4 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-tight">{nc.name}</h4>
             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">{nc.specialty}</p>
             <div className="mt-4">
               {/* Package pills */}
@@ -3574,23 +3290,23 @@ function AdminDashboardContent() {
                     return (
                       <span key={i} className="inline-flex items-center gap-1 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg">
                         <span className="text-[9px] font-bold text-slate-700 uppercase tracking-wide">{pkg.label}</span>
-                        <span className="text-[9px] font-black text-emerald-600">৳{pkg.price}</span>
+                        <span className="text-[9px] font-bold text-emerald-600">৳{pkg.price}</span>
                       </span>
                     );
                   })}
                 </div>
               ) : nc.price ? (
-                <p className="text-[11px] font-black text-[#1e4a3a] tracking-tighter mb-3">৳{nc.price}/day</p>
+                <p className="text-[11px] font-bold text-[#1e4a3a] tracking-tighter mb-3">৳{nc.price}/day</p>
               ) : null}
               <div className="flex items-center justify-between">
                 <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{nc.packages?.length || 0} Package{(nc.packages?.length || 0) !== 1 ? 's' : ''}</span>
-                <span className={`px-2 py-0.5 text-[8px] font-black uppercase rounded ${nc.status === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-50 text-slate-400'}`}>{nc.status}</span>
+                <span className={`px-2 py-0.5 text-[8px] font-bold uppercase rounded ${nc.status === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-50 text-slate-400'}`}>{nc.status}</span>
               </div>
             </div>
           </div>
         ))}
         {caregivers.length === 0 && (
-          <div className="col-span-full py-20 bg-slate-50/50 rounded-2xl border border-dashed border-slate-300 flex flex-col items-center justify-center">
+          <div className="col-span-full py-20 bg-slate-50/50 rounded-lg border border-dashed border-slate-300 flex flex-col items-center justify-center">
             <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">No home care specialists registered</p>
           </div>
         )}
@@ -3599,17 +3315,17 @@ function AdminDashboardContent() {
 
     {nursingTab === 'config' && (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white rounded-2xl border border-slate-300 overflow-hidden">
-          <div className="p-5 bg-slate-50/50 border-b border-slate-300 flex items-center justify-between">
-            <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest">Pricing Packages</h3>
+        <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+          <div className="p-5 bg-slate-50/50 border-b border-slate-200 flex items-center justify-between">
+            <h3 className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-widest">Pricing Packages</h3>
             <button onClick={() => setShowAddNursingPackage(true)} className="h-8 px-4 bg-[#1e4a3a] text-white rounded-lg text-[9px] font-bold uppercase tracking-widest">Add Package</button>
           </div>
           <div className="p-4 space-y-3">
              {nursingPackages.map(pkg => (
-               <div key={pkg.id} className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl hover:border-slate-400 transition-all">
+               <div key={pkg.id} className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-lg hover:border-slate-300 transition-all">
                   <div>
                     <p className="text-[13px] font-bold text-[#1e4a3a]">{pkg.label} <span className="text-slate-400 font-medium">{pkg.duration}</span></p>
-                    <p className="text-[12px] font-black text-emerald-600 mt-1">৳{pkg.price}</p>
+                    <p className="text-[12px] font-bold text-emerald-600 mt-1">৳{pkg.price}</p>
                   </div>
                   <button onClick={async () => {
                     const isConfirmed = await confirm({
@@ -3625,14 +3341,14 @@ function AdminDashboardContent() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-slate-300 overflow-hidden">
-          <div className="p-5 bg-slate-50/50 border-b border-slate-300 flex items-center justify-between">
-            <h3 className="text-[11px] font-black text-[#1e4a3a] uppercase tracking-widest">Specialist Types</h3>
+        <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+          <div className="p-5 bg-slate-50/50 border-b border-slate-200 flex items-center justify-between">
+            <h3 className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-widest">Specialist Types</h3>
             <button onClick={() => setShowAddNursingType(true)} className="h-8 px-4 bg-[#1e4a3a] text-white rounded-lg text-[9px] font-bold uppercase tracking-widest">Add Type</button>
           </div>
           <div className="p-4 space-y-3">
              {nursingTypes.map(type => (
-               <div key={type.id} className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl hover:border-slate-400 transition-all">
+               <div key={type.id} className="flex items-center justify-between p-4 bg-white border border-slate-200 rounded-lg hover:border-slate-300 transition-all">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-slate-50 border border-slate-100 rounded-lg flex items-center justify-center overflow-hidden">
                       {type.image ? <img src={type.image} className="w-full h-full object-cover" /> : <Stethoscope className="text-slate-300" size={16} />}
@@ -3712,9 +3428,9 @@ function AdminDashboardContent() {
  exit="exit"
  className="space-y-6"
  >
- <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-300 ">
+ <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-6 rounded-lg border border-slate-200 ">
  <div>
- <h2 className="text-[16px] font-extrabold text-[#1e4a3a] tracking-tight">
+ <h2 className="text-[14px] font-bold text-[#1e4a3a] tracking-tight uppercase">
  Diagnostics Control Center
  </h2>
  <p className="text-[12px] text-slate-500 font-medium tracking-tight mt-1">
@@ -3723,17 +3439,17 @@ function AdminDashboardContent() {
  </div>
  <div className="flex flex-wrap items-center gap-4">
  {labTab === 'providers' && (
- <button onClick={() => { setEditingLabProvider(null); setLabProviderForm({ name: '', division: '', district: '', area: '', status: 'active' }); setShowAddLabProvider(true); }} className="h-10 px-6 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-all">
+ <button onClick={() => { setEditingLabProvider(null); setLabProviderForm({ name: '', division: '', district: '', area: '', status: 'active' }); setShowAddLabProvider(true); }} className="h-10 px-6 bg-[#1e4a3a] text-white rounded-lg text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-all">
  <Plus size={16} /> Add Provider
  </button>
  )}
  {labTab === 'catalog' && (
- <button onClick={() => { setEditingLabTest(null); setLabTestForm({ name: '', category: '', price: '', providerId: '', preparation: '', description: '', status: 'active' }); setShowAddLabTest(true); }} className="h-10 px-6 bg-[#1e4a3a] text-white rounded-xl text-[11px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-all">
+ <button onClick={() => { setEditingLabTest(null); setLabTestForm({ name: '', category: '', price: '', providerId: '', preparation: '', description: '', status: 'active' }); setShowAddLabTest(true); }} className="h-10 px-6 bg-[#1e4a3a] text-white rounded-lg text-[10px] font-bold uppercase tracking-widest flex items-center gap-2 hover:bg-black transition-all">
  <Plus size={16} /> Add Test
  </button>
  )}
  <div className="h-10 w-px bg-slate-300 hidden lg:block mx-1" />
- <div className="flex items-center gap-1 p-1 bg-slate-100/50 border border-slate-300 rounded-xl">
+ <div className="flex items-center gap-1 p-1 bg-slate-50 border border-slate-200 rounded-lg">
  {[
  { id: 'bookings', label: 'Live Bookings', icon: ClipboardPlus },
  { id: 'providers', label: 'Lab Providers', icon: Building2 },
@@ -3743,7 +3459,7 @@ function AdminDashboardContent() {
  <button
  key={tab.id}
  onClick={() => setLabTab(tab.id)}
- className={`flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all ${labTab === tab.id ? 'bg-[#1e4a3a] text-white ' : 'text-slate-500 hover:text-[#1e4a3a] hover:bg-white'}`}
+ className={`flex items-center gap-2 px-4 py-2 rounded-md text-[10px] font-bold uppercase tracking-wider transition-all ${labTab === tab.id ? 'bg-[#1e4a3a] text-white ' : 'text-slate-500 hover:text-[#1e4a3a] hover:bg-white'}`}
  >
  <tab.icon size={13} />
  {tab.label}
@@ -3756,49 +3472,43 @@ function AdminDashboardContent() {
  {labTab === 'bookings' && (
  <div className="bg-white rounded-2xl border border-slate-300 overflow-hidden">
  <div className="overflow-x-auto">
+ <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+ <div className="overflow-x-auto">
  <table className="w-full text-left border-collapse">
  <thead>
- <tr className="bg-slate-50/50 border-b border-slate-300">
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">ID</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Patient & Contact</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Location (Collection)</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Tests</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest text-center">Schedule</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Status</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest text-right">Action</th>
+ <tr className="bg-slate-50/50 border-b border-slate-200">
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">ID</th>
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Patient & Contact</th>
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Test Details</th>
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Schedule</th>
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Status</th>
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] text-right">Action</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-slate-300 text-[12px] font-bold text-slate-700">
- {labBookings.map((bk, i) => (
- <tr key={bk.id} className="hover:bg-slate-50/50 transition-all">
- <td className="px-6 py-4 font-mono text-slate-400 text-[10px]">#{bk.id?.slice(-8).toUpperCase()}</td>
+ <tbody className="divide-y divide-slate-100">
+ {labBookings.map((bk, idx) => (
+ <tr key={bk.id} className="hover:bg-slate-50/50 transition-all group">
  <td className="px-6 py-4">
- <div className="flex flex-col">
- <span className="text-[#1e4a3a]">{bk.patientName || 'Anonymous'}</span>
- <span className="text-[10px] text-slate-400">{bk.patientPhone}</span>
+ <span className="text-[10px] font-bold text-[#1e4a3a] opacity-30 uppercase">#{bk.id.slice(-6).toUpperCase()}</span>
+ </td>
+ <td className="px-6 py-4">
+ <p className="text-[13px] font-bold text-[#1e4a3a] uppercase tracking-tight leading-tight">{bk.patientName || 'Anonymous'}</p>
+ <p className="text-[9px] font-bold text-slate-300 uppercase tracking-widest mt-0.5">{bk.phone}</p>
+ </td>
+ <td className="px-6 py-4">
+ <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg">
+ <p className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-tight">{bk.testName}</p>
+ <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1 opacity-60">FEE: ৳{bk.price}</p>
  </div>
  </td>
  <td className="px-6 py-4">
- <div className="flex flex-col max-w-[200px]">
- <span className="truncate">{bk.location?.area}, {bk.location?.district}</span>
- <span className="text-[10px] text-slate-400 truncate">{bk.collectionAddress}</span>
+ <div className="flex items-center gap-2">
+ <Clock size={12} className="text-slate-300" />
+ <p className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-tight">{bk.date}</p>
  </div>
  </td>
  <td className="px-6 py-4">
- <div className="flex flex-wrap gap-1">
- {bk.items?.map((item, idx) => (
- <span key={idx} className="px-1.5 py-0.5 bg-sky-50 text-sky-600 text-[8px] rounded uppercase border border-sky-100">{item.name}</span>
- ))}
- </div>
- </td>
- <td className="px-6 py-4 text-center">
- <div className="flex flex-col">
- <span>{bk.date}</span>
- <span className="text-[10px] text-slate-400 uppercase">{bk.time}</span>
- </div>
- </td>
- <td className="px-6 py-4">
- <span className={`px-2 py-0.5 text-[9px] font-black uppercase rounded border ${bk.status === 'confirmed' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 'bg-amber-50 border-amber-100 text-amber-600'}`}>
+ <span className={`px-2 py-0.5 text-[9px] font-bold uppercase rounded border ${bk.status === 'confirmed' ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 'bg-amber-50 border-amber-100 text-amber-600'}`}>
  {bk.status}
  </span>
  </td>
@@ -3808,14 +3518,14 @@ function AdminDashboardContent() {
  await updateDoc(doc(db, 'lab_bookings', bk.id), { status: 'confirmed' });
  toast.success('Booking Confirmed');
  }
- }} className="w-8 h-8 rounded-lg border border-slate-300 flex items-center justify-center text-slate-400 hover:bg-[#1e4a3a] hover:text-white transition-all">
+ }} className="w-8 h-8 rounded-lg border border-slate-200 flex items-center justify-center text-slate-300 hover:text-[#1e4a3a] hover:bg-slate-50 transition-all">
  <Check size={14} />
  </button>
  </td>
  </tr>
  ))}
  {labBookings.length === 0 && (
- <tr><td colSpan="7" className="py-20 text-center text-slate-400 text-[11px] font-bold uppercase tracking-widest">No active lab bookings</td></tr>
+ <tr><td colSpan="6" className="py-20 text-center text-slate-400 text-[11px] font-bold uppercase tracking-widest">No active lab bookings</td></tr>
  )}
  </tbody>
  </table>
@@ -3826,37 +3536,39 @@ function AdminDashboardContent() {
  {labTab === 'providers' && (
  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
  {labProviders.map(lp => (
- <div key={lp.id} className="bg-white p-4 rounded-xl border border-slate-300 hover:border-slate-400 transition-all group">
- <div className="flex items-start justify-between mb-4">
- <div className="w-12 h-12 bg-slate-50 border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 group-hover:text-sky-500 transition-colors">
- <Building2 size={24} />
+ <div key={lp.id} className="bg-white p-5 rounded-lg border border-slate-200 hover:border-[#1e4a3a] transition-all group overflow-hidden relative">
+ <div className="flex items-start justify-between relative z-10">
+ <div className="w-10 h-10 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-center text-slate-300 group-hover:text-[#1e4a3a] transition-colors">
+ <Building2 size={20} />
  </div>
-  <div className="flex gap-2">
- <button onClick={() => { setEditingLabProvider(lp.id); setLabProviderForm({...lp}); setShowAddLabProvider(true); }} className="w-8 h-8 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#1e4a3a] hover:border-slate-400 transition-all shadow-sm"><Edit3 size={12} /></button>
+ <div className="flex gap-1.5">
+ <button onClick={() => { setEditingLabProvider(lp.id); setLabProviderForm({...lp}); setShowAddLabProvider(true); }} className="w-7 h-7 bg-white border border-slate-200 rounded-lg flex items-center justify-center text-slate-300 hover:text-[#1e4a3a] transition-all"><Edit3 size={11} /></button>
  <button onClick={async () => {
-  const isConfirmed = await confirm({
-  title: 'Terminate Provider?',
-  message: `Are you sure you want to remove ${lp.name}? This will affect all associated clinical tests.`,
-  confirmText: 'Delete Provider',
-  type: 'danger'
-  });
-  if (isConfirmed) {
-  await deleteDoc(doc(db, 'lab_providers', lp.id));
-  toast.success('Provider removed');
-  }
-  }} className="w-8 h-8 bg-white border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-600 hover:border-rose-200 transition-all shadow-sm"><Trash2 size={12} /></button>
+ const isConfirmed = await confirm({
+ title: 'Terminate Provider?',
+ message: `Are you sure you want to remove ${lp.name}?`,
+ confirmText: 'Delete Provider',
+ type: 'danger'
+ });
+ if (isConfirmed) {
+ await deleteDoc(doc(db, 'lab_providers', lp.id));
+ toast.success('Provider removed');
+ }
+ }} className="w-7 h-7 bg-white border border-slate-200 rounded-lg flex items-center justify-center text-slate-300 hover:text-rose-600 transition-all"><Trash2 size={11} /></button>
  </div>
  </div>
- <h4 className="text-[14px] font-black text-[#1e4a3a] uppercase tracking-tight">{lp.name}</h4>
- <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">{lp.area}, {lp.district}, {lp.division}</p>
- <div className="mt-6 flex items-center justify-between">
- <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{labTests.filter(t => t.providerId === lp.id).length} Tests Listed</span>
- <span className={`px-2 py-0.5 text-[8px] font-black uppercase rounded ${lp.status === 'active' ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-50 text-slate-400'}`}>{lp.status}</span>
+ <div className="mt-6 relative z-10">
+ <h4 className="text-[13px] font-bold text-[#1e4a3a] uppercase tracking-tight leading-tight">{lp.name}</h4>
+ <p className="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1 opacity-60 line-clamp-1">{lp.area}, {lp.district}</p>
+ <div className="mt-6 pt-4 border-t border-slate-50 flex items-center justify-between">
+ <span className="text-[9px] font-bold text-slate-300 uppercase tracking-widest">{labTests.filter(t => t.providerId === lp.id).length} Tests Listed</span>
+ <span className={`px-2 py-0.5 text-[8px] font-bold uppercase rounded border ${lp.status === 'active' ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-slate-50 text-slate-300 border-slate-200'}`}>{lp.status}</span>
+ </div>
  </div>
  </div>
  ))}
  {labProviders.length === 0 && (
- <div className="col-span-full py-20 bg-slate-50/50 rounded-2xl border border-dashed border-slate-300 flex flex-col items-center justify-center">
+ <div className="col-span-full py-20 bg-slate-50/50 rounded-lg border border-dashed border-slate-300 flex flex-col items-center justify-center">
  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest">No diagnostic providers found</p>
  </div>
  )}
@@ -3864,8 +3576,8 @@ function AdminDashboardContent() {
  )}
 
  {labTab === 'catalog' && (
- <div className="bg-white rounded-2xl border border-slate-300 overflow-hidden">
- <div className="p-6 border-b border-slate-300 flex items-center gap-4">
+ <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+ <div className="p-6 border-b border-slate-200 flex items-center gap-4">
  <div className="relative group flex-1">
  <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
  <input 
@@ -3873,21 +3585,21 @@ function AdminDashboardContent() {
  placeholder="Filter catalog by test name..." 
  value={labSearch}
  onChange={(e) => setLabSearch(e.target.value)}
- className="w-full h-10 pl-10 pr-4 bg-slate-50 border border-slate-300 rounded-xl text-[11px] font-bold outline-none placeholder:text-slate-400" 
+ className="w-full h-10 pl-10 pr-4 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-bold outline-none placeholder:text-slate-400" 
  />
  </div>
  </div>
  <div className="overflow-x-auto">
  <table className="w-full text-left border-collapse">
  <thead>
- <tr className="bg-slate-50/50 border-b border-slate-300">
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Test Name</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest">Provider</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest text-right">Price</th>
- <th className="px-6 py-4 text-[10px] font-extrabold text-[#1e4a3a] uppercase tracking-widest text-right">Action</th>
+ <tr className="bg-slate-50/50 border-b border-slate-200">
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Clinical Test Title</th>
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Fulfillment Center</th>
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] text-right">Standard Fee</th>
+ <th className="px-6 py-4 text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em] text-right">Registry Actions</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-slate-300 text-[12px] font-bold text-slate-700">
+ <tbody className="divide-y divide-slate-100 text-[12px] font-bold text-slate-700">
  {labTests.filter(t => t.name.toLowerCase().includes(labSearch.toLowerCase())).map(test => (
  <tr key={test.id} className="hover:bg-slate-50/50 transition-all">
  <td className="px-6 py-4 text-[#1e4a3a]">{test.name}</td>
@@ -3895,7 +3607,7 @@ function AdminDashboardContent() {
  <td className="px-6 py-4 text-right text-[#1e4a3a]">৳{test.price}</td>
  <td className="px-6 py-4 text-right">
   <div className="flex justify-end gap-2">
- <button onClick={() => { setEditingLabTest(test.id); setLabTestForm({...test}); setShowAddLabTest(true); }} className="w-8 h-8 bg-slate-50 border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-[#1e4a3a] hover:bg-white transition-all"><Edit3 size={12} /></button>
+ <button onClick={() => { setEditingLabTest(test.id); setLabTestForm({...test}); setShowAddLabTest(true); }} className="w-8 h-8 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#1e4a3a] hover:bg-white transition-all"><Edit3 size={12} /></button>
  <button onClick={async () => {
   const isConfirmed = await confirm({
   title: 'Remove Test from Catalog?',
@@ -3907,7 +3619,7 @@ function AdminDashboardContent() {
   await deleteDoc(doc(db, 'lab_tests', test.id));
   toast.success('Test removed from catalog');
   }
-  }} className="w-8 h-8 bg-slate-50 border border-slate-300 rounded-xl flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-white transition-all"><Trash2 size={12} /></button>
+  }} className="w-8 h-8 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-white transition-all"><Trash2 size={12} /></button>
  </div>
  </td>
  </tr>
@@ -3921,16 +3633,16 @@ function AdminDashboardContent() {
  {labTab === 'locations' && (
  <div className="space-y-6">
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
- <div className="bg-white rounded-2xl border border-slate-300 overflow-hidden flex flex-col h-[650px]">
+ <div className="bg-white rounded-lg border border-slate-200 overflow-hidden flex flex-col h-[650px]">
  <div className="p-5 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
- <h3 className="text-[10px] font-black text-[#1e4a3a] uppercase tracking-widest">01. Divisions</h3>
+ <h3 className="text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest">01. Divisions</h3>
  <MapPin size={14} className="text-slate-300" />
  </div>
  <div className="p-4 border-b border-slate-100 flex gap-2">
  <input 
  type="text" placeholder="New Division..." 
  value={locForm.division} onChange={e => setLocForm({...locForm, division: e.target.value})}
- className="flex-1 h-9 px-3 bg-slate-50 border border-slate-300 rounded-lg text-[11px] font-bold outline-none focus:border-emerald-500" 
+ className="flex-1 h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-bold outline-none focus:border-emerald-500" 
  />
  <button onClick={async () => {
  if (!locForm.division) return;
@@ -3947,7 +3659,7 @@ function AdminDashboardContent() {
  {getDivisions().map(div => (
  <div 
  key={div} 
- className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all cursor-pointer ${selectedLocDiv === div ? 'bg-[#1e4a3a] text-white font-black' : 'hover:bg-slate-50 text-[12px] font-bold text-slate-600'}`}
+ className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all cursor-pointer ${selectedLocDiv === div ? 'bg-[#1e4a3a] text-white font-bold' : 'hover:bg-slate-50 text-[12px] font-bold text-slate-600'}`}
  onClick={() => { setSelectedLocDiv(div); setSelectedLocDist(''); }}
  >
  {div}
@@ -3972,9 +3684,9 @@ function AdminDashboardContent() {
  </div>
  </div>
 
- <div className="bg-white rounded-2xl border border-slate-300 overflow-hidden flex flex-col h-[650px]">
+ <div className="bg-white rounded-lg border border-slate-200 overflow-hidden flex flex-col h-[650px]">
  <div className="p-5 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
- <h3 className="text-[10px] font-black text-[#1e4a3a] uppercase tracking-widest">02. Districts {selectedLocDiv && `in ${selectedLocDiv}`}</h3>
+ <h3 className="text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest">02. Districts {selectedLocDiv && `in ${selectedLocDiv}`}</h3>
  <Navigation size={14} className="text-slate-300" />
  </div>
  {selectedLocDiv ? (
@@ -3983,7 +3695,7 @@ function AdminDashboardContent() {
  <input 
  type="text" placeholder="New District..." 
  value={locForm.district} onChange={e => setLocForm({...locForm, district: e.target.value})}
- className="flex-1 h-9 px-3 bg-slate-50 border border-slate-300 rounded-lg text-[11px] font-bold outline-none focus:border-emerald-500" 
+ className="flex-1 h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-bold outline-none focus:border-emerald-500" 
  />
  <button onClick={async () => {
  if (!locForm.district) return;
@@ -4000,7 +3712,7 @@ function AdminDashboardContent() {
  {getDistricts(selectedLocDiv).map(dist => (
  <div 
  key={dist} 
- className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all cursor-pointer ${selectedLocDist === dist ? 'bg-[#1e4a3a] text-white font-black' : 'hover:bg-slate-50 text-[12px] font-bold text-slate-600'}`}
+ className={`w-full flex items-center justify-between px-4 py-3 rounded-lg transition-all cursor-pointer ${selectedLocDist === dist ? 'bg-[#1e4a3a] text-white font-bold' : 'hover:bg-slate-50 text-[12px] font-bold text-slate-600'}`}
  onClick={() => setSelectedLocDist(dist)}
  >
  {dist}
@@ -4036,9 +3748,9 @@ function AdminDashboardContent() {
  )}
  </div>
 
- <div className="bg-white rounded-2xl border border-slate-300 overflow-hidden flex flex-col h-[650px]">
+ <div className="bg-white rounded-lg border border-slate-200 overflow-hidden flex flex-col h-[650px]">
  <div className="p-5 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
- <h3 className="text-[10px] font-black text-[#1e4a3a] uppercase tracking-widest">03. Areas {selectedLocDist && `in ${selectedLocDist}`}</h3>
+ <h3 className="text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest">03. Areas {selectedLocDist && `in ${selectedLocDist}`}</h3>
  <Plus size={14} className="text-slate-300" />
  </div>
  {selectedLocDist ? (
@@ -4048,7 +3760,7 @@ function AdminDashboardContent() {
  <input 
  type="text" placeholder="Single Area..." 
  value={locForm.area} onChange={e => setLocForm({...locForm, area: e.target.value})}
- className="flex-1 h-9 px-3 bg-slate-50 border border-slate-300 rounded-lg text-[11px] font-bold outline-none focus:border-emerald-500" 
+ className="flex-1 h-9 px-3 bg-slate-50 border border-slate-200 rounded-lg text-[11px] font-bold outline-none focus:border-emerald-500" 
  />
  <button onClick={async () => {
  if (!locForm.area) return;
@@ -4069,7 +3781,7 @@ function AdminDashboardContent() {
  <div className="flex gap-1">
  <textarea 
  placeholder="Bulk Add (comma separated)..." 
- className="flex-1 h-14 p-3 bg-slate-50 border border-slate-200 rounded-xl text-[10px] font-bold resize-none outline-none focus:border-[#1e4a3a] transition-all font-black"
+ className="flex-1 h-14 p-3 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-bold resize-none outline-none focus:border-[#1e4a3a] transition-all"
  onKeyDown={async (e) => {
  if (e.key === 'Enter' && !e.shiftKey && e.target.value.trim()) {
  e.preventDefault();
@@ -4091,7 +3803,7 @@ function AdminDashboardContent() {
  </div>
  <div className="flex-1 overflow-y-auto custom-scrollbar p-2 space-y-1">
  {getAreas(selectedLocDiv, selectedLocDist).map(area => (
- <div key={area} className="w-full flex items-center justify-between px-4 py-3 bg-white border border-slate-200 rounded-xl text-[12px] font-bold text-slate-800 lg:group">
+ <div key={area} className="w-full flex items-center justify-between px-4 py-3 bg-white border border-slate-200 rounded-lg text-[12px] font-bold text-slate-800 lg:group">
  {area}
  <button onClick={async () => {
  const isConfirmed = await confirm({ title: 'Remove Area?', message: `This will remove ${area} from ${selectedLocDist}.`, type: 'danger' });
@@ -4126,7 +3838,7 @@ function AdminDashboardContent() {
  {showAddSpecialty && (
  <div key="add-specialty-modal" className="fixed inset-0 z-[100] flex items-center justify-center p-4">
  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowAddSpecialty(false)} />
- <motion.div initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} className="relative w-full max-w-lg bg-white rounded-xl overflow-hidden">
+ <motion.div initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} className="relative w-full max-w-lg bg-white rounded-lg overflow-hidden">
  <form onSubmit={handleSaveSpecialty} className="p-6 space-y-6">
  <div className="flex items-center justify-between">
  <h3 className="text-[16px] font-bold text-med-text tracking-tight uppercase">New Medical Specialty</h3>
@@ -4135,13 +3847,13 @@ function AdminDashboardContent() {
  
  <div className="space-y-4">
  <div className="space-y-1.5">
- <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-1">Specialty Name</label>
- <input required type="text" value={specForm.name} onChange={(e) => setSpecForm({...specForm, name: e.target.value})} className="w-full h-11 bg-slate-50 border border-slate-300 rounded-xl px-4 text-[13px] font-bold text-slate-700 outline-none focus:border-med-primary/30 transition-all" placeholder="e.g. Orthopedics, Psychology..." />
+ <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Specialty Name</label>
+ <input required type="text" value={specForm.name} onChange={(e) => setSpecForm({...specForm, name: e.target.value})} className="w-full h-11 bg-slate-50 border border-slate-300 rounded-lg px-4 text-[13px] font-bold text-slate-700 outline-none focus:border-med-primary/30 transition-all" placeholder="e.g. Orthopedics, Psychology..." />
  </div>
  
  <div className="space-y-2">
- <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-1">Visual Identity (Icon)</label>
- <div className="grid grid-cols-6 gap-2 p-4 bg-slate-50 rounded-xl border border-slate-200 max-h-[160px] overflow-y-auto">
+ <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Visual Identity (Icon)</label>
+ <div className="grid grid-cols-6 gap-2 p-4 bg-slate-50 rounded-lg border border-slate-200 max-h-[160px] overflow-y-auto">
  {Object.keys(ICON_MAP).map((iconName) => (
  <button 
  key={iconName} type="button" onClick={() => setSpecForm({...specForm, icon: iconName})}
@@ -4155,12 +3867,12 @@ function AdminDashboardContent() {
 
  <div className="flex gap-4">
  <div className="flex-1 space-y-1.5 relative">
- <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-1">Brand Color</label>
+ <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest px-1">Brand Color</label>
  
  <button 
  type="button"
  onClick={() => setShowColorDropdown(!showColorDropdown)}
- className="w-full h-11 bg-slate-50 border border-slate-300 rounded-xl px-4 flex items-center justify-between group hover:border-slate-300 transition-all"
+ className="w-full h-11 bg-slate-50 border border-slate-300 rounded-lg px-4 flex items-center justify-between group hover:border-slate-300 transition-all"
  >
  <div className="flex items-center gap-3">
  <div className={`w-3 h-3 rounded-full ${specForm.color.replace('text', 'bg')}`} />
@@ -4177,7 +3889,7 @@ function AdminDashboardContent() {
  initial={{ opacity: 0, y: 10, scale: 0.95 }}
  animate={{ opacity: 1, y: 0, scale: 1 }}
  exit={{ opacity: 0, y: 10, scale: 0.95 }}
- className="absolute left-0 right-0 bottom-full mb-2 bg-white rounded-xl border border-slate-200 p-2 z-[120] grid grid-cols-1 gap-1"
+ className="absolute left-0 right-0 bottom-full mb-2 bg-white rounded-lg border border-slate-200 p-2 z-[120] grid grid-cols-1 gap-1"
  >
  {COLORS.map((c) => (
  <button
@@ -4209,7 +3921,7 @@ function AdminDashboardContent() {
 
  <div className="pt-2 flex justify-end gap-3">
  <button type="button" onClick={() => setShowAddSpecialty(false)} className="h-11 px-6 text-[12px] font-bold text-slate-400 hover:text-slate-600">Cancel</button>
- <button type="submit" disabled={isSaving} className="h-11 px-8 bg-[#1e4a3a] text-white rounded-xl text-[12px] font-bold hover:bg-black transition-all disabled:opacity-50">
+ <button type="submit" disabled={isSaving} className="h-11 px-8 bg-[#1e4a3a] text-white rounded-lg text-[12px] font-bold hover:bg-black transition-all disabled:opacity-50">
  {isSaving ? 'Initializing...' : 'Register Specialty'}
  </button>
  </div>
@@ -4218,52 +3930,6 @@ function AdminDashboardContent() {
  </div>
  )}
 
- {showAddService && (
- <div key="add-service-modal" className="fixed inset-0 z-[100] flex items-center justify-center p-4">
- <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowAddService(false)} />
- <motion.div initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }} className="relative w-full max-w-md bg-white rounded-xl overflow-hidden">
- <form onSubmit={handleSaveService} className="p-6 space-y-6">
- <div className="flex items-center justify-between">
- <h3 className="text-[14px] font-bold text-med-text tracking-tight uppercase">{editingService !== null ? 'Modify Treatment' : 'Define New Treatment'}</h3>
- <button type="button" onClick={() => setShowAddService(false)} className="text-slate-400 hover:text-slate-600"><X size={18} /></button>
- </div>
- 
- <div className="space-y-4">
- <div className="space-y-1.5">
- <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-1">Treatment Name</label>
- <input required type="text" value={serviceForm.name} onChange={(e) => setServiceForm({...serviceForm, name: e.target.value})} className="w-full h-11 bg-slate-50 border border-slate-300 rounded-xl px-4 text-[13px] font-bold text-slate-700 outline-none focus:border-med-primary/30" placeholder="e.g. Heart Rhythm Monitoring..." />
- </div>
- 
- <div className="grid grid-cols-2 gap-4">
- <div className="space-y-1.5">
- <label className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-1">Base Price (৳)</label>
- <input required type="number" value={serviceForm.price} onChange={(e) => setServiceForm({...serviceForm, price: e.target.value})} className="w-full h-11 bg-slate-50 border border-slate-300 rounded-xl px-4 text-[13px] font-bold text-slate-700 outline-none" placeholder="1500" />
- </div>
- <div className="flex items-center gap-3 pt-6 pl-2">
- <button type="button" onClick={() => setServiceForm({...serviceForm, telemed: !serviceForm.telemed})} className={`w-10 h-5 rounded-full transition-all relative ${serviceForm.telemed ? 'bg-blue-600' : 'bg-slate-200'}`}>
- <div className={`absolute top-1 w-3 h-3 rounded-full bg-white transition-all ${serviceForm.telemed ? 'left-6' : 'left-1'}`} />
- </button>
- <span className="text-[11px] font-bold text-slate-500 uppercase tracking-tighter">Telemed</span>
- </div>
- </div>
-
- {serviceForm.telemed && (
- <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="space-y-1.5 p-4 bg-blue-50/50 border border-blue-100 rounded-xl">
- <label className="text-[10px] font-extrabold text-blue-400 uppercase tracking-widest px-1">Telemedicine Pricing (৳)</label>
- <input required type="number" value={serviceForm.telemedPrice} onChange={(e) => setServiceForm({...serviceForm, telemedPrice: e.target.value})} className="w-full h-11 bg-white border border-blue-100 rounded-lg px-4 text-[13px] font-bold text-blue-700 outline-none" placeholder="800" />
- </motion.div>
- )}
- </div>
-
- <div className="pt-2 flex justify-end gap-3">
- <button type="button" onClick={() => setShowAddService(false)} className="h-10 px-6 text-[11px] font-bold text-slate-400">Discard</button>
- <button type="submit" disabled={isSaving} className="h-10 px-8 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold hover:bg-black transition-all disabled:opacity-50">
- {isSaving ? 'Processing...' : (editingService !== null ? 'Update Service' : 'Confirm Service')}
- </button>
- </div>
- </form>
- </motion.div>
- </div>
  )}
  </AnimatePresence>
  
@@ -5046,36 +4712,59 @@ function AdminDashboardContent() {
  </div>
  <h3 className="text-[14px] font-bold text-med-text tracking-tight">Staff Registration</h3>
  </div>
- <button onClick={() => setShowAddStaff(false)} className="w-7 h-7 rounded-lg hover:bg-slate-50 flex items-center justify-center text-slate-400 transition-all border border-transparent hover:border-slate-300">
- <X size={16} />
- </button>
- </div>
+ <button onClick={() => setShowAddStaff(false)} className="w-7 h-7 rounded-lg hover:bg-slate-50 flex items-center justify-center te  <AnimatePresence>
+    {showAddStaff && (
+      <div key="add-staff-modal" className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#0F172A]/30 backdrop-blur-sm" onClick={() => setShowAddStaff(false)} />
+        <motion.div initial={{ opacity: 0, scale: 0.98, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.98, y: 10 }} className="relative w-full max-w-sm bg-white rounded-lg shadow-2xl overflow-hidden border border-slate-300">
+          <div className="p-8 border-b border-slate-100 flex items-center justify-between">
+            <div>
+              <h3 className="text-[14px] font-bold text-[#1e4a3a] uppercase tracking-widest">Register Operator</h3>
+              <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1.5 opacity-60">Credential Access Hub</p>
+            </div>
+            <button onClick={() => setShowAddStaff(false)} className="w-9 h-9 border border-slate-200 rounded-lg text-slate-400 hover:text-[#1e4a3a] transition-all flex items-center justify-center"><X size={16} /></button>
+          </div>
 
- <form className="p-5 space-y-4" onSubmit={handleCreateStaff}>
- <div className="grid grid-cols-2 gap-4">
- <div className="space-y-1.5 col-span-2">
- <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-0.5">Identity Name</label>
- <input type="text" value={staffForm.name} onChange={e => setStaffForm({...staffForm, name: e.target.value})} placeholder="Full Name" required className="w-full h-9 px-3 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:border-emerald-500/40 focus:bg-white text-[12px] font-medium transition-all" />
- </div>
- <div className="space-y-1.5">
- <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-0.5">Work Email</label>
- <input type="email" value={staffForm.email} onChange={e => setStaffForm({...staffForm, email: e.target.value})} placeholder="staff@meditaj.com" required className="w-full h-9 px-3 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:border-emerald-500/40 focus:bg-white text-[12px] font-medium transition-all" />
- </div>
- <div className="space-y-1.5">
- <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-0.5">Phone Contact</label>
- <input type="tel" value={staffForm.phone} onChange={e => setStaffForm({...staffForm, phone: e.target.value})} placeholder="+880 1---" required className="w-full h-9 px-3 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:border-emerald-500/40 focus:bg-white text-[12px] font-medium transition-all" />
- </div>
- <div className="space-y-1.5 col-span-2">
- <label className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ml-0.5">Initial Password</label>
- <input type="password" value={staffForm.password} onChange={e => setStaffForm({...staffForm, password: e.target.value})} placeholder="••••••••" required className="w-full h-9 px-3 bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:border-emerald-500/40 focus:bg-white text-[12px] font-medium transition-all" />
- </div>
- </div>
+          <form className="p-8 space-y-6" onSubmit={handleCreateStaff}>
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest ml-1 opacity-70">Identity Name</label>
+                <div className="relative">
+                  <User size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" />
+                  <input type="text" value={staffForm.name} onChange={e => setStaffForm({...staffForm, name: e.target.value})} placeholder="Full Display Name" required className="w-full h-11 pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-lg text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] transition-all" />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 gap-6">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest ml-1 opacity-70">Work Email Node</label>
+                  <div className="relative">
+                    <Mail size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" />
+                    <input type="email" value={staffForm.email} onChange={e => setStaffForm({...staffForm, email: e.target.value})} placeholder="staff@hospital.com" required className="w-full h-11 pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-lg text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] transition-all" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-bold text-[#1e4a3a] uppercase tracking-widest ml-1 opacity-70">Security Password</label>
+                  <div className="relative">
+                    <Lock size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" />
+                    <input type="password" value={staffForm.password} onChange={e => setStaffForm({...staffForm, password: e.target.value})} placeholder="••••••••" required className="w-full h-11 pl-11 pr-4 bg-slate-50 border border-slate-200 rounded-lg text-[13px] font-bold text-[#1e4a3a] outline-none focus:border-[#1e4a3a] transition-all" />
+                  </div>
+                </div>
+              </div>
+            </div>
 
- <div className="pt-2 flex justify-end gap-2 text-[11px] font-bold">
- <button type="button" onClick={() => setShowAddStaff(false)} className="h-9 px-4 border border-transparent rounded-lg text-slate-500 hover:bg-slate-50 transition-all">Cancel</button>
- <button type="submit" disabled={isCreatingStaff} className="h-9 px-5 bg-[#1e4a3a] border border-slate-700 text-white rounded-lg flex items-center justify-center gap-2 hover:bg-black transition-all disabled:opacity-50">
- {isCreatingStaff ? <span className="animate-spin text-lg leading-none">↻</span> : <Check size={14} />}
- {isCreatingStaff ? 'Processing...' : 'Complete Registration'}
+            <div className="pt-4 flex gap-3">
+              <button type="button" onClick={() => setShowAddStaff(false)} className="flex-1 h-11 text-[11px] font-bold text-slate-400 uppercase tracking-widest">Discard</button>
+              <button type="submit" disabled={isCreatingStaff} className="flex-[2] h-11 bg-[#1e4a3a] text-white rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-black transition-all shadow-lg active:scale-95 disabled:opacity-50">
+                {isCreatingStaff ? 'Processing...' : 'Provision Access'}
+              </button>
+            </div>
+          </form>
+        </motion.div>
+      </div>
+    )}
+  </AnimatePresence>
+sing...' : 'Complete Registration'}
  </button>
  </div>
  </form>
@@ -5090,12 +4779,12 @@ function AdminDashboardContent() {
  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => { setSelectedPatient(null); setIsEditingPatient(false); }} />
  <motion.div 
  initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }}
- className="relative w-full max-w-lg bg-white rounded-xl overflow-hidden border border-slate-300"
+  className="relative w-full max-w-lg bg-white rounded-lg overflow-hidden border border-slate-300 shadow-2xl"
  >
  {/* Header */}
  <div className="p-5 border-b border-slate-200 flex items-center justify-between">
  <div className="flex items-center gap-4">
- <div className="w-10 h-10 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-[15px] border border-blue-100">
+  <div className="w-10 h-10 rounded-lg bg-slate-50 text-[#1e4a3a] flex items-center justify-center font-bold text-[15px] border border-slate-200">
  {selectedPatient.fullName?.charAt(0) || 'P'}
  </div>
  <div>
@@ -5151,7 +4840,7 @@ function AdminDashboardContent() {
  <Activity size={24} className="text-slate-200" />
  )}
  </div>
- <label className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-xl">
+  <label className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-lg">
  <Upload size={18} className="text-white" />
  <input 
  type="file" 
@@ -5395,7 +5084,7 @@ function AdminDashboardContent() {
  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowPaymentModal(false)} />
  <motion.div 
  initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }}
- className="relative w-full max-w-lg bg-white rounded-xl overflow-hidden"
+  className="relative w-full max-w-lg bg-white rounded-lg overflow-hidden border border-slate-300 shadow-2xl"
  >
  <div className="p-6 border-b border-slate-200 flex items-center justify-between">
  <h3 className="text-[16px] font-bold text-[#1e4a3a] tracking-tight uppercase">{editingPayment ? 'Edit Payment' : 'Add Payment'}</h3>
@@ -5622,7 +5311,7 @@ function AdminDashboardContent() {
  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowCouponModal(false)} />
  <motion.div 
  initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }}
- className="relative w-full max-w-md bg-white rounded-xl overflow-hidden border border-slate-300"
+  className="relative w-full max-w-md bg-white rounded-lg overflow-hidden border border-slate-300 shadow-2xl"
  >
  <div className="p-6 border-b border-slate-200 flex items-center justify-between">
  <h3 className="text-[16px] font-bold text-[#1e4a3a] tracking-tight uppercase">{editingCoupon ? 'Edit Coupon' : 'Create New Coupon'}</h3>
@@ -5653,7 +5342,7 @@ function AdminDashboardContent() {
  <div className="grid grid-cols-2 gap-4">
  <div className="space-y-1.5 font-bold">
  <label className="text-[9px] text-slate-400 uppercase tracking-widest ml-1">Discount Type</label>
- <div className="bg-slate-50 p-1 rounded-lg border border-slate-300 flex gap-1 h-11">
+  <div className="bg-slate-50 p-1 rounded-md border border-slate-200 flex gap-1 h-11">
  {['percentage', 'fixed'].map(t => (
  <button 
  key={t} type="button" 
@@ -5707,7 +5396,7 @@ function AdminDashboardContent() {
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowAddCaregiver(false)} />
   <motion.div 
   initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }}
-  className="relative w-full max-w-lg bg-white rounded-xl overflow-hidden border border-slate-300"
+   className="relative w-full max-w-lg bg-white rounded-lg overflow-hidden border border-slate-300 shadow-2xl"
   >
   <div className="p-6 border-b border-slate-200 flex items-center justify-between">
   <h3 className="text-[16px] font-bold text-[#1e4a3a] tracking-tight uppercase">{editingCaregiver ? 'Update Specialist' : 'Register Specialist'}</h3>
@@ -6060,7 +5749,7 @@ function AdminDashboardContent() {
          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="absolute inset-0 bg-[#1e4a3a]/40" onClick={() => setShowAssignModal(false)} />
          <motion.div 
            initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }}
-           className="relative w-full max-w-lg bg-white rounded-xl overflow-hidden border border-slate-300"
+            className="relative w-full max-w-lg bg-white rounded-lg overflow-hidden border border-slate-300 shadow-2xl"
          >
            <div className="p-6 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
               <div>
