@@ -4,7 +4,7 @@ import {
   Ambulance, Navigation, MapPin, Clock, Phone, 
   Search, Filter, Check, X, AlertCircle, Calendar,
   MoreVertical, UserCheck, Activity, Plus, MoreHorizontal,
-  ChevronRight, ArrowRight, ShieldCheck, HeartPulse, Edit3
+  ChevronRight, ArrowRight, ShieldCheck, HeartPulse, Edit3, Trash2
 } from 'lucide-react';
 import { m as motion, AnimatePresence } from 'framer-motion';
 import CustomDropdown from '@/components/UI/CustomDropdown';
@@ -16,7 +16,8 @@ export default function AmbulanceManagement({
   onAddAmbulance, 
   onEditAmbulance,
   onUpdateStatus,
-  onAssignAmbulance
+  onAssignAmbulance,
+  onDeleteAmbulance
 }) {
   const [activeSubTab, setActiveSubTab] = useState('bookings'); // bookings | fleet
   const [searchQuery, setSearchQuery] = useState('');
@@ -309,12 +310,22 @@ export default function AmbulanceManagement({
                            </div>
                         </td>
                         <td className="px-8 py-6 text-right">
-                           <button 
-                             onClick={() => onEditAmbulance(unit)}
-                             className="w-8 h-8 rounded-lg border border-slate-200 text-slate-400 hover:text-[#1e4a3a] hover:bg-slate-50 transition-all inline-flex items-center justify-center"
-                           >
-                             <Edit3 size={14} />
-                           </button>
+                           <div className="flex justify-end gap-2">
+                             <button 
+                               onClick={() => onEditAmbulance(unit)}
+                               className="w-8 h-8 rounded-lg border border-slate-200 text-slate-400 hover:text-[#1e4a3a] hover:bg-slate-50 transition-all inline-flex items-center justify-center"
+                               title="Edit Unit"
+                             >
+                               <Edit3 size={14} />
+                             </button>
+                             <button 
+                               onClick={() => onDeleteAmbulance(unit.id)}
+                               className="w-8 h-8 rounded-lg border border-slate-200 text-slate-300 hover:text-rose-600 hover:border-rose-100 transition-all inline-flex items-center justify-center"
+                               title="Decommission Unit"
+                             >
+                               <Trash2 size={14} />
+                             </button>
+                           </div>
                         </td>
                       </motion.tr>
                     ))

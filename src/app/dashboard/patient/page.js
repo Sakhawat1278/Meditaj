@@ -229,9 +229,9 @@ function PatientDashboardContent() {
 
   if (isDataLoading) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-white">
-        <Loader2 size={32} className="animate-spin text-[#1e4a3a] mb-3" />
-        <p className="text-[12px] font-medium text-slate-400 uppercase tracking-widest">Loading your health data...</p>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-med-bg">
+        <Loader2 size={32} className="animate-spin text-med-primary mb-3" />
+        <p className="text-[12px] font-medium text-med-muted uppercase tracking-widest">Loading your health data...</p>
       </div>
     );
   }
@@ -256,12 +256,12 @@ function PatientDashboardContent() {
       {/* Welcome Banner */}
       <div className="relative h-[180px] rounded-[16px] overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-tr from-emerald-950/90 via-emerald-900/60 to-transparent z-10" />
-        <div className="absolute inset-0 bg-[#1e4a3a] z-0" />
+        <div className="absolute inset-0 bg-med-primary z-0 opacity-80 dark:opacity-40" />
         <div className="absolute bottom-6 left-8 z-20">
-          <h1 className="text-2xl lg:text-3xl font-normal text-white tracking-tight leading-tight">
+          <h1 className="text-2xl lg:text-3xl font-normal text-white dark:text-emerald-50 tracking-tight leading-tight">
             Welcome Back, <br />{userData?.fullName?.split(' ')[0] || 'Member'}
           </h1>
-          <p className="text-white/60 text-[12px] font-medium mt-2">Your healthcare management, simplified.</p>
+          <p className="text-white/60 dark:text-emerald-50/60 text-[12px] font-medium mt-2">Your healthcare management, simplified.</p>
         </div>
         <div className="absolute bottom-6 right-8 z-20 flex items-center gap-3">
           <Link href="/doctors" className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-white px-5 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-500 transition-all">
@@ -276,11 +276,7 @@ function PatientDashboardContent() {
         {stats.map((stat, idx) => (
           <div 
             key={idx} 
-            className="h-[90px] rounded-[12px] border p-5 flex items-center gap-4 transition-all hover:shadow-md group"
-            style={{ 
-              background: `linear-gradient(135deg, ${stat.bgColor} 0%, #ffffff 100%)`,
-              borderColor: `${stat.color}30`
-            }}
+            className="h-[90px] rounded-[12px] border p-5 flex items-center gap-4 transition-all hover:shadow-md group bg-med-card border-med-border"
           >
             <div 
               className="w-10 h-10 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform"
@@ -289,8 +285,8 @@ function PatientDashboardContent() {
               <stat.icon size={28} strokeWidth={1.2} />
             </div>
             <div>
-              <p className="text-[11px] font-medium text-slate-500 leading-none mb-1">{stat.name}</p>
-              <p className="text-xl font-bold text-slate-800 tracking-tight">{stat.value}</p>
+              <p className="text-[11px] font-medium text-med-muted leading-none mb-1">{stat.name}</p>
+              <p className="text-xl font-bold text-med-text tracking-tight">{stat.value}</p>
             </div>
           </div>
         ))}
@@ -301,42 +297,42 @@ function PatientDashboardContent() {
         
         {/* Recent Activity */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="bg-white rounded-[12px] border border-slate-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-              <h3 className="text-[14px] font-medium text-[#1e4a3a] tracking-tight">Recent Activity</h3>
-              <button onClick={() => router.push('/dashboard/patient?view=appointments')} className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest hover:underline">View All</button>
+          <div className="bg-med-card rounded-[12px] border border-med-border overflow-hidden">
+            <div className="px-6 py-4 border-b border-med-border flex items-center justify-between">
+              <h3 className="text-[14px] font-medium text-med-primary tracking-tight">Recent Activity</h3>
+              <button onClick={() => router.push('/dashboard/patient?view=appointments')} className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest hover:underline">View All</button>
             </div>
-            <div className="divide-y divide-slate-50">
+            <div className="divide-y divide-med-border">
               {allTimelineItems.slice(0, 5).map((item) => {
                 const cs = getCategoryStyle(item.category);
                 return (
                   <div 
                     key={item.id} 
                     onClick={() => setSelectedItem(item)}
-                    className="px-6 py-4 hover:bg-slate-50/50 transition-colors flex items-center justify-between group cursor-pointer"
+                    className="px-6 py-4 hover:bg-med-bg transition-colors flex items-center justify-between group cursor-pointer"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-[8px] flex items-center justify-center shrink-0" style={{ background: cs.bg, color: cs.color }}>
+                      <div className="w-10 h-10 rounded-[8px] flex items-center justify-center shrink-0" style={{ background: `${cs.color}15`, color: cs.color }}>
                         <cs.icon size={20} strokeWidth={1.5} />
                       </div>
                       <div>
-                        <h4 className="text-[14px] font-medium text-slate-800 leading-tight">{item.title}</h4>
+                        <h4 className="text-[14px] font-medium text-med-text leading-tight">{item.title}</h4>
                         <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-[11px] font-medium text-slate-400">{item.category}</span>
-                          <span className="w-1 h-1 bg-slate-300 rounded-full" />
-                          <span className="text-[11px] text-slate-400">{item.date || item.createdAt?.toDate?.()?.toLocaleDateString()}</span>
+                          <span className="text-[11px] font-medium text-med-muted">{item.category}</span>
+                          <span className="w-1 h-1 bg-med-border rounded-full" />
+                          <span className="text-[11px] text-med-muted">{item.date || item.createdAt?.toDate?.()?.toLocaleDateString()}</span>
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       <span className={`px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider ${
-                        item.statusColor === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 
-                        item.statusColor === 'rose' ? 'bg-rose-50 text-rose-600' :
-                        'bg-amber-50 text-amber-600'
+                        item.statusColor === 'emerald' ? 'bg-emerald-500/10 text-emerald-500' : 
+                        item.statusColor === 'rose' ? 'bg-rose-500/10 text-rose-500' :
+                        'bg-amber-500/10 text-amber-500'
                       }`}>
                         {item.status}
                       </span>
-                      <ChevronRight size={16} className="text-slate-300 group-hover:text-[#1e4a3a] transition-colors" />
+                      <ChevronRight size={16} className="text-med-muted group-hover:text-med-primary transition-colors" />
                     </div>
                   </div>
                 );
@@ -352,22 +348,22 @@ function PatientDashboardContent() {
 
           {/* Quick Actions */}
           <div className="grid grid-cols-2 gap-4">
-            <Link href="/dashboard/patient?view=results" className="h-[100px] rounded-[12px] border border-slate-200 p-5 hover:border-blue-400 transition-all group flex items-center gap-4 bg-gradient-to-r from-blue-50/50 to-white">
-              <div className="w-10 h-10 rounded-[8px] bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+            <Link href="/dashboard/patient?view=results" className="h-[100px] rounded-[12px] border border-med-border p-5 hover:border-blue-400 transition-all group flex items-center gap-4 bg-med-card">
+              <div className="w-10 h-10 rounded-[8px] bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                 <FileText size={20} strokeWidth={1.5} />
               </div>
               <div>
-                <h4 className="text-[14px] font-medium text-slate-800">My Prescriptions</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">Access medical records</p>
+                <h4 className="text-[14px] font-medium text-med-text">My Prescriptions</h4>
+                <p className="text-[11px] text-med-muted mt-0.5">Access medical records</p>
               </div>
             </Link>
-            <Link href="/dashboard/patient?view=billing" className="h-[100px] rounded-[12px] border border-slate-200 p-5 hover:border-emerald-400 transition-all group flex items-center gap-4 bg-gradient-to-r from-emerald-50/50 to-white">
-              <div className="w-10 h-10 rounded-[8px] bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+            <Link href="/dashboard/patient?view=billing" className="h-[100px] rounded-[12px] border border-med-border p-5 hover:border-emerald-400 transition-all group flex items-center gap-4 bg-med-card">
+              <div className="w-10 h-10 rounded-[8px] bg-emerald-500/10 text-emerald-500 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                 <CreditCard size={20} strokeWidth={1.5} />
               </div>
               <div>
-                <h4 className="text-[14px] font-medium text-slate-800">Billing Center</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">Manage payments & invoices</p>
+                <h4 className="text-[14px] font-medium text-med-text">Billing Center</h4>
+                <p className="text-[11px] text-med-muted mt-0.5">Manage payments & invoices</p>
               </div>
             </Link>
           </div>
@@ -375,45 +371,45 @@ function PatientDashboardContent() {
 
         {/* Profile Sidebar */}
         <div className="space-y-4">
-          <div className="bg-white rounded-[12px] border border-slate-200 p-6">
-            <h3 className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-6 flex items-center gap-2">
+          <div className="bg-med-card rounded-[12px] border border-med-border p-6">
+            <h3 className="text-[11px] font-bold uppercase tracking-widest text-med-muted mb-6 flex items-center gap-2">
               <ShieldCheck size={14} className="text-emerald-500" />
               Patient Identity
             </h3>
             <div className="text-center mb-6">
-              <div className="w-20 h-20 rounded-[16px] bg-slate-50 border border-slate-200 mx-auto flex items-center justify-center text-slate-200 overflow-hidden mb-3">
+              <div className="w-20 h-20 rounded-[16px] bg-med-bg border border-med-border mx-auto flex items-center justify-center text-med-muted overflow-hidden mb-3">
                 {userData?.photoURL ? (
                   <img src={userData.photoURL} className="w-full h-full object-cover" />
                 ) : (
                   <User size={48} className="translate-y-3" />
                 )}
               </div>
-              <h4 className="text-[15px] font-bold text-[#1e4a3a] tracking-tight">{userData?.fullName || 'Anonymous'}</h4>
-              <p className="text-[10px] text-slate-400 font-medium mt-1 tracking-wider uppercase">ID: MED-{userData?.id?.slice(0, 8).toUpperCase() || 'PENDING'}</p>
+              <h4 className="text-[15px] font-bold text-med-primary tracking-tight">{userData?.fullName || 'Anonymous'}</h4>
+              <p className="text-[10px] text-med-muted font-medium mt-1 tracking-wider uppercase">ID: MED-{userData?.id?.slice(0, 8).toUpperCase() || 'PENDING'}</p>
             </div>
             <div className="grid grid-cols-2 gap-3 mb-6">
-              <div className="p-3 bg-slate-50 rounded-[8px] border border-slate-100 text-center">
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Blood Group</p>
-                <p className="text-[14px] font-bold text-rose-600">{userData?.bloodGroup || 'N/A'}</p>
+              <div className="p-3 bg-med-bg rounded-[8px] border border-med-border text-center">
+                <p className="text-[9px] font-bold text-med-muted uppercase tracking-widest mb-0.5">Blood Group</p>
+                <p className="text-[14px] font-bold text-rose-500">{userData?.bloodGroup || 'N/A'}</p>
               </div>
-              <div className="p-3 bg-slate-50 rounded-[8px] border border-slate-100 text-center">
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Age / Gender</p>
-                <p className="text-[14px] font-bold text-[#1e4a3a]">{userData?.age || '—'} / {userData?.gender?.charAt(0) || '—'}</p>
+              <div className="p-3 bg-med-bg rounded-[8px] border border-med-border text-center">
+                <p className="text-[9px] font-bold text-med-muted uppercase tracking-widest mb-0.5">Age / Gender</p>
+                <p className="text-[14px] font-bold text-med-primary">{userData?.age || '—'} / {userData?.gender?.charAt(0) || '—'}</p>
               </div>
             </div>
-            <div className="space-y-3 pt-4 border-t border-slate-100">
+            <div className="space-y-3 pt-4 border-t border-med-border">
               <div className="flex items-center justify-between">
-                <p className="text-[11px] font-medium text-slate-400">Emergency</p>
-                <span className="text-[11px] font-bold text-emerald-600">{userData?.emergencyContact || 'Not set'}</span>
+                <p className="text-[11px] font-medium text-med-muted">Emergency</p>
+                <span className="text-[11px] font-bold text-emerald-500">{userData?.emergencyContact || 'Not set'}</span>
               </div>
               <div className="flex items-center justify-between">
-                <p className="text-[11px] font-medium text-slate-400">Insurance</p>
-                <span className="text-[11px] font-bold text-[#1e4a3a]">Active • MetLife</span>
+                <p className="text-[11px] font-medium text-med-muted">Insurance</p>
+                <span className="text-[11px] font-bold text-med-primary">Active • MetLife</span>
               </div>
             </div>
           </div>
 
-          <div className="rounded-[16px] p-6 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #1e4a3a 0%, #0f3028 100%)' }}>
+          <div className="rounded-[16px] p-6 text-white relative overflow-hidden" style={{ background: 'linear-gradient(135deg, var(--med-primary) 0%, #0f3028 100%)' }}>
             <div className="absolute top-0 right-0 p-4 opacity-10">
               <TrendingUp size={80} />
             </div>
@@ -421,9 +417,9 @@ function PatientDashboardContent() {
               <Sparkles size={14} className="text-amber-400" />
               Vital Insights
             </h3>
-            <p className="text-[11px] text-emerald-100/70 leading-relaxed mb-4">Your health consistency is at <span className="text-white font-bold">84%</span> this month.</p>
+            <p className="text-[11px] text-emerald-100/70 dark:text-emerald-50/70 leading-relaxed mb-4">Your health consistency is at <span className="text-white font-bold">84%</span> this month.</p>
             <div className="space-y-2">
-              <div className="w-full bg-white/10 h-1.5 rounded-full overflow-hidden">
+              <div className="w-full bg-white/10 dark:bg-black/20 h-1.5 rounded-full overflow-hidden">
                 <motion.div initial={{ width: 0 }} animate={{ width: '84%' }} className="h-full bg-emerald-400 rounded-full" />
               </div>
               <div className="flex justify-between text-[9px] font-bold uppercase tracking-widest text-emerald-200/50">
@@ -442,24 +438,24 @@ function PatientDashboardContent() {
   const ServiceTable = ({ data, category, icon: Icon, colorClass }) => {
     const meta = getCategoryStyle(category);
     return (
-      <div className="bg-white rounded-[12px] border border-slate-200 overflow-hidden">
+      <div className="bg-med-card rounded-[12px] border border-med-border overflow-hidden">
         {/* Header */}
-        <div className="px-6 py-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="px-6 py-5 border-b border-med-border flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-[8px] flex items-center justify-center" style={{ background: meta.bg, color: meta.color }}>
+            <div className="w-9 h-9 rounded-[8px] flex items-center justify-center" style={{ background: `${meta.color}15`, color: meta.color }}>
               <Icon size={20} strokeWidth={1.5} />
             </div>
             <div>
-              <h2 className="text-[16px] font-bold text-[#1e4a3a] tracking-tight">{category} History</h2>
-              <p className="text-[11px] text-slate-400">All your {category.toLowerCase()} records in one place</p>
+              <h2 className="text-[16px] font-bold text-med-primary tracking-tight">{category} History</h2>
+              <p className="text-[11px] text-med-muted">All your {category.toLowerCase()} records in one place</p>
             </div>
           </div>
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={16} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-med-muted" size={16} />
             <input 
               type="text" placeholder={`Search ${category.toLowerCase()}...`}
               value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full md:w-[280px] h-10 bg-slate-50 border border-slate-200 rounded-[8px] pl-10 pr-4 text-[12px] font-medium outline-none focus:bg-white focus:border-[#1e4a3a] transition-all"
+              className="w-full md:w-[280px] h-10 bg-med-bg border border-med-border rounded-[8px] pl-10 pr-4 text-[12px] font-medium text-med-text outline-none focus:bg-med-card focus:border-med-primary transition-all"
             />
           </div>
         </div>
@@ -468,53 +464,53 @@ function PatientDashboardContent() {
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-slate-50/60 border-b border-slate-100">
-                <th className="px-6 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Detail</th>
-                <th className="px-6 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Schedule</th>
-                <th className="px-6 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Status</th>
-                <th className="px-6 py-3.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Actions</th>
+              <tr className="bg-med-bg/60 border-b border-med-border">
+                <th className="px-6 py-3.5 text-[10px] font-bold text-med-muted uppercase tracking-widest">Detail</th>
+                <th className="px-6 py-3.5 text-[10px] font-bold text-med-muted uppercase tracking-widest">Schedule</th>
+                <th className="px-6 py-3.5 text-[10px] font-bold text-med-muted uppercase tracking-widest">Status</th>
+                <th className="px-6 py-3.5 text-[10px] font-bold text-med-muted uppercase tracking-widest">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-50">
+            <tbody className="divide-y divide-med-border">
               {data.filter(item => 
                 item.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
                 item.subtitle?.toLowerCase().includes(searchQuery.toLowerCase())
               ).map((item) => (
-                <tr key={item.id} className="hover:bg-slate-50/40 transition-colors">
+                <tr key={item.id} className="hover:bg-med-bg/40 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-[8px] flex items-center justify-center shrink-0" style={{ background: meta.bg, color: meta.color }}>
+                      <div className="w-9 h-9 rounded-[8px] flex items-center justify-center shrink-0" style={{ background: `${meta.color}15`, color: meta.color }}>
                         <Icon size={18} strokeWidth={1.5} />
                       </div>
                       <div>
-                        <h4 className="text-[13px] font-medium text-slate-800 leading-tight">{item.title}</h4>
-                        <p className="text-[10px] text-slate-400 mt-0.5">{item.subtitle}</p>
+                        <h4 className="text-[13px] font-medium text-med-text leading-tight">{item.title}</h4>
+                        <p className="text-[10px] text-med-muted mt-0.5">{item.subtitle}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="flex items-center gap-2 text-[12px] font-medium text-slate-600">
-                      <Calendar size={14} className="text-slate-300" />
+                    <div className="flex items-center gap-2 text-[12px] font-medium text-med-text opacity-80">
+                      <Calendar size={14} className="text-med-muted" />
                       {item.date || item.createdAt?.toDate?.()?.toLocaleDateString()}
                     </div>
                     {item.time && (
-                      <div className="flex items-center gap-2 text-[10px] text-slate-400 mt-1">
-                        <Clock size={12} className="text-slate-300" />
+                      <div className="flex items-center gap-2 text-[10px] text-med-muted mt-1">
+                        <Clock size={12} className="text-med-muted" />
                         {item.time}
                       </div>
                     )}
                   </td>
                   <td className="px-6 py-4">
                     <span className={`px-2.5 py-1 rounded-full text-[9px] font-bold uppercase tracking-wider ${
-                      item.statusColor === 'emerald' ? 'bg-emerald-50 text-emerald-600' : 
-                      item.statusColor === 'rose' ? 'bg-rose-50 text-rose-600' :
-                      'bg-amber-50 text-amber-600'
+                      item.statusColor === 'emerald' ? 'bg-emerald-500/10 text-emerald-500' : 
+                      item.statusColor === 'rose' ? 'bg-rose-500/10 text-rose-500' :
+                      'bg-amber-500/10 text-amber-500'
                     }`}>
                       {item.status}
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    <button onClick={() => setSelectedItem(item)} className="text-[11px] font-bold text-[#1e4a3a] hover:underline uppercase tracking-wider">Details</button>
+                    <button onClick={() => setSelectedItem(item)} className="text-[11px] font-bold text-med-primary hover:underline uppercase tracking-wider">Details</button>
                   </td>
                 </tr>
               ))}
@@ -541,36 +537,36 @@ function PatientDashboardContent() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-medium text-[#1e4a3a] tracking-tight uppercase">Health Library</h2>
-            <p className="text-[11px] text-slate-400 mt-0.5">Your prescriptions and diagnostic reports</p>
+            <h2 className="text-lg font-medium text-med-primary tracking-tight uppercase">Health Library</h2>
+            <p className="text-[11px] text-med-muted mt-0.5">Your prescriptions and diagnostic reports</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Prescriptions */}
-          <div className="bg-white rounded-[12px] border border-slate-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-              <h3 className="text-[13px] font-medium text-[#1e4a3a] flex items-center gap-2">
+          <div className="bg-med-card rounded-[12px] border border-med-border overflow-hidden">
+            <div className="px-6 py-4 border-b border-med-border flex items-center justify-between">
+              <h3 className="text-[13px] font-medium text-med-primary flex items-center gap-2">
                 <FileText size={16} className="text-emerald-500" />
                 Prescriptions
               </h3>
-              <span className="text-[10px] font-bold bg-emerald-50 text-emerald-600 px-2 py-0.5 rounded-full">{prescriptions.length}</span>
+              <span className="text-[10px] font-bold bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded-full">{prescriptions.length}</span>
             </div>
-            <div className="divide-y divide-slate-50">
+            <div className="divide-y divide-med-border">
               {prescriptions.map((rec) => (
-                <div key={rec.id} className="px-6 py-4 flex items-center justify-between hover:bg-slate-50/50 transition-colors group">
+                <div key={rec.id} className="px-6 py-4 flex items-center justify-between hover:bg-med-bg/50 transition-colors group">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-[8px] bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                    <div className="w-9 h-9 rounded-[8px] bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
                       <Pill size={18} strokeWidth={1.5} />
                     </div>
                     <div>
-                      <h5 className="text-[13px] font-medium text-slate-800">{rec.doctorName || 'Clinical Prescription'}</h5>
-                      <p className="text-[10px] text-slate-400 mt-0.5">Issued: {rec.date || rec.createdAt?.toDate?.()?.toLocaleDateString()}</p>
+                      <h5 className="text-[13px] font-medium text-med-text">{rec.doctorName || 'Clinical Prescription'}</h5>
+                      <p className="text-[10px] text-med-muted mt-0.5">Issued: {rec.date || rec.createdAt?.toDate?.()?.toLocaleDateString()}</p>
                     </div>
                   </div>
                   <button 
                     onClick={() => window.open(rec.fileURL, '_blank')}
-                    className="w-8 h-8 border border-slate-200 rounded-[6px] flex items-center justify-center text-slate-400 hover:text-emerald-500 hover:border-emerald-500 transition-all"
+                    className="w-8 h-8 border border-med-border rounded-[6px] flex items-center justify-center text-med-muted hover:text-emerald-500 hover:border-emerald-500 transition-all"
                   >
                     <Download size={16} />
                   </button>
@@ -585,29 +581,29 @@ function PatientDashboardContent() {
           </div>
 
           {/* Lab Reports */}
-          <div className="bg-white rounded-[12px] border border-slate-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-              <h3 className="text-[13px] font-medium text-[#1e4a3a] flex items-center gap-2">
+          <div className="bg-med-card rounded-[12px] border border-med-border overflow-hidden">
+            <div className="px-6 py-4 border-b border-med-border flex items-center justify-between">
+              <h3 className="text-[13px] font-medium text-med-primary flex items-center gap-2">
                 <Activity size={16} className="text-blue-500" />
                 Diagnostic Reports
               </h3>
-              <span className="text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full">{labReports.length}</span>
+              <span className="text-[10px] font-bold bg-blue-500/10 text-blue-500 px-2 py-0.5 rounded-full">{labReports.length}</span>
             </div>
-            <div className="divide-y divide-slate-50">
+            <div className="divide-y divide-med-border">
               {labReports.map((rec) => (
-                <div key={rec.id} className="px-6 py-4 flex items-center justify-between hover:bg-slate-50/50 transition-colors group">
+                <div key={rec.id} className="px-6 py-4 flex items-center justify-between hover:bg-med-bg/50 transition-colors group">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-[8px] bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <div className="w-9 h-9 rounded-[8px] bg-blue-500/10 text-blue-500 flex items-center justify-center">
                       <Activity size={18} strokeWidth={1.5} />
                     </div>
                     <div>
-                      <h5 className="text-[13px] font-medium text-slate-800">{rec.title || 'Lab Report'}</h5>
-                      <p className="text-[10px] text-slate-400 mt-0.5">Released: {rec.date || rec.createdAt?.toDate?.()?.toLocaleDateString()}</p>
+                      <h5 className="text-[13px] font-medium text-med-text">{rec.title || 'Lab Report'}</h5>
+                      <p className="text-[10px] text-med-muted mt-0.5">Released: {rec.date || rec.createdAt?.toDate?.()?.toLocaleDateString()}</p>
                     </div>
                   </div>
                   <button 
                     onClick={() => window.open(rec.fileURL, '_blank')}
-                    className="w-8 h-8 border border-slate-200 rounded-[6px] flex items-center justify-center text-slate-400 hover:text-blue-500 hover:border-blue-500 transition-all"
+                    className="w-8 h-8 border border-med-border rounded-[6px] flex items-center justify-center text-med-muted hover:text-blue-500 hover:border-blue-500 transition-all"
                   >
                     <Download size={16} />
                   </button>
@@ -631,46 +627,46 @@ function PatientDashboardContent() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-medium text-[#1e4a3a] tracking-tight uppercase">Financial Center</h2>
-          <p className="text-[11px] text-slate-400 mt-0.5">Track your healthcare expenses</p>
+          <h2 className="text-lg font-medium text-med-primary tracking-tight uppercase">Financial Center</h2>
+          <p className="text-[11px] text-med-muted mt-0.5">Track your healthcare expenses</p>
         </div>
         <div className="flex gap-3">
-          <div className="px-4 py-2.5 bg-emerald-50 border border-emerald-100 rounded-[8px] text-center">
-            <p className="text-[9px] font-bold text-emerald-600 uppercase tracking-widest">Total Spent</p>
-            <p className="text-[15px] font-bold text-[#1e4a3a]">৳{(allTimelineItems.reduce((acc, item) => acc + (Number(item.amount || item.totalAmount || 0)), 0)).toLocaleString()}</p>
+          <div className="px-4 py-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-[8px] text-center">
+            <p className="text-[9px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-widest">Total Spent</p>
+            <p className="text-[15px] font-bold text-med-primary">৳{(allTimelineItems.reduce((acc, item) => acc + (Number(item.amount || item.totalAmount || 0)), 0)).toLocaleString()}</p>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-[12px] border border-slate-200 overflow-hidden">
-        <div className="divide-y divide-slate-50">
+      <div className="bg-med-card rounded-[12px] border border-med-border overflow-hidden">
+        <div className="divide-y divide-med-border">
           {productOrders.map((order) => (
-            <div key={order.id} className="px-6 py-5 hover:bg-slate-50/40 transition-colors">
+            <div key={order.id} className="px-6 py-5 hover:bg-med-bg/40 transition-colors">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-[8px] bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 shrink-0">
+                  <div className="w-10 h-10 rounded-[8px] bg-med-bg border border-med-border flex items-center justify-center text-med-muted shrink-0">
                     <ShoppingCart size={18} strokeWidth={1.5} />
                   </div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <h4 className="text-[13px] font-medium text-slate-800">Order #{order.id?.slice(-8).toUpperCase()}</h4>
+                      <h4 className="text-[13px] font-medium text-med-text">Order #{order.id?.slice(-8).toUpperCase()}</h4>
                       <span className={`px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider ${
-                        order.paymentStatus === 'paid' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'
+                        order.paymentStatus === 'paid' ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'
                       }`}>
                         {order.paymentStatus || 'Processing'}
                       </span>
                     </div>
-                    <p className="text-[10px] text-slate-400 mb-2">Placed on {order.createdAt?.toDate?.()?.toLocaleDateString() || 'Recent'}</p>
+                    <p className="text-[10px] text-med-muted mb-2">Placed on {order.createdAt?.toDate?.()?.toLocaleDateString() || 'Recent'}</p>
                     <div className="flex flex-wrap gap-1.5">
                       {order.items?.map((item, idx) => (
-                        <span key={idx} className="px-2 py-0.5 bg-slate-50 text-[10px] font-medium text-slate-600 rounded-[4px]">{item.name} x{item.quantity}</span>
+                        <span key={idx} className="px-2 py-0.5 bg-med-bg text-[10px] font-medium text-med-muted rounded-[4px]">{item.name} x{item.quantity}</span>
                       ))}
                     </div>
                   </div>
                 </div>
                 <div className="text-right shrink-0">
-                  <p className="text-[16px] font-bold text-[#1e4a3a]">৳{order.totalAmount || order.total}</p>
-                  <button className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider hover:underline mt-1">Track</button>
+                  <p className="text-[16px] font-bold text-med-primary">৳{order.totalAmount || order.total}</p>
+                  <button className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider hover:underline mt-1">Track</button>
                 </div>
               </div>
             </div>
@@ -690,16 +686,16 @@ function PatientDashboardContent() {
 
   const renderSettings = () => (
     <div className="max-w-4xl">
-      <div className="bg-white rounded-[12px] border border-slate-200 overflow-hidden">
-        <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between">
+      <div className="bg-med-card rounded-[12px] border border-med-border overflow-hidden">
+        <div className="px-8 py-6 border-b border-med-border flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-medium text-[#1e4a3a] tracking-tight uppercase">Medical Profile</h2>
-            <p className="text-[11px] text-slate-400 mt-0.5">Configure your clinical identity and health records</p>
+            <h2 className="text-lg font-medium text-med-primary tracking-tight uppercase">Medical Profile</h2>
+            <p className="text-[11px] text-med-muted mt-0.5">Configure your clinical identity and health records</p>
           </div>
           <div className="flex items-center gap-4">
             <label className="relative cursor-pointer group">
               <input type="file" className="hidden" accept="image/*" onChange={handlePhotoUpload} disabled={isUploading} />
-              <div className="w-14 h-14 rounded-[12px] bg-[#1e4a3a] text-white flex items-center justify-center group-hover:bg-emerald-600 transition-all overflow-hidden relative">
+              <div className="w-14 h-14 rounded-[12px] bg-med-primary text-white flex items-center justify-center group-hover:bg-emerald-600 transition-all overflow-hidden relative">
                 {userData?.photoURL ? (
                   <img src={userData.photoURL} className="w-full h-full object-cover" />
                 ) : (
@@ -711,13 +707,13 @@ function PatientDashboardContent() {
                   </div>
                 )}
               </div>
-              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-400 shadow-sm">
+              <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-med-card border border-med-border rounded-full flex items-center justify-center text-med-muted shadow-sm">
                 <Plus size={10} />
               </div>
             </label>
-            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-100 rounded-full">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 rounded-full">
               <ShieldCheck size={12} className="text-emerald-500" />
-              <span className="text-[9px] font-bold text-emerald-600 uppercase tracking-wider">Verified</span>
+              <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-wider">Verified</span>
             </div>
           </div>
         </div>
@@ -727,28 +723,28 @@ function PatientDashboardContent() {
             {/* Personal Info */}
             <div className="space-y-5">
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-6 h-6 rounded-[6px] bg-slate-100 flex items-center justify-center text-[#1e4a3a] font-bold text-[10px]">01</div>
-                <h4 className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-widest">Personal Info</h4>
+                <div className="w-6 h-6 rounded-[6px] bg-med-bg/50 border border-med-border flex items-center justify-center text-med-primary font-bold text-[10px]">01</div>
+                <h4 className="text-[11px] font-bold text-med-primary uppercase tracking-widest">Personal Info</h4>
               </div>
               <div className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Full Name</label>
+                  <label className="text-[10px] font-bold text-med-muted uppercase tracking-widest">Full Name</label>
                   <div className="relative">
-                    <UserCircle size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300" />
-                    <input type="text" value={profileForm.fullName} onChange={e => setProfileForm({...profileForm, fullName: e.target.value})} className="w-full h-10 bg-slate-50 border border-slate-200 rounded-[8px] pl-10 pr-4 text-[13px] font-medium text-[#1e4a3a] outline-none focus:bg-white focus:border-emerald-500 transition-all" />
+                    <UserCircle size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-med-muted" />
+                    <input type="text" value={profileForm.fullName} onChange={e => setProfileForm({...profileForm, fullName: e.target.value})} className="w-full h-10 bg-med-bg border border-med-border rounded-[8px] pl-10 pr-4 text-[13px] font-medium text-med-text outline-none focus:bg-med-card focus:border-med-primary transition-all" />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Phone</label>
+                    <label className="text-[10px] font-bold text-med-muted uppercase tracking-widest">Phone</label>
                     <div className="relative">
-                      <Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300" />
-                      <input type="text" value={profileForm.phone} onChange={e => setProfileForm({...profileForm, phone: e.target.value})} className="w-full h-10 bg-slate-50 border border-slate-200 rounded-[8px] pl-10 pr-4 text-[13px] font-medium text-[#1e4a3a] outline-none focus:bg-white focus:border-emerald-500 transition-all" />
+                      <Phone size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-med-muted" />
+                      <input type="text" value={profileForm.phone} onChange={e => setProfileForm({...profileForm, phone: e.target.value})} className="w-full h-10 bg-med-bg border border-med-border rounded-[8px] pl-10 pr-4 text-[13px] font-medium text-med-text outline-none focus:bg-med-card focus:border-med-primary transition-all" />
                     </div>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Gender</label>
-                    <select value={profileForm.gender} onChange={e => setProfileForm({...profileForm, gender: e.target.value})} className="w-full h-10 bg-slate-50 border border-slate-200 rounded-[8px] px-3 text-[12px] font-medium text-[#1e4a3a] outline-none focus:bg-white focus:border-emerald-500 transition-all">
+                    <label className="text-[10px] font-bold text-med-muted uppercase tracking-widest">Gender</label>
+                    <select value={profileForm.gender} onChange={e => setProfileForm({...profileForm, gender: e.target.value})} className="w-full h-10 bg-med-bg border border-med-border rounded-[8px] px-3 text-[12px] font-medium text-med-text outline-none focus:bg-med-card focus:border-med-primary transition-all">
                       <option value="">Select</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
@@ -757,10 +753,10 @@ function PatientDashboardContent() {
                   </div>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Address</label>
+                  <label className="text-[10px] font-bold text-med-muted uppercase tracking-widest">Address</label>
                   <div className="relative">
-                    <MapPin size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300" />
-                    <input type="text" value={profileForm.address} onChange={e => setProfileForm({...profileForm, address: e.target.value})} className="w-full h-10 bg-slate-50 border border-slate-200 rounded-[8px] pl-10 pr-4 text-[13px] font-medium text-[#1e4a3a] outline-none focus:bg-white focus:border-emerald-500 transition-all" />
+                    <MapPin size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-med-muted" />
+                    <input type="text" value={profileForm.address} onChange={e => setProfileForm({...profileForm, address: e.target.value})} className="w-full h-10 bg-med-bg border border-med-border rounded-[8px] pl-10 pr-4 text-[13px] font-medium text-med-text outline-none focus:bg-med-card focus:border-med-primary transition-all" />
                   </div>
                 </div>
               </div>
@@ -769,36 +765,36 @@ function PatientDashboardContent() {
             {/* Clinical Data */}
             <div className="space-y-5">
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-6 h-6 rounded-[6px] bg-slate-100 flex items-center justify-center text-[#1e4a3a] font-bold text-[10px]">02</div>
-                <h4 className="text-[11px] font-bold text-[#1e4a3a] uppercase tracking-widest">Clinical Data</h4>
+                <div className="w-6 h-6 rounded-[6px] bg-med-bg/50 border border-med-border flex items-center justify-center text-med-primary font-bold text-[10px]">02</div>
+                <h4 className="text-[11px] font-bold text-med-primary uppercase tracking-widest">Clinical Data</h4>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Blood Group</label>
-                  <select value={profileForm.bloodGroup} onChange={e => setProfileForm({...profileForm, bloodGroup: e.target.value})} className="w-full h-10 bg-slate-50 border border-slate-200 rounded-[8px] px-3 text-[13px] font-bold text-rose-600 outline-none focus:bg-white focus:border-emerald-500 transition-all">
+                  <label className="text-[10px] font-bold text-med-muted uppercase tracking-widest">Blood Group</label>
+                  <select value={profileForm.bloodGroup} onChange={e => setProfileForm({...profileForm, bloodGroup: e.target.value})} className="w-full h-10 bg-med-bg border border-med-border rounded-[8px] px-3 text-[13px] font-bold text-rose-500 outline-none focus:bg-med-card focus:border-med-primary transition-all">
                     <option value="">Select</option>
                     {['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'].map(g => <option key={g} value={g}>{g}</option>)}
                   </select>
                 </div>
                 <div className="space-y-1.5">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Age</label>
-                  <input type="number" value={profileForm.age} onChange={e => setProfileForm({...profileForm, age: e.target.value})} placeholder="28" className="w-full h-10 bg-slate-50 border border-slate-200 rounded-[8px] px-3 text-[13px] font-medium text-[#1e4a3a] outline-none focus:bg-white focus:border-emerald-500 transition-all" />
+                  <label className="text-[10px] font-bold text-med-muted uppercase tracking-widest">Age</label>
+                  <input type="number" value={profileForm.age} onChange={e => setProfileForm({...profileForm, age: e.target.value})} placeholder="28" className="w-full h-10 bg-med-bg border border-med-border rounded-[8px] px-3 text-[13px] font-medium text-med-text outline-none focus:bg-med-card focus:border-med-primary transition-all" />
                 </div>
               </div>
               <div className="space-y-1.5">
-                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Emergency Contact</label>
+                <label className="text-[10px] font-bold text-med-muted uppercase tracking-widest">Emergency Contact</label>
                 <div className="relative">
                   <AlertCircle size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-rose-300" />
-                  <input type="text" value={profileForm.emergencyContact} onChange={e => setProfileForm({...profileForm, emergencyContact: e.target.value})} placeholder="+880 1XXX-XXXXXX" className="w-full h-10 bg-slate-50 border border-slate-200 rounded-[8px] pl-10 pr-4 text-[13px] font-bold text-rose-600 outline-none focus:bg-white focus:border-emerald-500 transition-all" />
+                  <input type="text" value={profileForm.emergencyContact} onChange={e => setProfileForm({...profileForm, emergencyContact: e.target.value})} placeholder="+880 1XXX-XXXXXX" className="w-full h-10 bg-med-bg border border-med-border rounded-[8px] pl-10 pr-4 text-[13px] font-bold text-rose-500 outline-none focus:bg-med-card focus:border-med-primary transition-all" />
                 </div>
-                <p className="text-[9px] text-slate-400 mt-1 italic">This contact will be prioritized in emergencies.</p>
+                <p className="text-[9px] text-med-muted mt-1 italic">This contact will be prioritized in emergencies.</p>
               </div>
             </div>
           </div>
 
-          <div className="pt-6 border-t border-slate-100 flex items-center justify-end gap-3">
-            <button type="button" onClick={() => router.push('/dashboard/patient')} className="h-9 px-5 text-[11px] font-bold text-slate-400 hover:text-slate-600 transition-all uppercase tracking-wider">Cancel</button>
-            <button type="submit" disabled={isSaving} className="h-9 px-6 bg-[#1e4a3a] text-white rounded-[8px] text-[11px] font-bold uppercase tracking-wider hover:bg-emerald-700 transition-all flex items-center gap-2">
+          <div className="pt-6 border-t border-med-border flex items-center justify-end gap-3">
+            <button type="button" onClick={() => router.push('/dashboard/patient')} className="h-9 px-5 text-[11px] font-bold text-med-muted hover:text-med-text transition-all uppercase tracking-wider">Cancel</button>
+            <button type="submit" disabled={isSaving} className="h-9 px-6 bg-med-primary text-white rounded-[8px] text-[11px] font-bold uppercase tracking-wider hover:bg-emerald-700 transition-all flex items-center gap-2">
               {isSaving ? <Loader2 size={14} className="animate-spin" /> : <Check size={14} />}
               Save Changes
             </button>
@@ -888,46 +884,46 @@ function PatientDashboardContent() {
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="relative w-full max-w-md bg-white rounded-[16px] overflow-hidden shadow-2xl border border-slate-200"
+              className="relative w-full max-w-md bg-med-card rounded-[16px] overflow-hidden shadow-2xl border border-med-border"
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-emerald-50 text-[#1e4a3a] rounded-[8px] flex items-center justify-center">
+                    <div className="w-10 h-10 bg-emerald-500/10 text-emerald-500 rounded-[8px] flex items-center justify-center">
                       <ShieldCheck size={20} strokeWidth={1.5} />
                     </div>
                     <div>
-                      <h3 className="text-[15px] font-bold text-[#1e4a3a]">Service Details</h3>
-                      <p className="text-[10px] text-slate-400 mt-0.5">Ref: {selectedItem.id?.slice(0, 12).toUpperCase()}</p>
+                      <h3 className="text-[15px] font-bold text-med-primary">Service Details</h3>
+                      <p className="text-[10px] text-med-muted mt-0.5">Ref: {selectedItem.id?.slice(0, 12).toUpperCase()}</p>
                     </div>
                   </div>
-                  <button onClick={() => setSelectedItem(null)} className="w-8 h-8 rounded-[6px] bg-slate-50 text-slate-400 hover:text-rose-500 transition-all flex items-center justify-center">
+                  <button onClick={() => setSelectedItem(null)} className="w-8 h-8 rounded-[6px] bg-med-bg text-med-muted hover:text-rose-500 transition-all flex items-center justify-center">
                     <X size={16} />
                   </button>
                 </div>
 
                 <div className="space-y-5">
-                  <div className="grid grid-cols-2 gap-4 p-4 bg-slate-50 rounded-[10px] border border-slate-100">
+                  <div className="grid grid-cols-2 gap-4 p-4 bg-med-bg rounded-[10px] border border-med-border">
                     <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Provider</p>
-                      <p className="text-[13px] font-medium text-[#1e4a3a]">{selectedItem.title}</p>
+                      <p className="text-[10px] font-bold text-med-muted uppercase tracking-widest mb-1">Provider</p>
+                      <p className="text-[13px] font-medium text-med-text">{selectedItem.title}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Service</p>
-                      <p className="text-[13px] font-medium text-[#1e4a3a]">{selectedItem.category}</p>
+                      <p className="text-[10px] font-bold text-med-muted uppercase tracking-widest mb-1">Service</p>
+                      <p className="text-[13px] font-medium text-med-text">{selectedItem.category}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Date</p>
-                      <p className="text-[13px] font-medium text-slate-600">{selectedItem.date || selectedItem.createdAt?.toDate?.()?.toLocaleDateString()}</p>
+                      <p className="text-[10px] font-bold text-med-muted uppercase tracking-widest mb-1">Date</p>
+                      <p className="text-[13px] font-medium text-med-text opacity-70">{selectedItem.date || selectedItem.createdAt?.toDate?.()?.toLocaleDateString()}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Status</p>
-                      <span className="px-2.5 py-1 bg-emerald-50 text-emerald-600 rounded-full text-[9px] font-bold uppercase tracking-wider">{selectedItem.status}</span>
+                      <p className="text-[10px] font-bold text-med-muted uppercase tracking-widest mb-1">Status</p>
+                      <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-500 rounded-full text-[9px] font-bold uppercase tracking-wider">{selectedItem.status}</span>
                     </div>
                   </div>
 
                   {(selectedItem.category === 'Consultation' || selectedItem.category === 'Instant Call') && selectedItem.status === 'confirmed' && (
-                    <div className="p-4 rounded-[10px] text-white" style={{ background: 'linear-gradient(135deg, #1e4a3a 0%, #0f3028 100%)' }}>
+                    <div className="p-4 rounded-[10px] text-white" style={{ background: 'linear-gradient(135deg, var(--med-primary) 0%, #0f3028 100%)' }}>
                       <div className="flex items-center gap-2 mb-2">
                         <Video size={16} className="text-emerald-400" />
                         <h4 className="text-[13px] font-bold">Virtual Waiting Room</h4>
@@ -947,8 +943,8 @@ function PatientDashboardContent() {
                   )}
 
                   <div className="flex gap-3 pt-2">
-                    <button className="flex-1 h-9 border border-slate-200 text-slate-600 rounded-[8px] text-[11px] font-bold uppercase tracking-wider hover:bg-slate-50 transition-all">Support</button>
-                    <button className="flex-1 h-9 bg-[#1e4a3a] text-white rounded-[8px] text-[11px] font-bold uppercase tracking-wider hover:bg-emerald-700 transition-all flex items-center justify-center gap-2">
+                    <button className="flex-1 h-9 border border-med-border text-med-muted rounded-[8px] text-[11px] font-bold uppercase tracking-wider hover:bg-med-bg transition-all">Support</button>
+                    <button className="flex-1 h-9 bg-med-primary text-white rounded-[8px] text-[11px] font-bold uppercase tracking-wider hover:bg-emerald-700 transition-all flex items-center justify-center gap-2">
                        <Download size={14} />
                        Export Receipt
                     </button>
@@ -966,8 +962,8 @@ function PatientDashboardContent() {
 export default function PatientDashboard() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <Loader2 className="animate-spin text-[#1e4a3a]" />
+      <div className="min-h-screen flex items-center justify-center bg-med-bg">
+        <Loader2 className="animate-spin text-med-primary" />
       </div>
     }>
       <PatientDashboardContent />

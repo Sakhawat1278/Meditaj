@@ -23,24 +23,27 @@ import NavigationWrapper from "@/components/Home/NavigationWrapper";
 import FooterWrapper from "@/components/Home/FooterWrapper";
 import MotionProvider from "@/components/UI/MotionProvider";
 import GlobalConsultationListener from "@/components/Consultation/GlobalConsultationListener";
+import { ThemeProvider } from "@/components/UI/ThemeProvider";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased text-med-text overflow-x-hidden`} suppressHydrationWarning>
-        <AuthProvider>
-          <CartProvider>
-            <MotionProvider>
-              <ConfirmationProvider>
-                <NavigationWrapper />
-                <GlobalConsultationListener />
-                <main>{children}</main>
-                <FooterWrapper />
-                <Toaster position="bottom-right" toastOptions={{ duration: 3000 }} />
-              </ConfirmationProvider>
-            </MotionProvider>
-          </CartProvider>
-        </AuthProvider>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+          <AuthProvider>
+            <CartProvider>
+              <MotionProvider>
+                <ConfirmationProvider>
+                  <NavigationWrapper />
+                  <GlobalConsultationListener />
+                  <main>{children}</main>
+                  <FooterWrapper />
+                  <Toaster position="bottom-right" toastOptions={{ duration: 3000 }} />
+                </ConfirmationProvider>
+              </MotionProvider>
+            </CartProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

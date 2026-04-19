@@ -6,9 +6,20 @@
   --med-primary: #1e4a3a;
   --med-primary-light: #F0FDF4;
   --med-text-main: #27272A;
-  --med-text-muted: #52525B; /* Darker Zinc-600 instead of 500 for better contrast */
-  --med-border: #E2E8F0; /* Increased contrast for flatter design */
+  --med-text-muted: #52525B;
+  --med-border: #E2E8F0;
   --med-shadow: none;
+}
+
+.dark {
+  --med-bg: #09090B;          /* Zinc-950 */
+  --med-card: #141417;        /* Slightly lighter Zinc */
+  --med-primary: #10B981;      /* Emerald-500 for better visibility in dark mode */
+  --med-primary-light: #064E3B; /* Emerald-900 */
+  --med-text-main: #FAFAFA;    /* Zinc-50 */
+  --med-text-muted: #A1A1AA;   /* Zinc-400 */
+  --med-border: #27272A;      /* Zinc-800 */
+  --med-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 @theme inline {
